@@ -1,0 +1,12 @@
+<main>
+  <header>
+    <p class="brand">SMAP</p>
+    <h1>Mapa de ocorrências</h1>
+    <p>Explore o mapa usando os botões de zoom ou arrastando para navegar.</p>
+  </header>
+  @if (tileError()) {
+    <p role="alert">Não foi possível carregar parte do mapa. Verifique sua conexão e recarregue a página.</p>
+  }
+  <div #mapContainer class="map" role="region" aria-label="Mapa interativo de ocorrências"></div>
+  <p class="hint">As ocorrências aparecerão aqui quando o cadastro estiver integrado.</p>
+</main>
