@@ -1,0 +1,11 @@
+.container {
+  width: 100vw;
+  max-width: 1200px;
+  object-fit: cover;
+  object-position: center;
+ overflow: hidden;
+}
+.container img{
+    width: 500px;
+
+}
