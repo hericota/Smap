@@ -1,11 +1,29 @@
 .container {
   width: 100vw;
   max-width: 1200px;
+  height: 100vh;
   object-fit: cover;
   object-position: center;
- overflow: hidden;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.container img{
-    width: 500px;
-
+.fundo {
+  position: relative;
+}
+.saudacao {
+  position: absolute;
+  top: 0;
+}
+.saudacao h1{
+    color: #16C1A3;
+    font-family: ;
+}
+.formulario {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
