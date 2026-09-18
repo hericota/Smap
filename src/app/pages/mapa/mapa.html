@@ -32,10 +32,12 @@
     </form>
     <section aria-label="Ocorrências registradas">
       <div #mapContainer class="map" role="region" aria-label="Mapa interativo de ocorrências"></div>
+
       <p class="hint">{{ ocorrencias().length }} ocorrência(s). Azul: ponto selecionado. Verde: ocorrência salva.</p>
       @for (item of ocorrencias(); track item.id) {
         <article><strong>{{ item.categoria }}</strong><p>{{ item.descricao }}</p></article>
       }
     </section>
+
   </div>
 </main>
