@@ -10,7 +10,7 @@ export const routes: Routes = [
   {path:'header', component:Header},
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
-  { path: '', redirectTo: 'mapa', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'mapa',
     title: 'Mapa | SMAP',
