@@ -1,5 +1,42 @@
-form{
+form {
      display: flex;
      flex-direction: column;
-     
+     width: 100%;
+     gap: 10px;
+}
+
+.caixa-input {
+     display: flex;
+     flex-direction: column;
+     font-size: 14px;
+     color: #64748B;
+     font-weight: bolder;
+}
+
+input {
+     padding: 10px;
+     width: 300px;
+     border-radius: 14px;
+}
+
+a {
+     color: #16C1A3;
+     font-size: 14px;
+     text-decoration: none;
+     text-align: end;
+}
+
+button {
+     background-color: #16C1A3;
+     color: #ffffff;
+     padding: 10px;
+     border-radius: 14px;
+     font-size: 14px;
+     margin-top: 20px;
+     margin-bottom: 14px;
+}
+.detalhe{
+     display: flex;
+     flex-direction: row;
+     width: 100px;
 }
