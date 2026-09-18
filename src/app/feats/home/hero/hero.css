@@ -4,13 +4,16 @@
     font-weight: 700;
     text-align: center;
     max-width: 400px;
+    line-height: 1.2;
 }
 .you {
     color: #16C1A3;
 }
 
-hero{
-    padding: 2rem 5%;
+.hero{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .text-direction{
@@ -20,6 +23,8 @@ hero{
 }
 
 .text-box{
-    text-align: center;
-    
+   margin-left: 5%;
+   line-height: 1.4;
+   font-size: 1.2rem ;
+   color: #64748B;
 }
