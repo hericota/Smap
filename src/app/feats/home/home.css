@@ -1,5 +1,44 @@
 .map-section {
     display: flex;
     width: 100%;
-    padding: 0px 
+    padding: 0px
+}
+
+.occurrences-section {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 20px;
+    gap: 10px;
+}
+
+.occurrences-section h2 {
+    color: #0D1B2A;
+    font-size: 1.3rem;
+}
+
+.occurrences-section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.occurrences-section-content p {
+    line-height: 20px;
+    color: #64748B;
+}
+
+.occurrences-section-content a {
+    color: #16C1A3;
+}
+
+.occurrences-section-link {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+    font-weight: bold;
+}
+
+.occurrences-section-link img {
+    width: 16px;
+    height: 16px;
 }
