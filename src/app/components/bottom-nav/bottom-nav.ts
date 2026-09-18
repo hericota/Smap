@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 
-export type Aba = 'inicio' | 'mapa' | 'ocorrencias' | 'perfil';
+export type Aba = 'home' | 'mapa' | 'ocorrencias' | 'perfil';
 
 @Component({
   selector: 'app-bottom-nav',
@@ -9,14 +9,14 @@ export type Aba = 'inicio' | 'mapa' | 'ocorrencias' | 'perfil';
   styleUrl: './bottom-nav.css',
 })
 export class BottomNav {
-  ativa = input<Aba>('mapa');
+  ativa = input<Aba>('perfil');
   selecionar = output<Aba>();
   adicionar = output<void>();
 
   readonly itens: { id: Aba; nome: string; icone: string }[] = [
     {
-      id: 'inicio',
-      nome: 'Início',
+      id: 'home',
+      nome: 'home',
       icone: 'M3 10 12 3l9 7v11h-6v-8H9v8H3Z',
     },
     {
