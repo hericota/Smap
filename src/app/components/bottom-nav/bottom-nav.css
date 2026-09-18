@@ -16,14 +16,13 @@
     border-top: 1px solid #edf0f4;
     box-sizing: border-box;
   }
-  
-  button {
+  a {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 0;
     font-family: inherit;
+    text-decoration: none;
     cursor: pointer;
   }
   
@@ -61,7 +60,7 @@
     box-shadow: 0 3px 10px #14bfa933;
   }
   
-  button:focus-visible {
+  a:focus-visible {
     outline: 3px solid #087e70;
     outline-offset: 3px;
   }
