@@ -31,22 +31,6 @@ svg {
   display: block;
   max-width: 100%;
 }
-
-/* Remover estilos de formulário e botões */
-input,
-button,
-textarea,
-select {
-  font: inherit;
-}
-
-/* Estilos para links */
-a {
-  text-decoration: none;
-}
-
-/* Remover marcadores de lista */
-ul,
-ol {
-  list-style: none;
+body{
+    font-family: "Poppins", sans-serif;
 }
