@@ -58,7 +58,7 @@ p {
   display: flex;
   gap: 8px;
 }
-p a[routerLink='/'] {
+p a[routerLink='/cadastro'] {
   color: #16c1a3;
   text-decoration: none;
 }
