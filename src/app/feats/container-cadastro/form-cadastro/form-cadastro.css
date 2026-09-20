@@ -10,7 +10,7 @@ form {
   color: #64748b;
   font-weight: bolder;
   font-size: 14px;
-  gap: 4px;
+  gap: 8px;
 }
 input::placeholder {
   color: #64748b;
@@ -26,7 +26,39 @@ input::placeholder {
   color: #16c1a3;
   font-weight: 600;
 }
-input {
+input[type='checkbox']{
+   appearance: none;
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: 2px solid #16c1a3;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+input[type='checkbox']::after {
+  content: '\e5ca';
+  font-family: 'Material Symbols Outlined';
+  font-size: 14px;
+  font-weight: 900;
+  color: #16c1a3;
+  display: none;
+
+}
+input[type='checkbox']:checked {
+  background-color: #16c1a234;
+  border: 2px solid #16c1a3;
+  box-sizing: border-box;
+}
+
+input[type='checkbox']:checked::after {
+  display: block;
+}
+
+input:not([type='checkbox']) {
   height: 42px;
   border: 1px solid;
   border-color: #e2e8f0;
@@ -45,5 +77,6 @@ button {
   color: #ffffff;
   font-weight: bolder;
   font-size: 16px;
+  margin: 24px 0;
 }
 
