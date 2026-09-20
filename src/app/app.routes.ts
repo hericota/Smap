@@ -20,4 +20,25 @@ export const routes: Routes = [
     title: 'Mapa | SMAP',
     loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
   },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import('./admin/layouts/admin-layout/admin-layout').then(
+        (m) => m.AdminLayout,
+      ),
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./admin/pages/dashboard-admin/dashboard-admin').then(
+            (m) => m.DashboardAdmin,
+          ),
+      },
+    ],
+  },
 ];
