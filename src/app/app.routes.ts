@@ -3,7 +3,7 @@ import { Header } from './component/header/header';
 import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
-import { FormCadastro } from './feats/form-cadastro/form-cadastro';
+import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
 
 
 
@@ -13,7 +13,7 @@ export const routes: Routes = [
   {path:'home', component:Home},
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
-  {path: 'cadastro' , component: FormCadastro},
+  {path: 'cadastro' , component: ContainerCadastro},
   { path: '', redirectTo: 'mapa', pathMatch: 'full' },
   {
     path: 'mapa',

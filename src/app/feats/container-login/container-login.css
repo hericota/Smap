@@ -1,7 +1,7 @@
 .container {
   overflow-x: hidden;
   width: 100%;
-  max-width: 1200px;
+  max-width: 400px;
   min-height: 100dvh;
   background-image: url('/assets/login-img/fundo-mobile.jpg');
   background-repeat: no-repeat;
@@ -33,7 +33,6 @@
 
 .saudacao h1 {
   color: #16c1a3;
-  
 }
 
 .saudacao img {
@@ -52,15 +51,17 @@
   padding-top: 8px;
 }
 p {
-  color: #94A3B8;
+  color: #94a3b8;
   font-size: 14px;
   padding: 30px;
   display: flex;
   gap: 8px;
 }
+
 p a[routerLink='/cadastro'] {
   color: #16c1a3;
   text-decoration: none;
+   font-weight: 600;
 }
 .entrarComGoogleApple {
   width: 100%;
@@ -71,7 +72,8 @@ p a[routerLink='/cadastro'] {
 .entrarComGoogleApple button {
   width: 45%;
   padding: 8px;
-  border-radius: 14px;
+  border-radius: 12px;
+
   display: flex;
   align-items: center;
   justify-content: center;
