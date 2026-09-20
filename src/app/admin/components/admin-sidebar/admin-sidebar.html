@@ -1,0 +1,67 @@
+<aside class="admin-sidebar">
+  <div class="sidebar-top">
+    <a class="brand" routerLink="/admin/dashboard">
+      <span class="brand-mark">A</span>
+      <span class="brand-name">Smap</span>
+    </a>
+
+    <nav class="sidebar-navigation" aria-label="Navegação administrativa">
+      <a
+        class="navigation-item"
+        routerLink="/admin/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span class="navigation-icon">▦</span>
+        <span>Visão Geral</span>
+      </a>
+
+      <a
+        class="navigation-item"
+        routerLink="/admin/ocorrencias"
+        routerLinkActive="active"
+      >
+        <span class="navigation-icon">☷</span>
+        <span>Ocorrências</span>
+      </a>
+
+      <a
+        class="navigation-item"
+        routerLink="/admin/mapa"
+        routerLinkActive="active"
+      >
+        <span class="navigation-icon">♧</span>
+        <span>Mapa</span>
+      </a>
+
+      <a
+        class="navigation-item"
+        routerLink="/admin/regioes"
+        routerLinkActive="active"
+      >
+        <span class="navigation-icon">◎</span>
+        <span>Regiões</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-bottom">
+    <a
+      class="navigation-item settings-item"
+      routerLink="/admin/configuracoes"
+      routerLinkActive="active"
+    >
+      <span class="navigation-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+    <div class="profile">
+      <div class="profile-avatar">CS</div>
+
+      <div class="profile-information">
+        <strong>Carlos Silva</strong>
+        <span>Coord. Geral</span>
+      </div>
+    </div>
+  </div>
+</aside>
