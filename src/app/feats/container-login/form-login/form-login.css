@@ -8,7 +8,7 @@ form {
 .caixa-input {
   display: flex;
   flex-direction: column;
-  font-size: 12px;
+  font-size: 14px;
   color: #94A3B8;
   font-weight: bolder;
   gap: 8px;

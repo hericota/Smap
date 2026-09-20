@@ -23,3 +23,7 @@ p a[routerLink='/login']{
   color: #16C1A3 ;
   font-weight: 600;
 }
+.login{
+  display: flex;
+  justify-content: center;
+}
