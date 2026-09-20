@@ -1,0 +1,25 @@
+section {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  color: #0d1b2a;
+  gap: 24px;
+  background-color: #f7f8f4;
+}
+.criarConta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+p{
+  color: #64748B;
+  font-weight: normal;
+}
+p a[routerLink='/login']{
+  color: #16C1A3 ;
+  font-weight: 600;
+}
