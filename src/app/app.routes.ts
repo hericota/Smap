@@ -4,6 +4,7 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
+import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 
 
 
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {path:'home', component:Home},
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
+  {path: 'perfil-usuario' , component: ProfileHome},
   {path: 'cadastro' , component: ContainerCadastro},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
