@@ -1,7 +1,8 @@
 .map-section {
     display: flex;
     width: 100%;
-    padding: 0px
+    padding: 0px;
+    justify-content: center;
 }
 
 .occurrences-section {
@@ -42,3 +43,69 @@
     width: 16px;
     height: 16px;
 }
+
+.how-it-work-section {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 20px;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 32px;
+}
+
+.title h3 {
+    font-size: 1.5rem;
+}
+
+.title p {
+    color: #64748B;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.list-icons {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.list-icons img {
+    width: 36px;
+    height: 36px;
+    height: auto;
+    object-fit: contain;
+}
+
+.list-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.list-content h4 {
+  margin: 0 0 -20px 0;
+  line-height: 36px;
+  
+}
+
+.list-content span {
+  margin: 0;
+  line-height: 20px;
+  color: #64748B;
