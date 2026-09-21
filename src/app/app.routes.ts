@@ -14,9 +14,9 @@ export const routes: Routes = [
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
   {path: 'cadastro' , component: ContainerCadastro},
-  { path: '', redirectTo: 'mapa', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: 'mapa',
+    path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
     loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
   },
