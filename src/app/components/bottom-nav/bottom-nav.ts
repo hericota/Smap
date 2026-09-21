@@ -12,7 +12,7 @@ export class BottomNav {
   readonly itens = [
     {
       nome: 'Início',
-      rota: '/hero',
+      rota: '/home',
       icone: 'M3 10 12 3l9 7v11h-6v-8H9v8H3Z',
     },
     {
