@@ -35,6 +35,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
 
 
@@ -46,4 +47,44 @@
     align-items: center;
     width: 85%;
     background: #16C1A3;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-regitrar a{
+    color:#fff;
+    font-weight: 500;
+}
+
+.btn-regitrar:hover{
+     transform: scale(1.03);
+}
+
+.btn-explorer{
+    border: 1px solid #0D1B2A;
+    margin-top: 10px;
+    width: 85%;
+    padding: 12.5px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-explorer:hover{
+    transform: scale(1.03);
+}
+
+.btn-explorer a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #0D1B2A;
+}
+
+.btn-explorer img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
