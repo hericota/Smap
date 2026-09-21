@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, signal } fr
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Header } from '../../component/header/header';
-import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
 interface Ocorrencia {
   id: string;
@@ -16,7 +15,7 @@ const STORAGE_KEY = 'smap.ocorrencias.v1';
 
 @Component({
   selector: 'app-mapa',
-  imports: [FormsModule, Header, BottomNav],
+  imports: [FormsModule, Header],
   templateUrl: './mapa.html',
   styleUrl: './mapa.css',
 })
