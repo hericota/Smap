@@ -9,6 +9,7 @@ import { ContainerCadastro } from './feats/container-cadastro/container-cadastro
 
 
 export const routes: Routes = [
+  {path:'home', component:Home},
   {path:'header', component:Header},
   {path:'home', component:Home},
   {path:'hero', component:Hero},
