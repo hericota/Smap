@@ -1,5 +1,61 @@
-form{
-     display: flex;
-     flex-direction: column;
-     
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+
+.caixa-input {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #94A3B8;
+  font-weight: bolder;
+  gap: 8px;
+}
+
+input {
+  padding: 18px;
+  width: 300px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background-clip: padding-box;
+}
+
+a {
+  color: #16c1a3;
+  font-size: 12px;
+  text-decoration: none;
+  text-align: end;
+   font-weight: 600;
+  
+}
+
+button {
+  background-color: #16c1a3;
+  color: #ffffff;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-top: 10px;
+  box-shadow: 0 1px 5px #16c1a246;
+  border: none;
+  outline: none;
+  background-clip: padding-box;
+}
+.detalhe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.detalhe div {
+  width: 45%;
+  color: #94A3B8;
+  border-bottom: 1px solid #64748b;
+}
+.detalhe p {
+  color: #94A3B8;
+  font-size: 12px;
+  
 }

@@ -1,0 +1,28 @@
+<nav aria-label="Navegação principal">
+    @for (item of itens; track item.rota) {
+      @if ($index === 2) {
+        <a
+          class="adicionar"
+          routerLink="/nova-ocorrencia"
+          aria-label="Nova ocorrência"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </a>
+      }
+  
+      <a
+        class="item"
+        [routerLink]="item.rota"
+        routerLinkActive="ativo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path [attr.d]="item.icone" />
+        </svg>
+        <span>{{ item.nome }}</span>
+      </a>
+    }
+  </nav>
