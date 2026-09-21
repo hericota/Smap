@@ -16,7 +16,7 @@ export const routes: Routes = [
   {path: 'cadastro' , component: ContainerCadastro},
   { path: '', redirectTo: 'mapa', pathMatch: 'full' },
   {
-    path: 'mapa',
+    path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
     loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
   },
