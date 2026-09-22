@@ -87,3 +87,9 @@
     height: 18px;
     object-fit: contain;
 }
+.mapa-hero{
+    margin-top: 20px;
+    width: 750px;
+    height: 400px;
+    border: #292727 solid 1px;
+}

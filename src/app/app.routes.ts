@@ -4,7 +4,9 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
+import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
+
 
 export const routes: Routes = [
   {path:'home', component:Home},
@@ -86,4 +88,6 @@ export const routes: Routes = [
       },
     ],
   },
+  {path:"mapa-separado", component:MapaSeparado}
+];
 ];
