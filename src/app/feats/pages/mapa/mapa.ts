@@ -1,16 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Header } from '../../component/header/header';
+import { Header } from '../../../component/header/header';
+import { Ocorrencia } from '../../ocorrencia';
+import { form, required } from '@angular/forms/signals';
+import { ConsumoApi } from '../../posts/consumo-api';
 
-interface Ocorrencia {
-  id: string;
-  categoria: string;
-  descricao: string;
-  latitude: number;
-  longitude: number;
-  criadaEm: string;
-}
+
 const STORAGE_KEY = 'smap.ocorrencias.v1';
 
 @Component({
@@ -20,6 +16,30 @@ const STORAGE_KEY = 'smap.ocorrencias.v1';
   styleUrl: './mapa.css',
 })
 export class Mapa implements AfterViewInit, OnDestroy {
+
+  readonly consumoService = inject(ConsumoApi);
+
+
+  ocorrenciaModel = signal<Ocorrencia>({
+    categoria: '',
+    descricao: '',
+    latitude:0 ,
+    longitude: 0,
+    criadaEm: '',
+    titulo: '',
+    localizacao:'',
+  });
+  ocorrenciaForm = form(this.ocorrenciaModel, (s)=>{
+    required(s.categoria, {message:'Campo Obrigatório'});
+    required(s.descricao, {message:'Campo Obrigatório'});
+    required(s.longitude, {message:'Campo Obrigatório'});
+    required(s.latitude, {message:'Campo Obrigatório'});
+    required(s.titulo, {message:'Campo Obrigatório'});
+    required(s.localizacao, {message:'Campo Obrigatório'});
+  })
+
+
+
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;
 
@@ -110,8 +130,35 @@ export class Mapa implements AfterViewInit, OnDestroy {
       radius: 10, color: '#175cd3', fillOpacity: 0.5, interactive: false,
     }).addTo(this.map!);
   }
+  // tem problema eu trocar esse form:ngForm por event:submitEvent?
+  cadastrar(form: NgForm, event:SubmitEvent): void {
+    event.preventDefault();
 
-  cadastrar(form: NgForm): void {
+    const ocorrencia = this.ocorrenciaModel();
+
+
+    this.consumoService.cadastrarOcorrencia(ocorrencia).subscribe({
+      next:(response)=>{
+        console.log("Ocorrencia" + response.titulo + response.categoria);
+
+        this.ocorrenciaModel.set({
+          categoria: '',
+          descricao: '',
+          latitude: 0,
+          longitude: 0,
+          criadaEm: '',
+          titulo: '',
+          localizacao:'',
+      });
+
+      this.ocorrenciaForm().reset();
+      },
+      error:(error)=>{
+        console.error('ERRO AO CADASTRAR:', error);
+        
+      }
+    });
+
     this.erro.set('');
     this.mensagem.set('');
     const ponto = this.ponto();
@@ -125,6 +172,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
       return;
     }
     const registro: Ocorrencia = {
+      // n sei oq ta dando aqui rever ess problema 
       id: crypto.randomUUID(), categoria: this.categoria, descricao: this.descricao.trim(),
       latitude: ponto.latitude, longitude: ponto.longitude, criadaEm: new Date().toISOString(),
     };

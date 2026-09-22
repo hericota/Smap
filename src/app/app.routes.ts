@@ -4,7 +4,7 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
-import { ConfirmacaoPost } from './posts/confirmacao-post/confirmacao-post';
+import { ConfirmacaoPost } from './feats/posts/confirmacao-post/confirmacao-post';
 
 
 
@@ -20,6 +20,6 @@ export const routes: Routes = [
   {
     path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
-    loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
+    loadComponent: () => import('./feats/pages/mapa/mapa').then((m) => m.Mapa),
   },
 ];

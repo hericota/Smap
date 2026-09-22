@@ -4,7 +4,7 @@
     <p role="alert">Não foi possível carregar parte do mapa. Verifique sua conexão e recarregue a página.</p>
   }
   <div class="layout">
-    <form #form="ngForm" (ngSubmit)="cadastrar(form)">
+    <form #form="ngForm" (ngSubmit)="cadastrar(form, $event)">
       <h2>Nova ocorrência</h2>
       <p class="hint">Os relatos ficam somente neste navegador. Ainda não são enviados à prefeitura ou a outros usuários.</p>
       <label for="categoria">Categoria</label>
