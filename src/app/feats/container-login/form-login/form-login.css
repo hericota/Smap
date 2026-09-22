@@ -3,6 +3,7 @@ form {
   flex-direction: column;
   width: 100%;
   gap: 20px;
+ 
 }
 
 .caixa-input {
@@ -23,7 +24,33 @@ input {
   outline: none;
   background-clip: padding-box;
 }
-
+.errorValidators {
+  
+  font-size: 12px;           
+  color: #ffa3a3;
+  font-weight: 500;
+  white-space: wrap;       /* Impede que o texto de erro quebre em duas linhas */
+  overflow: hidden;
+  text-overflow: ellipsis;   /* Adiciona "..." se o texto for muito grande */
+  max-width: 100%;
+}
+label.label-error{
+  color: #fa6c6c;
+}
+input.input-error {
+  border: 1px solid #fa6c6c !important;
+  box-shadow: 0 0px 3px #fa6c6c;
+  animation: shake 0.3s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.box-validators{
+  display: flex;
+  gap: 10px;
+}
 a {
   color: #16c1a3;
   font-size: 12px;
@@ -59,14 +86,4 @@ button {
   color: #94A3B8;
   font-size: 12px;
   
-}
-.errorValidators {
-  
-  font-size: 12px;           
-  color: #E53935;
-  font-weight: 500;
-  white-space: wrap;       /* Impede que o texto de erro quebre em duas linhas */
-  overflow: hidden;
-  text-overflow: ellipsis;   /* Adiciona "..." se o texto for muito grande */
-  max-width: 100%;
 }
