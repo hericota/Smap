@@ -244,3 +244,4 @@ export class Mapa implements AfterViewInit, OnDestroy {
     }
   }
 }
+
