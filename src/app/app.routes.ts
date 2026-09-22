@@ -23,3 +23,4 @@ export const routes: Routes = [
     loadComponent: () => import('./feats/pages/mapa/mapa').then((m) => m.Mapa),
   },
 ];
+
