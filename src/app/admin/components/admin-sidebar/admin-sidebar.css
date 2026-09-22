@@ -1,5 +1,8 @@
 :host {
   display: block;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
   width: 260px;
   min-width: 260px;
   height: 100vh;
@@ -15,6 +18,7 @@
   padding: 28px 22px 24px;
   background-color: #f0f1f1;
   border-right: 1px solid #e1e5e4;
+  overflow-y: auto;
 }
 
 .brand {
