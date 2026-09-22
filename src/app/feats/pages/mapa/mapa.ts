@@ -1,17 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Header } from '../../component/header/header';
-import { BottomNav } from '../../components/bottom-nav/bottom-nav';
+import { Header } from '../../../component/header/header';
+import { Ocorrencia } from '../../ocorrencia';
+import { form, required } from '@angular/forms/signals';
+import { ConsumoApi } from '../../posts/consumo-api';
 
-interface Ocorrencia {
-  id: string;
-  categoria: string;
-  descricao: string;
-  latitude: number;
-  longitude: number;
-  criadaEm: string;
-}
 const STORAGE_KEY = 'smap.ocorrencias.v1';
 
 @Component({
@@ -21,13 +16,32 @@ const STORAGE_KEY = 'smap.ocorrencias.v1';
   styleUrl: './mapa.css',
 })
 export class Mapa implements AfterViewInit, OnDestroy {
+
+  readonly consumoService = inject(ConsumoApi);
+  readonly router = inject(Router);
+
+  ocorrenciaModel = signal<Ocorrencia>({
+    categoria: '',
+    descricao: '',
+    latitude: 0,
+    longitude: 0,
+    criadaEm: '',
+    titulo: '',
+    localizacao: '',
+  });
+
+  ocorrenciaForm = form(this.ocorrenciaModel, (s) => {
+    required(s.categoria, { message: 'Campo Obrigatório' });
+    required(s.descricao, { message: 'Campo Obrigatório' });
+    required(s.titulo, { message: 'Campo Obrigatório' });
+    required(s.localizacao, { message: 'Campo Obrigatório' });
+  });
+
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;
 
   protected readonly tileError = signal(false);
   readonly categorias = ['Vias públicas', 'Iluminação', 'Lixo e limpeza', 'Alagamento', 'Sinalização', 'Acessibilidade', 'Outros'];
-  categoria = '';
-  descricao = '';
   readonly ponto = signal<{ latitude: number; longitude: number; precisao?: number } | null>(null);
   readonly localizando = signal(false);
   readonly mensagem = signal('');
@@ -42,7 +56,6 @@ export class Mapa implements AfterViewInit, OnDestroy {
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
-    // Localização só é solicitada quando o usuário toca no botão.
     this.map = L.map(this.mapContainer.nativeElement).setView([-14.235, -51.9253], 4);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -112,46 +125,84 @@ export class Mapa implements AfterViewInit, OnDestroy {
     }).addTo(this.map!);
   }
 
-  cadastrar(form: NgForm): void {
+  cadastrar(form: NgForm, event?: SubmitEvent): void {
+    if (event) {
+      event.preventDefault();
+    }
+
     this.erro.set('');
     this.mensagem.set('');
+
     const ponto = this.ponto();
-    if (form.invalid || !ponto || !this.categorias.includes(this.categoria) || this.descricao.trim().length < 10 || this.descricao.length > 1000) {
+    const dados = this.ocorrenciaModel();
+
+    // 1. Validação dos campos e da seleção de mapa
+    if (form.invalid || !ponto || !this.categorias.includes(dados.categoria) || dados.descricao.trim().length < 10 || dados.descricao.length > 1000) {
       form.control.markAllAsTouched();
-      this.erro.set('Escolha a categoria, descreva o problema com pelo menos 10 caracteres e confirme um ponto no mapa.');
+      this.erro.set('Preencha os campos obrigatórios (descrição com no mínimo 10 caracteres) e selecione um ponto no mapa.');
       return;
     }
+
     if (!this.storageReady) {
       this.erro.set('O armazenamento local não pôde ser lido. Libere o armazenamento do navegador e recarregue antes de salvar.');
       return;
     }
+
+    // 2. Monta o objeto completo incluindo todos os campos da interface Ocorrencia
     const registro: Ocorrencia = {
-      id: crypto.randomUUID(), categoria: this.categoria, descricao: this.descricao.trim(),
-      latitude: ponto.latitude, longitude: ponto.longitude, criadaEm: new Date().toISOString(),
+      ...dados,
+      id: Date.now(),
+      descricao: dados.descricao.trim(),
+      latitude: ponto.latitude,
+      longitude: ponto.longitude,
+      criadaEm: new Date().toISOString(),
     };
-    try {
-      // Releitura evita sobrescrever registros salvos por outra aba desde a abertura.
-      const registros = [...this.lerRegistros(), registro];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(registros));
-      this.ocorrencias.set(registros);
-    } catch {
-      this.erro.set('Não foi possível salvar. O armazenamento pode estar cheio ou indisponível. Seus dados permanecem no formulário.');
-      return;
-    }
-    this.renderizar();
-    this.requestId++;
-    this.localizando.set(false);
-    this.selecao?.remove();
-    this.ponto.set(null);
-    form.resetForm({ categoria: '', descricao: '' });
-    this.mensagem.set('Ocorrência salva neste navegador e adicionada ao mapa.');
+
+    // 3. Executa a requisição HTTP
+    this.consumoService.cadastrarOcorrencia(registro).subscribe({
+      next: (response) => {
+        console.log('Ocorrência cadastrada:', response.titulo, response.categoria);
+
+        this.router.navigate(['/confirmacao-ocorrencia']);
+
+        // Reseta formulários e estado
+        this.ocorrenciaModel.set({
+          categoria: '',
+          descricao: '',
+          latitude: 0,
+          longitude: 0,
+          criadaEm: '',
+          titulo: '',
+          localizacao: '',
+        });
+
+        this.ocorrenciaForm().reset();
+        form.resetForm();
+
+        this.renderizar();
+        this.requestId++;
+        this.localizando.set(false);
+        this.selecao?.remove();
+        this.ponto.set(null);
+        this.mensagem.set('Ocorrência salva neste navegador e adicionada ao mapa.');
+      },
+      error: (error) => {
+        console.error('ERRO AO CADASTRAR:', error);
+        this.erro.set('Ocorreu um erro ao enviar para o servidor. Tente novamente.');
+      }
+
+    });
   }
 
   private lerRegistros(): Ocorrencia[] {
     const data: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
     if (!Array.isArray(data) || !data.every((item) =>
-      item && typeof item.id === 'string' && this.categorias.includes(item.categoria) &&
+      item &&
+      (typeof item.id === 'string' || typeof item.id === 'number') &&
+      this.categorias.includes(item.categoria) &&
       typeof item.descricao === 'string' && item.descricao.length <= 1000 &&
+      typeof item.titulo === 'string' &&
+      typeof item.localizacao === 'string' &&
       Number.isFinite(item.latitude) && Math.abs(item.latitude) <= 90 &&
       Number.isFinite(item.longitude) && Math.abs(item.longitude) <= 180 &&
       typeof item.criadaEm === 'string'
@@ -164,7 +215,10 @@ export class Mapa implements AfterViewInit, OnDestroy {
       this.ocorrencias.set(this.lerRegistros());
       this.renderizar();
       if (this.ocorrencias().length) {
-        this.map?.fitBounds(this.ocorrencias().map((o) => [o.latitude, o.longitude] as L.LatLngTuple), { maxZoom: 16, padding: [24, 24] });
+        this.map?.fitBounds(
+          this.ocorrencias().map((o) => [o.latitude!, o.longitude!] as L.LatLngTuple),
+          { maxZoom: 16, padding: [24, 24] }
+        );
       }
     } catch {
       this.storageReady = false;
@@ -175,15 +229,19 @@ export class Mapa implements AfterViewInit, OnDestroy {
   private renderizar(): void {
     this.registros.clearLayers();
     for (const registro of this.ocorrencias()) {
-      const popup = document.createElement('div');
-      const title = document.createElement('strong');
-      title.textContent = registro.categoria;
-      const description = document.createElement('p');
-      description.textContent = registro.descricao;
-      popup.append(title, description);
-      L.circleMarker([registro.latitude, registro.longitude], {
-        radius: 9, color: '#13795b', fillOpacity: 0.8, bubblingMouseEvents: false,
-      }).bindPopup(popup).addTo(this.registros);
+      if (registro.latitude != null && registro.longitude != null) {
+        const popup = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = registro.titulo || registro.categoria;
+        const description = document.createElement('p');
+        description.textContent = registro.descricao;
+        popup.append(title, description);
+
+        L.circleMarker([registro.latitude, registro.longitude], {
+          radius: 9, color: '#13795b', fillOpacity: 0.8, bubblingMouseEvents: false,
+        }).bindPopup(popup).addTo(this.registros);
+      }
     }
   }
 }
+
