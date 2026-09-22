@@ -12,6 +12,7 @@ form {
   color: #94A3B8;
   font-weight: bolder;
   gap: 8px;
+ 
 }
 
 input {
@@ -54,8 +55,18 @@ button {
   color: #94A3B8;
   border-bottom: 1px solid #64748b;
 }
-.detalhe p {
+.detalhe p{
   color: #94A3B8;
   font-size: 12px;
   
+}
+.errorValidators {
+  
+  font-size: 12px;           
+  color: #E53935;
+  font-weight: 500;
+  white-space: wrap;       /* Impede que o texto de erro quebre em duas linhas */
+  overflow: hidden;
+  text-overflow: ellipsis;   /* Adiciona "..." se o texto for muito grande */
+  max-width: 100%;
 }

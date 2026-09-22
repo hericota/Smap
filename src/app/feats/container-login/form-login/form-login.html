@@ -1,12 +1,18 @@
-<form>
+<form (submit)="fazerLogin($event)">
     <div class="caixa-input">
         <label for="email">E-mail</label>
-        <input id="email" type="email" placeholder="E-mail">
+        <input [formField]="loginForm.email" id="email" type="email" placeholder="E-mail">
+        @if (loginForm.email().touched() && loginForm.email().invalid() ) {
+          @for (error of loginForm.email().errors(); track error.kind) {  <span class="errorValidators">{{ error.message }}</span>}
+        }
     </div>
 
     <div class="caixa-input">
         <label for="password">Senha</label>
-        <input id="password" type="password" placeholder="Senha">
+        <input  [formField]="loginForm.password" id="password" type="password" placeholder="Senha">
+         @if (loginForm.password().touched() && loginForm.password().invalid() ) {
+          @for (error of loginForm.password().errors(); track error.kind) {  <span class="errorValidators">{{ error.message }}</span>}
+        }
     </div>
 
     <a routerLink="/">Esqueceu a senha?</a>
