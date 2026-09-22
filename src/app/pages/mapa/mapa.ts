@@ -144,6 +144,9 @@ export class Mapa implements AfterViewInit, OnDestroy {
     this.ponto.set(null);
     form.resetForm({ categoria: '', descricao: '' });
     this.mensagem.set('Ocorrência salva neste navegador e adicionada ao mapa.');
+
+    
+
   }
 
   private lerRegistros(): Ocorrencia[] {
