@@ -90,4 +90,4 @@ export const routes: Routes = [
   },
   {path:"mapa-separado", component:MapaSeparado}
 ];
-];
+
