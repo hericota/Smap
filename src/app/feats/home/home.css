@@ -1,0 +1,172 @@
+.map-section {
+    display: flex;
+    width: 100%;
+    padding: 0px;
+    justify-content: center;
+}
+
+.occurrences-section {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 20px;
+    gap: 10px;
+}
+
+.occurrences-section h2 {
+    color: #0D1B2A;
+    font-size: 1.3rem;
+}
+
+.occurrences-section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.occurrences-section-content p {
+    line-height: 20px;
+    color: #64748B;
+}
+
+.occurrences-section-content a {
+    color: #16C1A3;
+}
+
+.occurrences-section-link {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+    font-weight: bold;
+}
+
+.occurrences-section-link img {
+    width: 16px;
+    height: 16px;
+}
+
+.how-it-work-section {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 20px;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 32px;
+}
+
+.title h3 {
+    font-size: 1.5rem;
+}
+
+.title p {
+    color: #64748B;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.list-icons {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.list-icons img {
+    width: 36px;
+    height: 36px;
+    height: auto;
+    object-fit: contain;
+}
+
+.list-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.list-content h4 {
+    margin: 0 0 -20px 0;
+    line-height: 36px;
+
+}
+
+.list-content span {
+    margin: 0;
+    line-height: 20px;
+    color: #64748B;
+}
+
+
+.register-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px;
+    gap: 20px;
+}
+
+.register-img {
+    width: 324px;
+    height: 327px;
+}
+
+.register-link {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.register-link h3 {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #0D1B2A;
+}
+
+.register-link span {
+color: #16C1A3;
+}
+
+.register-link p {
+    color: #727272;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.register-btn {
+    padding: 12.5px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    background: #16C1A3;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+    transition: color ease 0.3s;
+}
+
+.register-btn:hover {
+    color: #16C1A3;
+    background-color: white;
+}
+
