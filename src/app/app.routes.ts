@@ -7,6 +7,7 @@ import { ContainerCadastro } from './feats/container-cadastro/container-cadastro
 import { ConfirmacaoPost } from './feats/posts/confirmacao-post/confirmacao-post';
 import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
+import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
 
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
   {path: 'perfil-usuario' , component: ProfileHome},
+  {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
   {path:'confirmacao-ocorrencia' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
