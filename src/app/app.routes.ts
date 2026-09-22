@@ -4,6 +4,7 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
+import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 
 
 
@@ -21,4 +22,8 @@ export const routes: Routes = [
     title: 'Mapa | SMAP',
     loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
   },
+
+
+
+  {path:"mapa-separado", component:MapaSeparado}
 ];
