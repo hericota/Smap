@@ -11,7 +11,7 @@ const STORAGE_KEY = 'smap.ocorrencias.v1';
 
 @Component({
   selector: 'app-mapa',
-  imports: [FormsModule, Header],
+  imports: [FormsModule, Header, BottomNav],
   templateUrl: './mapa.html',
   styleUrl: './mapa.css',
 })
