@@ -2,10 +2,11 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, sig
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Header } from '../../../component/header/header';
-import { Ocorrencia } from '../../ocorrencia';
+import { Header } from '../../component/header/header';
+import { Ocorrencia } from '../../feats/ocorrencia';
 import { form, required } from '@angular/forms/signals';
-import { ConsumoApi } from '../../posts/consumo-api';
+import { ConsumoApi } from '../../feats/posts/consumo-api';
+import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
 const STORAGE_KEY = 'smap.ocorrencias.v1';
 
