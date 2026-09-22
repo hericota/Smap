@@ -5,6 +5,7 @@ import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
+import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
 
 export const routes: Routes = [
   {path:'home', component:Home},
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {path:'hero', component:Hero},
   {path: 'login' , component: ContainerLogin},
   {path: 'perfil-usuario' , component: ProfileHome},
+  {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
