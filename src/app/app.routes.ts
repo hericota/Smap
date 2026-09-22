@@ -23,7 +23,7 @@ export const routes: Routes = [
     path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
     loadComponent: () =>
-      import('./pages/').then((m) => m.Mapa)
+      import('./pages/mapa/mapa').then((m) => m.Mapa)
   },
 
   {
