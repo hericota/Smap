@@ -4,6 +4,7 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
+import { ConfirmacaoPost } from './feats/posts/confirmacao-post/confirmacao-post';
 import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 
@@ -16,12 +17,13 @@ export const routes: Routes = [
   {path: 'login' , component: ContainerLogin},
   {path: 'perfil-usuario' , component: ProfileHome},
   {path: 'cadastro' , component: ContainerCadastro},
+  {path:'confirmacao-ocorrencia' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
     loadComponent: () =>
-      import('./pages/mapa/mapa').then((m) => m.Mapa),
+      import('./pages/mapa/mapa').then((m) => m.Mapa)
   },
 
   {
@@ -90,4 +92,5 @@ export const routes: Routes = [
   },
   {path:"mapa-separado", component:MapaSeparado}
 ];
+
 
