@@ -2,44 +2,86 @@
 
   <div class="nomeSobrenome">
     <div class="box-input">
-      <label for="nome">Nome</label>
-      <input id="nome" type="text" placeholder="Nome">
+      <div>
+        <label [class.label-error]="cadastroForm.nome().touched() && cadastroForm.nome().invalid()" for="nome">Nome</label>
+        @if (cadastroForm.nome().touched() && cadastroForm.nome().invalid() ) {
+        @for (error of cadastroForm.nome().errors(); track $index) {
+        <span class="errorValidators">{{ error.message }}</span>}
+        }
+      </div>
+      <input [class.input-error]="cadastroForm.nome().touched() && cadastroForm.nome().invalid()" [formField]="cadastroForm.nome" id="nome" type="text" placeholder="Nome">
     </div>
 
     <div class="box-input">
-      <label for="sobrenome">Sobrenome</label>
-      <input id="sobrenome" type="text" placeholder="sobrenome">
+      <div>
+        <label [class.label-error]="cadastroForm.sobreNome().touched() && cadastroForm.sobreNome().invalid()" for="sobrenome">Sobrenome</label>
+        @if (cadastroForm.sobreNome().touched() && cadastroForm.sobreNome().invalid() ) {
+        @for (error of cadastroForm.sobreNome().errors(); track $index) {
+        <span class="errorValidators">{{ error.message }}</span>}
+        }
+      </div>
+      <input [class.input-error]="cadastroForm.sobreNome().touched() && cadastroForm.sobreNome().invalid()" [formField]="cadastroForm.sobreNome" id="sobrenome" type="text" placeholder="sobrenome">
     </div>
   </div>
 
   <div class="box-input">
-    <label for="email">E-mail</label>
-    <input id="email" type="email" placeholder="email@gmail.com">
+    <div>
+      <label [class.label-error]="cadastroForm.email().touched() && cadastroForm.email().invalid()" for="email">E-mail</label>
+      @if (cadastroForm.email().touched() && cadastroForm.email().invalid() ) {
+      @for (error of cadastroForm.email().errors(); track $index) {
+      <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [class.input-error]="cadastroForm.email().touched() && cadastroForm.email().invalid()" [formField]="cadastroForm.email" id="email" type="email" placeholder="email@gmail.com">
   </div>
 
   <div class="box-input">
-    <label for="CPF">CPF</label>
-    <input id="CPF" type="text" placeholder="000.000.000-00">
+    <div>
+      <label [class.label-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" for="CPF">CPF</label>
+      @if (cadastroForm.cpf().touched() && cadastroForm.cpf().invalid() ) {
+      @for (error of cadastroForm.cpf().errors(); track $index) {
+      <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [class.input-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" [formField]="cadastroForm.cpf" id="CPF" type="text" placeholder="000.000.000-00">
   </div>
 
   <div class="box-input">
-    <label for="phone">Telefone</label>
-    <input id="phone" type="tel" placeholder="(00) 99999-9999">
+    <div>
+      <label [class.label-error]="cadastroForm.telefone().touched() && cadastroForm.telefone().invalid()" for="phone">Telefone</label>
+      @if (cadastroForm.telefone().touched() && cadastroForm.telefone().invalid() ) {
+      @for (error of cadastroForm.telefone().errors(); track $index) {
+      <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [class.input-error]="cadastroForm.telefone().touched() && cadastroForm.telefone().invalid()" [formField]="cadastroForm.telefone" id="phone" type="tel" placeholder="(00) 99999-9999">
   </div>
 
   <div class="box-input">
-    <label for="CEP">CEP</label>
-    <input id="CEP" type="text" placeholder="00000-000">
+    <div>
+      <label [class.label-error]="cadastroForm.cep().touched() && cadastroForm.cep().invalid()" for="CEP">CEP</label>
+      @if (cadastroForm.cep().touched() && cadastroForm.cep().invalid() ) {
+      @for (error of cadastroForm.cep().errors(); track $index) {
+      <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [class.input-error]="cadastroForm.cep().touched() && cadastroForm.cep().invalid()" [formField]="cadastroForm.cep" id="CEP" type="text" placeholder="00000-000">
   </div>
 
   <div class="box-input">
-    <label for="password">Senha</label>
-    <input id="password" type="password" placeholder="Crie uma senha forte">
+
+    <label [class.label-error]="cadastroForm.senha().touched() && cadastroForm.senha().invalid()" for="password">Senha</label>
+    <input [class.input-error]="cadastroForm.senha().touched() && cadastroForm.senha().invalid()" [formField]="cadastroForm.senha" id="password" type="password" placeholder="Crie uma senha forte">
+    @if (cadastroForm.senha().touched() && cadastroForm.senha().invalid() ) {
+    @for (error of cadastroForm.senha().errors(); track $index) {
+    <span class="errorValidators">{{ error.message }}</span>}
+    }
   </div>
 
   <div class="box-input check-box">
-    <label for="check" class="checkbox-custom">Li e aceito os <span>termos de uso</span></label>
-    <input id="check" name="active" type="checkbox">
+
+    <label [class.label-error]="cadastroForm.check().touched() && cadastroForm.check().invalid()" for="check" class="checkbox-custom">Li e aceito os <span>termos de uso</span></label>
+    <input [class.input-error]="cadastroForm.check().touched() && cadastroForm.check().invalid()" [formField]="cadastroForm.check" id="check" type="checkbox">
   </div>
 
   <button>Criar conta</button>
