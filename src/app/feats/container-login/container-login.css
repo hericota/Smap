@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 400px;
   min-height: 100dvh;
-  background-image: url('/assets/login-img/fundo-mobile.jpg');
+  background-image: url('/assets/fundo-mobile.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
