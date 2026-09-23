@@ -8,4 +8,10 @@ import { RouterLink } from '@angular/router';
   styleUrl: './profile-config.css',
   templateUrl: './profile-config.html',
 })
-export class ProfileConfig {}
+export class ProfileConfig {
+
+  notificacao = false
+  aceitarNotificacao() {
+    this.notificacao = !this.notificacao
+  }
+}
