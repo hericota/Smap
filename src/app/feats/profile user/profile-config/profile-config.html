@@ -3,39 +3,72 @@
     <div class="container">
         <div class="perfil">
             <div class="icon-box">
-            <img class="foto-user" src="/assets/user.jpg" alt="usuario">
-            <button class="icon-edit"><img src="/assets/edit-icon.png"></button>
+                <img class="foto-user" src="/assets/user.jpg" alt="usuario">
+                <button class="icon-edit"><img src="/assets/edit-icon.png"></button>
             </div>
             <h2>Jordan</h2>
             <p>Jordan_67</p>
         </div>
 
         <div class="list">
-            <div >
-                <p>12</p>
-                <p>Registros</p>
+            <div class="card">
+                <p class=" registro">12</p>
+                <p class="card-text">Registros</p>
             </div>
 
+            <div class="divider"></div>
 
-           <div class="card">
-                <p>8</p>
-                <p>Resolvidos</p>
+            <div class="card">
+                <p class=" resolvidos">8</p>
+                <p class="card-text">Resolvidos</p>
             </div>
 
+            <div class="divider"></div>
 
-          <div >
-                <p>2</p>
-                <p>Em andamento</p>
+
+            <div class="card">
+                <p class="andamento">2</p>
+                <p class="card-text">Andamento</p>
             </div>
         </div>
 
-        <div>
-            <h3>Configurações</h3>
-            <ul>
-                <li>Dados pessoais</li>
-                <li> Notificações por email <button></button></li>
-                <li>Sobre o SMAP</li>
-            </ul>
+        <div class="box-config">
+            <h3 class="text-config">Configurações</h3>
+            <div class="box-ul">
+                <a routerLink="/">
+                    <div class="card-li">
+                        <div class="flex-icon">
+                            <img src="/assets/user-icon.png">Dados pessoais
+                        </div>
+                        <img class="arrow" src="/assets/arrow-icon.png">
+
+
+                    </div>
+                </a>
+
+
+
+                <div class="card-li">
+                    <div class="flex-icon">
+                        <img src="/assets/bell-icon.png"> Notificações por email
+                    </div>
+                    <button></button>
+
+                </div>
+
+
+                <a routerLink="/">
+                    <div class="card-li">
+
+                        <div class="flex-icon">
+                            <img src="/assets/info-icon.png">
+                            Sobre o SMAP
+                        </div>
+                        <img class="arrow" src="/assets/arrow-icon.png">
+
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 
