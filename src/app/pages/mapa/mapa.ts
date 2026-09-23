@@ -1,14 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Header } from '../../component/header/header';
 import { Ocorrencia } from '../../feats/ocorrencia';
-import { form, required } from '@angular/forms/signals';
 import { ConsumoApi } from '../../feats/posts/consumo-api';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
-
-const STORAGE_KEY = 'smap.ocorrencias.v1';
 
 @Component({
   selector: 'app-mapa',
@@ -20,6 +20,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
 
   readonly consumoService = inject(ConsumoApi);
   readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   ocorrenciaModel = signal<Ocorrencia>({
     categoria: '',
@@ -31,13 +32,6 @@ export class Mapa implements AfterViewInit, OnDestroy {
     localizacao: '',
   });
 
-  ocorrenciaForm = form(this.ocorrenciaModel, (s) => {
-    required(s.categoria, { message: 'Campo Obrigatório' });
-    required(s.descricao, { message: 'Campo Obrigatório' });
-    required(s.titulo, { message: 'Campo Obrigatório' });
-    required(s.localizacao, { message: 'Campo Obrigatório' });
-  });
-
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;
 
@@ -47,12 +41,14 @@ export class Mapa implements AfterViewInit, OnDestroy {
   readonly localizando = signal(false);
   readonly mensagem = signal('');
   readonly erro = signal('');
+  readonly erroCarregamento = signal('');
+  readonly carregando = signal(false);
+  readonly salvando = signal(false);
   readonly ocorrencias = signal<Ocorrencia[]>([]);
   private selecao?: L.CircleMarker;
   private registros = L.layerGroup();
   private requestId = 0;
   private destroyed = false;
-  private storageReady = true;
   private map?: L.Map;
   private resizeObserver?: ResizeObserver;
 
@@ -130,6 +126,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
     if (event) {
       event.preventDefault();
     }
+    if (this.salvando()) return;
 
     this.erro.set('');
     this.mensagem.set('');
@@ -138,21 +135,17 @@ export class Mapa implements AfterViewInit, OnDestroy {
     const dados = this.ocorrenciaModel();
 
     // 1. Validação dos campos e da seleção de mapa
-    if (form.invalid || !ponto || !this.categorias.includes(dados.categoria) || dados.descricao.trim().length < 10 || dados.descricao.length > 1000) {
+    if (form.invalid || !ponto || !dados.titulo.trim() || !dados.localizacao.trim() || !this.categorias.includes(dados.categoria) || dados.descricao.trim().length < 10 || dados.descricao.length > 1000) {
       form.control.markAllAsTouched();
       this.erro.set('Preencha os campos obrigatórios (descrição com no mínimo 10 caracteres) e selecione um ponto no mapa.');
-      return;
-    }
-
-    if (!this.storageReady) {
-      this.erro.set('O armazenamento local não pôde ser lido. Libere o armazenamento do navegador e recarregue antes de salvar.');
       return;
     }
 
     // 2. Monta o objeto completo incluindo todos os campos da interface Ocorrencia
     const registro: Ocorrencia = {
       ...dados,
-      id: Date.now(),
+      titulo: dados.titulo.trim(),
+      localizacao: dados.localizacao.trim(),
       descricao: dados.descricao.trim(),
       latitude: ponto.latitude,
       longitude: ponto.longitude,
@@ -160,9 +153,12 @@ export class Mapa implements AfterViewInit, OnDestroy {
     };
 
     // 3. Executa a requisição HTTP
-    this.consumoService.cadastrarOcorrencia(registro).subscribe({
-      next: (response) => {
-        console.log('Ocorrência cadastrada:', response.titulo, response.categoria);
+    this.salvando.set(true);
+    this.consumoService.cadastrarOcorrencia(registro).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      finalize(() => this.salvando.set(false)),
+    ).subscribe({
+      next: () => {
 
         this.router.navigate(['/confirmacao-ocorrencia']);
 
@@ -177,7 +173,6 @@ export class Mapa implements AfterViewInit, OnDestroy {
           localizacao: '',
         });
 
-        this.ocorrenciaForm().reset();
         form.resetForm();
 
         this.renderizar();
@@ -185,52 +180,51 @@ export class Mapa implements AfterViewInit, OnDestroy {
         this.localizando.set(false);
         this.selecao?.remove();
         this.ponto.set(null);
-        this.mensagem.set('Ocorrência salva neste navegador e adicionada ao mapa.');
+        this.mensagem.set('Ocorrência enviada ao servidor.');
       },
-      error: (error) => {
-        console.error('ERRO AO CADASTRAR:', error);
-        this.erro.set('Ocorreu um erro ao enviar para o servidor. Tente novamente.');
+      error: (error: HttpErrorResponse) => {
+        this.erro.set(error.status === 0
+          ? 'Não foi possível conectar à API. Verifique se o servidor está disponível e tente novamente.'
+          : 'O servidor não conseguiu salvar a ocorrência. Confira os dados e tente novamente.');
       }
 
     });
   }
 
-  private lerRegistros(): Ocorrencia[] {
-    const data: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
-    if (!Array.isArray(data) || !data.every((item) =>
-      item &&
-      (typeof item.id === 'string' || typeof item.id === 'number') &&
-      this.categorias.includes(item.categoria) &&
-      typeof item.descricao === 'string' && item.descricao.length <= 1000 &&
-      typeof item.titulo === 'string' &&
-      typeof item.localizacao === 'string' &&
-      Number.isFinite(item.latitude) && Math.abs(item.latitude) <= 90 &&
-      Number.isFinite(item.longitude) && Math.abs(item.longitude) <= 180 &&
-      typeof item.criadaEm === 'string'
-    )) throw new Error('Dados locais inválidos');
-    return data;
+  carregar(): void {
+    if (this.carregando()) return;
+    this.carregando.set(true);
+    this.erroCarregamento.set('');
+    this.consumoService.listarOcorrencias().pipe(
+      takeUntilDestroyed(this.destroyRef),
+      finalize(() => this.carregando.set(false)),
+    ).subscribe({
+      next: (registros) => {
+        if (!Array.isArray(registros)) {
+          this.erroCarregamento.set('A API retornou uma lista de ocorrências em formato inesperado.');
+          return;
+        }
+        this.ocorrencias.set(registros.filter((item) => item != null));
+        this.renderizar();
+        const pontos = this.ocorrencias().filter((item) => this.temCoordenadas(item));
+        if (pontos.length) {
+          this.map?.fitBounds(pontos.map((o) => [o.latitude!, o.longitude!] as L.LatLngTuple),
+            { maxZoom: 16, padding: [24, 24] });
+        }
+      },
+      error: () => this.erroCarregamento.set('Não foi possível carregar as ocorrências da API. Tente novamente quando o servidor estiver disponível.'),
+    });
   }
 
-  private carregar(): void {
-    try {
-      this.ocorrencias.set(this.lerRegistros());
-      this.renderizar();
-      if (this.ocorrencias().length) {
-        this.map?.fitBounds(
-          this.ocorrencias().map((o) => [o.latitude!, o.longitude!] as L.LatLngTuple),
-          { maxZoom: 16, padding: [24, 24] }
-        );
-      }
-    } catch {
-      this.storageReady = false;
-      this.erro.set('Não foi possível ler os registros deste navegador. Os dados existentes não foram alterados.');
-    }
+  private temCoordenadas(registro: Ocorrencia): registro is Ocorrencia & { latitude: number; longitude: number } {
+    return Number.isFinite(registro.latitude) && Math.abs(registro.latitude!) <= 90 &&
+      Number.isFinite(registro.longitude) && Math.abs(registro.longitude!) <= 180;
   }
 
   private renderizar(): void {
     this.registros.clearLayers();
     for (const registro of this.ocorrencias()) {
-      if (registro.latitude != null && registro.longitude != null) {
+      if (this.temCoordenadas(registro)) {
         const popup = document.createElement('div');
         const title = document.createElement('strong');
         title.textContent = registro.titulo || registro.categoria;
