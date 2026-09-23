@@ -3,7 +3,7 @@
 
   <h2>Gestão de ocorrências</h2>
 
-  @for (ocorrencia of ocorrencias().value; track $index) {
+  @for (ocorrencia of ocorrencias; track $index) {
   <div id="ocorrencia">
     <h3 id="titulo">{{ocorrencia.titulo}}</h3>
     <p id="descricao">{{ocorrencia.descricao}}</p>

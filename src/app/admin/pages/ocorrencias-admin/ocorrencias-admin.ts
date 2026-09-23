@@ -17,8 +17,8 @@ export class OcorrenciasAdmin {
 
   private route = inject(ActivatedRoute);
   
-  // metodo get
-   readonly ocorrencias = httpResource<Ocorrencia>[](
+   readonly PegandoOcorrencias = httpResource<Ocorrencia[]>(
         () => this.urlApi
     )
+    ocorrencias = this.PegandoOcorrencias.value
 }
