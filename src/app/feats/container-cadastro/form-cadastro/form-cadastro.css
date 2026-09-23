@@ -15,6 +15,15 @@ form {
 input::placeholder {
   color: #64748b;
 }
+.nomeSobrenome{
+  width: 100%;
+  display: flex;
+ gap: 12px;
+}
+.nomeSobrenome .box-input{
+  flex: 1; 
+  min-width: 0;
+}
 .check-box {
   display: flex;
   flex-direction: row-reverse;

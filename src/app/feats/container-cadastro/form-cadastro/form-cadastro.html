@@ -1,41 +1,47 @@
+<form (submit)="cadastrar($event)">
 
-<form>
-<div class="box-input">
-<label for="nome">Nome completo</label>
-<input id="nome" type="text" placeholder="Nome e sobrenome">
-</div>
+  <div class="nomeSobrenome">
+    <div class="box-input">
+      <label for="nome">Nome</label>
+      <input id="nome" type="text" placeholder="Nome">
+    </div>
 
-<div class="box-input">
-<label for="email">E-mail</label>
-<input id="email" type="email" placeholder="email@gmail.com">
-</div>
+    <div class="box-input">
+      <label for="sobrenome">Sobrenome</label>
+      <input id="sobrenome" type="text" placeholder="sobrenome">
+    </div>
+  </div>
 
-<div class="box-input">
-<label for="CPF">CPF</label>
-<input id="CPF" type="text" placeholder="000.000.000-00"> 
-</div>
+  <div class="box-input">
+    <label for="email">E-mail</label>
+    <input id="email" type="email" placeholder="email@gmail.com">
+  </div>
 
-<div class="box-input">
-<label for="phone">Telefone</label>
-<input id="phone" type="tel" placeholder="(00) 99999-9999">
-</div>
+  <div class="box-input">
+    <label for="CPF">CPF</label>
+    <input id="CPF" type="text" placeholder="000.000.000-00">
+  </div>
 
-<div class="box-input">
-<label for="CEP">CEP</label>
-<input id="CEP" type="text" placeholder="00000-000">
-</div>
+  <div class="box-input">
+    <label for="phone">Telefone</label>
+    <input id="phone" type="tel" placeholder="(00) 99999-9999">
+  </div>
 
-<div class="box-input">
-<label for="password">Senha</label>
-<input id="password" type="password" placeholder="Crie uma senha forte">
-</div>
+  <div class="box-input">
+    <label for="CEP">CEP</label>
+    <input id="CEP" type="text" placeholder="00000-000">
+  </div>
 
-<div class="box-input check-box">
-<label for="check" class="checkbox-custom">Li e aceito os <span>termos de uso</span></label>
-<input id="check" type="checkbox">
-</div>
+  <div class="box-input">
+    <label for="password">Senha</label>
+    <input id="password" type="password" placeholder="Crie uma senha forte">
+  </div>
 
-<button>Criar conta</button>
+  <div class="box-input check-box">
+    <label for="check" class="checkbox-custom">Li e aceito os <span>termos de uso</span></label>
+    <input id="check" name="active" type="checkbox">
+  </div>
 
+  <button>Criar conta</button>
 
 </form>
