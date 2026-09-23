@@ -9,4 +9,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './container-cadastro.css',
   templateUrl: './container-cadastro.html',
 })
-export class ContainerCadastro {}
+export class ContainerCadastro {
+  
+}
