@@ -8,6 +8,7 @@ import { ConfirmacaoPost } from './feats/posts/confirmacao-post/confirmacao-post
 import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
+import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
 
 
 export const routes: Routes = [
@@ -92,6 +93,7 @@ export const routes: Routes = [
       },
     ],
   },
+  {path:'ocorrencias', component: TelaOcorrencias},
   {path:"mapa-separado", component:MapaSeparado}
 ];
 
