@@ -1,29 +1,34 @@
 <form (submit)="fazerLogin($event)">
-    <div class="caixa-input">
-      <div class="box-validators">
-        <label [class.label-error]="loginForm.email().touched() && loginForm.email().invalid()" for="email">E-mail</label>  @if (loginForm.email().touched() && loginForm.email().invalid() ) {
-          @for (error of loginForm.email().errors(); track error.kind) {  <span class="errorValidators">{{ error.message }}</span>}
-        }</div>
-        <input [formField]="loginForm.email" id="email" type="email" placeholder="E-mail" [class.input-error]="loginForm.email().touched() && loginForm.email().invalid() ">
-       
-    </div>
 
-    <div class="caixa-input">
-       <div class="box-validators">
-        <label [class.label-error]="loginForm.password().touched() && loginForm.password().invalid()" for="password">Senha</label> @if (loginForm.password().touched() && loginForm.password().invalid() ) {
-          @for (error of loginForm.password().errors(); track error.kind) {  <span class="errorValidators">{{ error.message }}</span>}
-        }</div>
-        <input  [formField]="loginForm.password" id="password" type="password" placeholder="Senha"  [class.input-error]="loginForm.password().touched() && loginForm.password().invalid() ">
-        
-    </div>
+  <div class="caixa-input">
 
-    <a routerLink="/">Esqueceu a senha?</a>
-    <button>Entrar</button>
+    <div class="box-validators">
 
-    <div class="detalhe">
-      <div></div>
-       <p>ou</p>
-      <div></div>
-       
+      <label [class.label-error]="loginForm.email().touched() && loginForm.email().invalid()" for="email">E-mail</label>
+      @if (loginForm.email().touched() && loginForm.email().invalid() ) {
+      @for (error of loginForm.email().errors(); track error.kind) { <span class="errorValidators">{{ error.message }}</span>}}
     </div>
+    <input [formField]="loginForm.email" id="email" type="email" placeholder="E-mail" [class.input-error]="loginForm.email().touched() && loginForm.email().invalid() ">
+
+  </div>
+
+  <div class="caixa-input">
+    <div class="box-validators">
+      <label [class.label-error]="loginForm.password().touched() && loginForm.password().invalid()" for="password">Senha</label> @if (loginForm.password().touched() && loginForm.password().invalid() ) {
+      @for (error of loginForm.password().errors(); track error.kind) { <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [formField]="loginForm.password" id="password" type="password" placeholder="Senha" [class.input-error]="loginForm.password().touched() && loginForm.password().invalid() ">
+
+  </div>
+
+  <a routerLink="/">Esqueceu a senha?</a>
+  <button>Entrar</button>
+
+  <div class="detalhe">
+    <div></div>
+    <p>ou</p>
+    <div></div>
+
+  </div>
 </form>
