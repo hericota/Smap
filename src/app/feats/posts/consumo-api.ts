@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Ocorrencia } from '../ocorrencia';
 
@@ -11,4 +11,10 @@ export class ConsumoApi {
     cadastrarOcorrencia(ocorrencia:Ocorrencia){
         return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia)
     }
+
+    ocorrenciaRegistrada = httpResource<Ocorrencia[]>(
+        () => this.urlApi,
+        {defaultValue:[]}
+    )
+
 }
