@@ -1,0 +1,26 @@
+.dashboard-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-eyebrow {
+  margin: 0 0 8px;
+  color: #2f8f5b;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dashboard-page h2 {
+  margin: 0;
+  color: #1f2a24;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.page-description {
+  margin: 12px 0 0;
+  color: #68736d;
+  font-size: 16px;
+}

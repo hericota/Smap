@@ -12,17 +12,17 @@ export class BottomNav {
   readonly itens = [
     {
       nome: 'Início',
-      rota: '/hero',
+      rota: '/home',
       icone: 'M3 10 12 3l9 7v11h-6v-8H9v8H3Z',
     },
     {
       nome: 'Mapa',
-      rota: '/mapa',
+      rota: '/mapa-separado',
       icone: 'm3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2ZM9 3v16M15 5v16',
     },
     {
       nome: 'Ocorrências',
-      rota: '/ocorrencias',
+      rota: '/',
       icone: 'M9 5h12M9 12h12M9 19h12M3 5h1M3 12h1M3 19h1',
     },
     {

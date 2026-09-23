@@ -1,7 +1,7 @@
-<app-header></app-header>
 <div class="hero">
-    <div>
-        <p class="title-text">A mudança começa  <span class="text-direction">com <span class="you">você</span></span></p>
+    <div class="title">
+        <p class="title-text">A mudança começa <br>
+        com <span class="you">você.</span></p>
     </div>
     <div class="text-box">
          <p>
@@ -10,6 +10,20 @@
             sua cidade em uma cidade inteligente 
             e colaborativa.
         </p>
+    </div>
+
+    <div class="btn">
+        <div class="btn-regitrar">
+            <a routerLink="/registrar-ocorrencia">Registrar ocorrência</a>
+        </div>
+        <div class="btn-explorer">
+            <a routerLink="/mapa-separado">
+                <span>
+                    Explorar Mapa
+                </span>  
+            </a>
+        </div>
+        <div class="mapa-hero"><app-mapa-separado></app-mapa-separado></div>
     </div>
 </div>
  
