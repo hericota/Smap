@@ -22,7 +22,7 @@ export class BottomNav {
     },
     {
       nome: 'Ocorrências',
-      rota: '/',
+      rota: '/ocorrencias',
       icone: 'M9 5h12M9 12h12M9 19h12M3 5h1M3 12h1M3 19h1',
     },
     {
