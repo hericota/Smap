@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './pagina-offline.css',
   templateUrl: './pagina-offline.html',
 })
-export class PaginaOffline {}
+export class PaginaOffline {
+  recarregar() {
+    window.location.reload();
+  }
+}

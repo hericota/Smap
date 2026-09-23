@@ -1,4 +1,13 @@
-import { Service } from '@angular/core';
+import { Injectable, signal} from '@angular/core';
 
-@Service()
-export class NetworkService {}
+@Injectable({
+    providedIn: 'root'
+})
+export class NetworkService {
+    isOnline = signal<boolean>(navigator.onLine);
+
+  constructor() {
+    window.addEventListener('online', () => this.isOnline.set(true));
+    window.addEventListener('offline', () => this.isOnline.set(false));
+  }
+}
