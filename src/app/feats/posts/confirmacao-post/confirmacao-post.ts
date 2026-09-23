@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ConsumoApi } from '../consumo-api';
 
 @Component({
   imports: [],
@@ -6,4 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './confirmacao-post.css',
   templateUrl: './confirmacao-post.html',
 })
-export class ConfirmacaoPost {}
+export class ConfirmacaoPost {
+
+  protected consumoService = inject(ConsumoApi)
+  
+
+}
