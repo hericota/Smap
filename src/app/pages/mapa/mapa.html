@@ -81,11 +81,18 @@
       }
       <p role="status">{{ mensagem() }}</p>
 
-      <button type="submit" [disabled]="localizando()">Salvar ocorrência</button>
+      <button type="submit" [disabled]="localizando() || salvando()">{{ salvando() ? 'Enviando…' : 'Salvar ocorrência' }}</button>
     </form>
 
     <!-- Seção do Mapa e Lista de Registros -->
     <section aria-label="Ocorrências registradas">
+      @if (carregando()) {
+        <p role="status">Carregando ocorrências…</p>
+      }
+      @if (erroCarregamento()) {
+        <p role="alert">{{ erroCarregamento() }}</p>
+        <button type="button" (click)="carregar()" [disabled]="carregando()">Tentar novamente</button>
+      }
       <div #mapContainer class="map" role="region" aria-label="Mapa interativo de ocorrências"></div>
 
       <p class="hint">{{ ocorrencias().length }} ocorrência(s). Azul: ponto selecionado. Verde: ocorrência salva.</p>
