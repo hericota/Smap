@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { BottomNav } from '../../../components/bottom-nav/bottom-nav';
 
 @Component({
-  imports: [],
+  imports: [BottomNav],
   selector: 'app-profile-config',
   styleUrl: './profile-config.css',
   templateUrl: './profile-config.html',
