@@ -1,9 +1,29 @@
 <section class="admin-page">
   <p class="page-eyebrow">Ocorrências</p>
-
   <h2>Gestão de ocorrências</h2>
 
-  <p class="page-description">
-    Aqui serão listadas, filtradas e gerenciadas as ocorrências urbanas.
+  @if (ocorrenciaDetail.isLoading()) {
+  <p>Carregando ocorrências...</p>
+  } @else if (ocorrenciaDetail.error()) {
+  <p class="erro">
+    Não foi possível carregar as ocorrências.
   </p>
+  } @else {
+  <div class="lista-ocorrencias">
+    @for (
+    ocorrencia of ocorrenciaDetail.value() ?? [];
+    track ocorrencia.id
+    ) {
+    <div class="ocorrencia-card">
+      <h3>Ocorrência #{{ ocorrencia.id }}</h3>
+      <p>Titulo: {{ocorrencia.titulo}}</p>
+      <p>Descricao: {{ocorrencia.descricao}}</p>
+      <p>Categoria: {{ocorrencia.categoria}}</p>
+
+    </div>
+    } @empty {
+    <p>Nenhuma ocorrência encontrada.</p>
+    }
+  </div>
+  }
 </section>
