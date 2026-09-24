@@ -2,11 +2,94 @@
   <p class="page-eyebrow">Mapa</p>
 
   <h2>Mapa de ocorrências</h2>
-  <div id="mapa">
-  <app-mapa-separado></app-mapa-separado>
-  </div>
 
   <p class="page-description">
     Visualize a distribuição das ocorrências urbanas no mapa.
   </p>
+</section>
+
+<section class="mapa-grid">
+  <article class="mapa-card">
+    @if (carregando()) {
+    <p class="mapa-estado">Carregando ocorrências…</p>
+    } @else if (comErro()) {
+    <div class="mapa-estado">
+      <p>
+        Não foi possível carregar as ocorrências. Confirme se a API está rodando em
+        http://localhost:8080.
+      </p>
+
+      <button type="button" class="botao-tentar" (click)="carregar()">Tentar novamente</button>
+    </div>
+    } @else if (comCoordenadas().length === 0) {
+    <p class="mapa-estado">
+      Nenhuma ocorrência com coordenadas no mapa ainda.
+      @if (semCoordenadas() > 0) {
+      <span>{{ semCoordenadas() }} ocorrência(s) foram registradas sem latitude/longitude.</span>
+      }
+    </p>
+    }
+
+    <div class="mapa-legenda">
+      <span class="legenda-item">
+        <span class="legenda-dot dot-alta"></span> Alta ({{ contagemNiveis().alta }})
+      </span>
+      <span class="legenda-item">
+        <span class="legenda-dot dot-media"></span> Média ({{ contagemNiveis().media }})
+      </span>
+      <span class="legenda-item">
+        <span class="legenda-dot dot-baixa"></span> Baixa ({{ contagemNiveis().baixa }})
+      </span>
+
+      <span class="legenda-nota">intensidade por nº de registros na região</span>
+    </div>
+
+    <div #mapContainer class="mapa-container" role="region" aria-label="Mapa de ocorrências"></div>
+  </article>
+
+  <aside class="lista-card">
+    <h3>Ocorrências no mapa ({{ comCoordenadas().length }})</h3>
+
+    @if (regioesResumo().length > 0) {
+    <div class="regioes-chips">
+      @for (regiao of regioesResumo(); track regiao.nome) {
+      <span class="regiao-chip">{{ regiao.nome }} ({{ regiao.total }})</span>
+      }
+    </div>
+    }
+
+    @for (ocorrencia of comCoordenadas(); track ocorrencia.id) {
+    <button type="button" class="lista-item" [class.ativa]="selecionadaId() === ocorrencia.id"
+      (click)="focar(ocorrencia)">
+      <strong>#{{ ocorrencia.id }} {{ ocorrencia.titulo }}</strong>
+
+      <span class="lista-meta">
+        {{ ocorrencia.categoria }} — {{ regiaoDe(ocorrencia.localizacao) }} ·
+        {{ diasAtras(ocorrencia.criadaEm) }}
+      </span>
+    </button>
+    } @empty {
+    <p class="lista-vazia">Nada para listar ainda.</p>
+    }
+
+    @if (semCoordenadas() > 0) {
+    <p class="lista-aviso">
+      {{ semCoordenadas() }} ocorrência(s) sem coordenadas não aparecem no mapa.
+    </p>
+    }
+
+    <h3 class="lista-subtitulo">Ocorrências recentes</h3>
+
+    @for (ocorrencia of recentes(); track ocorrencia.id) {
+    <div class="recente-item">
+      <strong>#{{ ocorrencia.id }} {{ ocorrencia.titulo }}</strong>
+
+      <span class="lista-meta">
+        {{ ocorrencia.categoria }} · {{ diasAtras(ocorrencia.criadaEm) }}
+      </span>
+    </div>
+    } @empty {
+    <p class="lista-vazia">Nada ainda.</p>
+    }
+  </aside>
 </section>
