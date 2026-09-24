@@ -224,4 +224,4 @@ O SMAP está **em desenvolvimento**. O frontend de registro e visualização de 
 
 ## Autor
 
-Desenvolvido por [Henrique Galvão](https://github.com/hericota) e colaboradores durante o programa Entra21.
+Desenvolvido por Smap durante o programa Entra21.
