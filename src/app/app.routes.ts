@@ -12,7 +12,6 @@ import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
 
 
 export const routes: Routes = [
-  {path:'home', component:Home},
   {path:'header', component:Header},
   {path:'home', component:Home},
   {path:'hero', component:Hero},
@@ -20,7 +19,7 @@ export const routes: Routes = [
   {path: 'perfil-usuario' , component: ProfileHome},
   {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
-  {path:'confirmacao-ocorrencia' , component:ConfirmacaoPost},
+  {path:'confirmacao-ocorrencia/:id' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'registrar-ocorrencia',

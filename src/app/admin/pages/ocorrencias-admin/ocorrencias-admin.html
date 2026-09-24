@@ -1,181 +1,29 @@
 <section class="admin-page">
-  <header class="page-header">
-    <div>
-      <h2>Ocorrências</h2>
+  <p class="page-eyebrow">Ocorrências</p>
+  <h2>Gestão de ocorrências</h2>
 
-      <p class="page-description">
-        1.247 ocorrências registradas no sistema
-      </p>
+  @if (ocorrenciaDetail.isLoading()) {
+  <p>Carregando ocorrências...</p>
+  } @else if (ocorrenciaDetail.error()) {
+  <p class="erro">
+    Não foi possível carregar as ocorrências.
+  </p>
+  } @else {
+  <div class="lista-ocorrencias">
+    @for (
+    ocorrencia of ocorrenciaDetail.value() ?? [];
+    track ocorrencia.id
+    ) {
+    <div class="ocorrencia-card">
+      <h3>Ocorrência #{{ ocorrencia.id }}</h3>
+      <p>Titulo: {{ocorrencia.titulo}}</p>
+      <p>Descricao: {{ocorrencia.descricao}}</p>
+      <p>Categoria: {{ocorrencia.categoria}}</p>
+
     </div>
-
-    <button type="button" class="botao-exportar" (click)="exportarCsv()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12" y1="15" x2="12" y2="3" />
-      </svg>
-
-      Exportar CSV
-    </button>
-  </header>
-
-  <section class="filtro-card">
-    <div class="busca-caixa">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
-
-      <input type="text" placeholder="Buscar por código SMAP, endereço ou descrição..." [value]="busca()"
-        (input)="onBusca($event)" />
-    </div>
-
-    <div class="filtro-linha">
-      <select class="filtro-seletor" [value]="filtroPrioridade()" (change)="onFiltroPrioridade($event)"
-        aria-label="Filtrar por prioridade">
-        <option value="">Prioridade</option>
-        <option value="Alta">Alta</option>
-        <option value="Média">Média</option>
-        <option value="Baixa">Baixa</option>
-      </select>
-
-      <select class="filtro-seletor" [value]="filtroStatus()" (change)="onFiltroStatus($event)"
-        aria-label="Filtrar por status">
-        <option value="">Status</option>
-        @for (status of statusDisponiveis; track status) {
-        <option [value]="status">{{ status }}</option>
-        }
-      </select>
-
-      <select class="filtro-seletor" [value]="filtroCategoria()" (change)="onFiltroCategoria($event)"
-        aria-label="Filtrar por categoria">
-        <option value="">Categoria</option>
-        @for (categoria of categoriasDisponiveis; track categoria) {
-        <option [value]="categoria">{{ categoria }}</option>
-        }
-      </select>
-
-      <select class="filtro-seletor" [value]="filtroRegiao()" (change)="onFiltroRegiao($event)"
-        aria-label="Filtrar por região">
-        <option value="">Região</option>
-        @for (regiao of regioesDisponiveis; track regiao) {
-        <option [value]="regiao">{{ regiao }}</option>
-        }
-      </select>
-
-      <select class="filtro-seletor" [value]="filtroPeriodo()" (change)="onFiltroPeriodo($event)"
-        aria-label="Filtrar por período">
-        <option value="">Período</option>
-        <option value="7">Últimos 7 dias</option>
-        <option value="15">Últimos 15 dias</option>
-        <option value="30">Últimos 30 dias</option>
-      </select>
-    </div>
-
-    @if (filtrosAtivos().length > 0) {
-    <div class="ativos-linha">
-      <span class="ativos-rotulo">Filtros ativos:</span>
-
-      @for (filtro of filtrosAtivos(); track filtro.chave) {
-      <span [class]="'ativo-chip ativo-' + filtro.chave">
-        {{ filtro.rotulo }}
-
-        <button type="button" class="ativo-remover" (click)="limparFiltro(filtro.chave)"
-          [attr.aria-label]="'Remover filtro ' + filtro.rotulo">×</button>
-      </span>
-      }
-
-      <button type="button" class="limpar-todos" (click)="limparFiltros()">Limpar todos</button>
-    </div>
+    } @empty {
+    <p>Nenhuma ocorrência encontrada.</p>
     }
-  </section>
-
-  <section class="tabela-card">
-    <div class="tabela-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Foto</th>
-            <th>Categoria</th>
-            <th>Localização</th>
-            <th>Prioridade</th>
-            <th>Status</th>
-            <th>Aguardando</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          @if (ocorrenciasPaginadas().length === 0) {
-          <tr class="linha-vazia">
-            <td colspan="7">Nenhuma ocorrência encontrada para os filtros aplicados.</td>
-          </tr>
-          } @else {
-          @for (ocorrencia of ocorrenciasPaginadas(); track ocorrencia.codigo) {
-          <tr class="linha-clicavel" (click)="abrirDetalhe(ocorrencia.codigo)">
-            <td class="celula-codigo">{{ ocorrencia.codigo }}</td>
-
-            <td>
-              <span class="foto-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="m21 15-5-5L5 21" />
-                </svg>
-              </span>
-            </td>
-
-            <td>{{ ocorrencia.categoria }}</td>
-
-            <td>{{ ocorrencia.endereco }}</td>
-
-            <td>
-              <span class="prioridade-celula">
-                <span class="ponto" [class]="classePrioridade(ocorrencia.prioridade)"></span>
-                {{ ocorrencia.prioridade }}
-              </span>
-            </td>
-
-            <td>
-              <span class="status-chip" [class]="classeStatus(ocorrencia.status)">{{ ocorrencia.status }}</span>
-            </td>
-
-            <td class="celula-dias" [class]="classeDias(ocorrencia.diasAguardando)">
-              {{ ocorrencia.diasAguardando }} dias
-            </td>
-          </tr>
-          }
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <footer class="tabela-rodape">
-      @if (ocorrenciasFiltradas().length === 0) {
-      <span>Nenhuma ocorrência encontrada</span>
-      } @else {
-      <span>
-        Mostrando {{ inicioFaixa() }}-{{ fimFaixa() }} de {{ ocorrenciasFiltradas().length }}
-        {{ ocorrenciasFiltradas().length === 1 ? 'ocorrência' : 'ocorrências' }}
-      </span>
-      }
-
-      <div class="paginacao">
-        <button type="button" (click)="paginaAnterior()" [disabled]="paginaAtual() === 1">Anterior</button>
-
-       @for (pagina of paginas(); track pagina) {
-        <button type="button" [class.ativa]="pagina === paginaAtual()" (click)="selecionarPagina(pagina)">
-          {{ pagina }}
-        </button>
-        }
-
-        <button type="button" (click)="proximaPagina()" [disabled]="paginaAtual() === totalPaginas()">
-          Próxima
-        </button>
-      </div>
-    </footer>
-  </section>
+  </div>
+  }
 </section>

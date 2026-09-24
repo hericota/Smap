@@ -1,15 +1,37 @@
-<div>
-    <h1>Ocorrência Registrada</h1>
+<div class="card">
 
-    <p>
-        Seu registro #id foi enviado com sucesso.
-    </p>
-    <p>
-        Você pode acompanhar o progresso a qualquer momento.
-    </p>
+    @if (ocorrenciaDetail.isLoading()) {
 
-    <div class="btn">
-        <a class="btn-ocorrencia">Ver minhas ocorrências</a>
-        <a class="btn-regitrar">Registrar outra ocorrência</a>
-    </div>
+        <div class="card-loading">
+            <span class="loader"></span>
+            <p>Carregando ocorrência...</p>
+        </div>
+
+    } @else if (ocorrenciaDetail.error()) {
+
+        <div class="card-error">
+            <span>!</span>
+            <p>Não foi possível carregar a ocorrência.</p>
+        </div>
+
+    } @else if (ocorrenciaDetail.hasValue()) {
+
+        <div class="card-content">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <div class="card-info">
+                <span>Ocorrência registrada</span>
+
+                <h2>
+                    {{ ocorrenciaDetail.value().titulo }}
+                </h2>
+            </div>
+
+        </div>
+
+    }
+
 </div>

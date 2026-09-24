@@ -1,13 +1,13 @@
 <div class="hero">
     <div class="title">
         <p class="title-text">A mudança começa <br>
-        com <span class="you">você.</span></p>
+            com <span class="you">você.</span></p>
     </div>
     <div class="text-box">
-         <p>
-            Registre problemas urbanos, 
-            acompanhe soluções e transforme 
-            sua cidade em uma cidade inteligente 
+        <p>
+            Registre problemas urbanos,
+            acompanhe soluções e transforme
+            sua cidade em uma cidade inteligente
             e colaborativa.
         </p>
     </div>
@@ -20,10 +20,23 @@
             <a routerLink="/mapa-separado">
                 <span>
                     Explorar Mapa
-                </span>  
+                </span>
             </a>
         </div>
-        <div class="mapa-hero"><app-mapa-separado></app-mapa-separado></div>
+        <div class="defer-loading">
+            @defer (on immediate) {
+            <div class="mapa-hero"><app-mapa-separado></app-mapa-separado></div>
+            } @loading {
+            <div class="spinner-container">
+                <div class="spinner-media">
+                    <img src="/assets/spinner.png" alt="Spinner">
+                </div>
+                <div class="spinner-text">
+                    <h3>Carregando mapa...</h3>
+                </div>
+            </div>
+            }
+        </div>
+
     </div>
 </div>
- 
