@@ -52,7 +52,7 @@ export const routes: Routes = [
           ),
       },
 
-     
+
       {
         path: 'ocorrencias',
         title: 'Ocorrências | SMAP',
@@ -62,7 +62,16 @@ export const routes: Routes = [
           ).then((m) => m.OcorrenciasAdmin),
       },
 
-      
+      {
+        path: 'ocorrencias/:codigo',
+        title: 'Detalhe da ocorrência | SMAP',
+        loadComponent: () =>
+          import(
+            './admin/pages/ocorrencia-detalhe-admin/ocorrencia-detalhe-admin'
+          ).then((m) => m.OcorrenciaDetalheAdmin),
+      },
+
+
       {
         path: 'mapa',
         title: 'Mapa administrativo | SMAP',
@@ -72,7 +81,7 @@ export const routes: Routes = [
           ),
       },
 
-      
+
       {
         path: 'regioes',
         title: 'Regiões | SMAP',
@@ -82,7 +91,7 @@ export const routes: Routes = [
           ),
       },
 
-     
+
       {
         path: 'configuracoes',
         title: 'Configurações | SMAP',
@@ -96,5 +105,3 @@ export const routes: Routes = [
   {path:'ocorrencias', component: TelaOcorrencias},
   {path:"mapa-separado", component:MapaSeparado}
 ];
-
-
