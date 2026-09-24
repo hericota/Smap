@@ -158,29 +158,11 @@ export class Mapa implements AfterViewInit, OnDestroy {
       takeUntilDestroyed(this.destroyRef),
       finalize(() => this.salvando.set(false)),
     ).subscribe({
-      next: () => {
+      next: (response) => {
+        
+          this.router.navigate(['/confirmacao-ocorrencia', response.id]);
 
-        this.router.navigate(['/confirmacao-ocorrencia']);
 
-        // Reseta formulários e estado
-        this.ocorrenciaModel.set({
-          categoria: '',
-          descricao: '',
-          latitude: 0,
-          longitude: 0,
-          criadaEm: '',
-          titulo: '',
-          localizacao: '',
-        });
-
-        form.resetForm();
-
-        this.renderizar();
-        this.requestId++;
-        this.localizando.set(false);
-        this.selecao?.remove();
-        this.ponto.set(null);
-        this.mensagem.set('Ocorrência enviada ao servidor.');
       },
       error: (error: HttpErrorResponse) => {
         this.erro.set(error.status === 0

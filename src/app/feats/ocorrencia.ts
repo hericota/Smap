@@ -1,5 +1,4 @@
 export interface Ocorrencia {
-
   id?: number;
   categoria: string;
   descricao: string;

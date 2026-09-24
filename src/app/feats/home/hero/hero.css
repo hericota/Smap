@@ -88,6 +88,26 @@
     height: 18px;
     object-fit: contain;
 }
+
+.spinner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    gap: 12px;
+}
+
+.spinner-media {
+    display: flex;
+    justify-content: center;
+}
+
+.spinner-text h3{
+    color: #64748B;
+    font-weight: 500;
+}
+
 .mapa-hero{
     margin-top: 20px;
     width: 750px;
