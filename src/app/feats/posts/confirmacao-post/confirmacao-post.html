@@ -1,0 +1,37 @@
+<div class="card">
+
+    @if (ocorrenciaDetail.isLoading()) {
+
+        <div class="card-loading">
+            <span class="loader"></span>
+            <p>Carregando ocorrência...</p>
+        </div>
+
+    } @else if (ocorrenciaDetail.error()) {
+
+        <div class="card-error">
+            <span>!</span>
+            <p>Não foi possível carregar a ocorrência.</p>
+        </div>
+
+    } @else if (ocorrenciaDetail.hasValue()) {
+
+        <div class="card-content">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <div class="card-info">
+                <span>Ocorrência registrada</span>
+
+                <h2>
+                    {{ ocorrenciaDetail.value().titulo }}
+                </h2>
+            </div>
+
+        </div>
+
+    }
+
+</div>

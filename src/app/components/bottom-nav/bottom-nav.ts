@@ -17,7 +17,7 @@ export class BottomNav {
     },
     {
       nome: 'Mapa',
-      rota: '/mapa',
+      rota: '/mapa-separado',
       icone: 'm3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2ZM9 3v16M15 5v16',
     },
     {

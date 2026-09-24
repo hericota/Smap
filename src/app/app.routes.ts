@@ -4,11 +4,14 @@ import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
 import { Home } from './feats/home/home';
 import { ContainerCadastro } from './feats/container-cadastro/container-cadastro';
+import { ConfirmacaoPost } from './feats/posts/confirmacao-post/confirmacao-post';
+import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
+import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
+
 
 export const routes: Routes = [
-  {path:'home', component:Home},
   {path:'header', component:Header},
   {path:'home', component:Home},
   {path:'hero', component:Hero},
@@ -16,12 +19,13 @@ export const routes: Routes = [
   {path: 'perfil-usuario' , component: ProfileHome},
   {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
+  {path:'confirmacao-ocorrencia/:id' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'registrar-ocorrencia',
     title: 'Mapa | SMAP',
     loadComponent: () =>
-      import('./pages/mapa/mapa').then((m) => m.Mapa),
+      import('./pages/mapa/mapa').then((m) => m.Mapa)
   },
 
   {
@@ -88,4 +92,8 @@ export const routes: Routes = [
       },
     ],
   },
+  {path:'ocorrencias', component: TelaOcorrencias},
+  {path:"mapa-separado", component:MapaSeparado}
 ];
+
+
