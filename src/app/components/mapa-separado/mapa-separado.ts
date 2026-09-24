@@ -59,8 +59,10 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
-    this.map = L.map(this.mapContainer.nativeElement)
-      .setView([-14.235, -51.9253], 4);
+    this.map = L.map(this.mapContainer.nativeElement).setView(
+      [-14.235, -51.9253],
+      4,
+    );
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -97,6 +99,7 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
           }
 
           this.erro.set('');
+
           this.ocorrencias.set(
             ocorrencias.filter((ocorrencia) => ocorrencia != null),
           );
@@ -115,18 +118,114 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
               continue;
             }
 
-            L.circleMarker([latitude, longitude], {
+            const marcador = L.circleMarker([latitude, longitude], {
               radius: 9,
               color: '#13795b',
               fillColor: '#13795b',
               fillOpacity: 0.8,
-            }).addTo(this.registros);
+              weight: 2,
+            });
+
+            marcador.bindTooltip(
+              this.criarConteudoOcorrencia(ocorrencia),
+              {
+                direction: 'top',
+                offset: L.point(0, -10),
+                opacity: 0.96,
+                sticky: true,
+                className: 'tooltip-ocorrencia',
+              },
+            );
+
+            marcador.addTo(this.registros);
           }
         },
         error: () => {
           this.erro.set('Não foi possível carregar as ocorrências.');
         },
       });
+  }
+
+  private criarConteudoOcorrencia(
+    ocorrencia: Ocorrencia,
+  ): HTMLDivElement {
+    const container = document.createElement('div');
+    container.className = 'conteudo-ocorrencia';
+
+    const titulo = document.createElement('strong');
+    titulo.className = 'conteudo-ocorrencia__titulo';
+    titulo.textContent = ocorrencia.titulo || 'Ocorrência';
+    container.appendChild(titulo);
+
+    this.adicionarInformacao(
+      container,
+      'Categoria',
+      ocorrencia.categoria,
+    );
+
+    this.adicionarInformacao(
+      container,
+      'Descrição',
+      ocorrencia.descricao,
+    );
+
+    this.adicionarInformacao(
+      container,
+      'Localização',
+      ocorrencia.localizacao,
+    );
+
+    const dataFormatada = this.formatarData(ocorrencia.criadaEm);
+
+    if (dataFormatada) {
+      this.adicionarInformacao(
+        container,
+        'Registrada em',
+        dataFormatada,
+      );
+    }
+
+    return container;
+  }
+
+  private adicionarInformacao(
+    container: HTMLElement,
+    rotulo: string,
+    valor?: string | null,
+  ): void {
+    if (!valor?.trim()) {
+      return;
+    }
+
+    const linha = document.createElement('div');
+    linha.className = 'conteudo-ocorrencia__linha';
+
+    const rotuloElemento = document.createElement('span');
+    rotuloElemento.className = 'conteudo-ocorrencia__rotulo';
+    rotuloElemento.textContent = `${rotulo}: `;
+
+    const valorElemento = document.createElement('span');
+    valorElemento.textContent = valor;
+
+    linha.append(rotuloElemento, valorElemento);
+    container.appendChild(linha);
+  }
+
+  private formatarData(valor?: string | null): string {
+    if (!valor) {
+      return '';
+    }
+
+    const data = new Date(valor);
+
+    if (Number.isNaN(data.getTime())) {
+      return valor;
+    }
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(data);
   }
 
   ngOnDestroy(): void {

@@ -1,3 +1,33 @@
 main { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
 .map { height: 100%; min-height: 360px; width: 100%; border: 1px solid #cbd8d1; }
+
+:host ::ng-deep .tooltip-ocorrencia {
+  max-width: 320px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  color: #1f2937;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
+  white-space: normal;
+}
+
+:host ::ng-deep .conteudo-ocorrencia {
+  display: grid;
+  gap: 5px;
+}
+
+:host ::ng-deep .conteudo-ocorrencia__titulo {
+  display: block;
+  margin-bottom: 3px;
+  color: #13795b;
+  font-size: 14px;
+}
+
+:host ::ng-deep .conteudo-ocorrencia__linha {
+  line-height: 1.35;
+}
+
+:host ::ng-deep .conteudo-ocorrencia__rotulo {
+  font-weight: 600;
+}
