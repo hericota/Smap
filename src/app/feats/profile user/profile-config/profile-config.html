@@ -52,7 +52,10 @@
                     <div class="flex-icon">
                         <img src="/assets/bell-icon.png"> Notificações por email
                     </div>
-                    <button></button>
+
+                    <button (click)="aceitarNotificacao()" [class.active]="notificacao" class="btn">
+                        <span class="bolinha-btn"></span></button>
+
 
                 </div>
 
@@ -72,6 +75,11 @@
         </div>
     </div>
 
-
+    <button class="sairDaConta">
+    <div>
+        <img class="exit-icon" src="/assets/exit-icon.png" >
+    </div>
+       <p>Sair da conta</p>
+    </button>
 </section>
 <app-bottom-nav></app-bottom-nav>
