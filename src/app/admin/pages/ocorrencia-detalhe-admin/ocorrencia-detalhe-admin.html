@@ -1,0 +1,144 @@
+<p>ocorrencia-detalhe-admin works!</p>
+<section class="detalhe-page">
+  <nav class="breadcrumb">
+    <a routerLink="/admin/ocorrencias">Ocorrências</a>
+
+    <span class="breadcrumb-separador">/</span>
+
+    <span class="breadcrumb-atual">{{ codigo }}</span>
+  </nav>
+
+  <div class="detalhe-grid">
+    <div class="coluna-esquerda">
+      <article class="card">
+        <div class="galeria">
+          <div class="galeria-placeholder" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path d="m21 15-5-5L5 21" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="galeria-dots">
+          @for (indice of indicesFotos; track indice) {
+          <button type="button" [class.ativo]="fotoAtiva() === indice" (click)="selecionarFoto(indice)"
+            [attr.aria-label]="'Ver foto ' + (indice + 1)"></button>
+          }
+        </div>
+
+        <h3 class="ocorrencia-titulo">Buraco na pista — Rua XV de Novembro</h3>
+
+        <p class="ocorrencia-descricao">
+          Há um buraco de grande porte na pista, próximo ao número 1420,
+          representando risco para veículos e motociclistas. O problema
+          piorou após as chuvas da última semana.
+        </p>
+
+        <div class="localizacao-card">
+          <h4>Localização do Incidente</h4>
+
+          <div #mapaContainer class="mapa"></div>
+
+          <p class="endereco">Rua XV de Novembro, 1420 - Centro, Blumenau - SC</p>
+        </div>
+      </article>
+
+      <article class="card card-cidadao">
+        <span class="cidadao-avatar" aria-hidden="true">AS</span>
+
+        <div class="cidadao-info">
+          <strong class="cidadao-nome">Ana Silva</strong>
+
+          <span class="cidadao-bio">Cidadã ativa no SMAP desde 2026</span>
+        </div>
+
+        <span class="cidadao-envio">Enviado em: 28 jan, 10:45</span>
+      </article>
+    </div>
+
+    <div class="coluna-direita">
+      <article class="card">
+        <h3 class="card-titulo">Gerenciamento</h3>
+
+        <div class="gerenciamento-linha">
+          <span class="gerenciamento-rotulo">Status Atual</span>
+
+          <span [class]="'status-chip ' + classeStatus(status())">{{ status() }}</span>
+        </div>
+
+        <div class="gerenciamento-linha">
+          <span class="gerenciamento-rotulo">Prioridade</span>
+
+          <span class="gerenciamento-valor prioridade-valor">
+            <span class="ponto" [class]="classePrioridade(prioridade)"></span>
+            {{ prioridade }}
+          </span>
+        </div>
+
+        <div class="gerenciamento-linha sem-borda">
+          <span class="gerenciamento-rotulo">Secretaria Responsável</span>
+
+          <span class="gerenciamento-valor">{{ secretaria }}</span>
+        </div>
+
+        @if (acaoPrimariaLabel(); as acao) {
+        <button type="button" class="botao-primario" (click)="executarAcaoPrimaria()">
+          {{ acao }}
+        </button>
+        } @else {
+        <p class="sem-acoes">Ocorrência finalizada — sem ações disponíveis.</p>
+        }
+
+        <div class="botoes-secundarios">
+          @if (pausarVisivel()) {
+          <button type="button" class="botao-secundario" (click)="pausar()">Pausar</button>
+          }
+
+          @if (rejeitarVisivel()) {
+          <button type="button" class="botao-perigo" (click)="rejeitar()">Rejeitar</button>
+          }
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="card-titulo">Histórico de Atualizações</h3>
+
+        <ol class="historico">
+          @for (registro of historico(); track $index) {
+          <li>
+            <span class="historico-ponto" [class.atual]="registro.statusDaEpoca === status()"></span>
+
+            <h4 class="historico-titulo">{{ registro.titulo }}</h4>
+
+            <p class="historico-descricao">{{ registro.descricao }}</p>
+
+            <span class="historico-meta">{{ registro.momento }} · {{ registro.autor }}</span>
+          </li>
+          }
+        </ol>
+      </article>
+    </div>
+  </div>
+</section>
+
+@if (modalAberto()) {
+<div class="modal-fundo" (click)="fecharModal()">
+  <div class="modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <span class="modal-icone" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+        stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </span>
+
+    <h3 class="modal-titulo">Status atualizado!</h3>
+
+    <p class="modal-mensagem">{{ modalMensagem() }}</p>
+
+    <button type="button" class="botao-primario" (click)="fecharModal()">OK, entendi</button>
+  </div>
+</div>
+}
