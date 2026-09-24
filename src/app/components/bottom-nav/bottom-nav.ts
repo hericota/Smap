@@ -27,7 +27,7 @@ export class BottomNav {
     },
     {
       nome: 'Perfil',
-      rota: '/perfil',
+      rota: '/perfil-usuario',
       icone: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2',
     },
   ];
