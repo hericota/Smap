@@ -22,7 +22,7 @@
   </header>
 
   <div class="indicadores">
-    @for (indicador of indicadores; track indicador.label) {
+    @for (indicador of indicadores(); track indicador.label) {
     <article class="indicador-card">
       <p class="indicador-rotulo">{{ indicador.label }}</p>
 
@@ -58,61 +58,65 @@
     </div>
   </article>
   <section class="zona-card">
-  <header class="zona-cabecalho">
-    <div>
-      <h3>Zonas de calor de ocorrências</h3>
-      <p>Concentração de registros por região da cidade.</p>
-    </div>
+    <header class="zona-cabecalho">
+      <div>
+        <h3>Zonas de calor de ocorrências</h3>
+        <p>Concentração de registros por região da cidade.</p>
+      </div>
 
-    <ul class="zona-legenda">
-      <li><span class="zona-marcador zona-alta"></span> Alta</li>
-      <li><span class="zona-marcador zona-media"></span> Média</li>
-      <li><span class="zona-marcador zona-baixa"></span> Baixa</li>
-    </ul>
-  </header>
+      <ul class="zona-legenda">
+        <li><span class="zona-marcador zona-alta"></span> Alta</li>
+        <li><span class="zona-marcador zona-media"></span> Média</li>
+        <li><span class="zona-marcador zona-baixa"></span> Baixa</li>
+      </ul>
+    </header>
 
-  <div class="zona-mapa" #mapContainer></div>
+    <div class="zona-mapa" #mapContainer></div>
+  </section>
 </section>
-</section>
 
-<section class="dashboard-rodape">
+<section class="dashboard-linha-2">
   <article class="regioes-card">
     <h3>Regiões Críticas</h3>
 
-    <div class="regioes-tabela">
-      <div class="regioes-linha regioes-cabecalho">
-        <span>Região</span>
-        <span>Total</span>
-        <span>Alta Prioridade</span>
-        <span>Tempo Médio</span>
-      </div>
+    <table class="regioes-tabela">
+      <thead>
+        <tr>
+          <th>Região</th>
+          <th>Total</th>
+          <th>Alta Prioridade</th>
+          <th>Tempo Médio</th>
+        </tr>
+      </thead>
 
-      @for (regiao of regioesCriticas; track regiao.regiao) {
-      <div class="regioes-linha">
-        <span class="regioes-nome">{{ regiao.regiao }}</span>
-        <span>{{ regiao.total }}</span>
-        <span [class.regioes-alerta]="regiao.altaPrioridade >= 10">{{ regiao.altaPrioridade }}</span>
-        <span>{{ regiao.tempoMedio }}</span>
-      </div>
-      }
-    </div>
+      <tbody>
+        @for (regiao of regioesCriticas; track regiao.nome) {
+        <tr>
+          <td>{{ regiao.nome }}</td>
+          <td>{{ regiao.total }}</td>
+          <td [class.regiao-alerta]="regiao.altaPrioridade >= 10">
+            {{ regiao.altaPrioridade }}
+          </td>
+          <td>{{ regiao.tempoMedioDias.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }} dias</td>
+        </tr>
+        }
+      </tbody>
+    </table>
   </article>
 
-  <section class="atencao-col">
+  <div class="atencao-coluna">
     <h3>Atenção Imediata (Antigas)</h3>
 
-    <div class="atencao-lista">
-      @for (ocorrencia of atencaoImediata; track ocorrencia.endereco) {
-      <article class="atencao-item">
-        <div class="atencao-linha">
-          <span [class]="'atencao-badge badge-' + ocorrencia.categoria">{{ ocorrencia.tipo }}</span>
+    @for (item of atencaoImediata; track item.endereco) {
+    <article class="atencao-card">
+      <div class="atencao-linha">
+        <span [class]="'atencao-badge ' + item.classe">{{ item.tipo }}</span>
 
-          <span class="atencao-dias">{{ ocorrencia.diasAguardando }} dias aguardando</span>
-        </div>
+        <span class="atencao-dias">{{ item.diasAguardando }} dias aguardando</span>
+      </div>
 
-        <p class="atencao-endereco">{{ ocorrencia.endereco }}</p>
-      </article>
-      }
-    </div>
-  </section>
+      <p class="atencao-endereco">{{ item.endereco }}</p>
+    </article>
+    }
+  </div>
 </section>

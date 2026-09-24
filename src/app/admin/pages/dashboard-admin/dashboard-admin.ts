@@ -4,11 +4,14 @@ import {
   ElementRef,
   OnDestroy,
   ViewChild,
+  computed,
+  effect,
 } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import * as L from 'leaflet';
+import { environment } from '../../../../environments/environment';
 
 type TipoBadge = 'positivo' | 'critico' | 'eficiencia';
-type CategoriaBadge = 'buraco' | 'vazamento' | 'poste';
 
 interface Indicador {
   label: string;
@@ -25,17 +28,28 @@ interface StatusOcorrencia {
 }
 
 interface RegiaoCritica {
-  regiao: string;
+  nome: string;
   total: number;
   altaPrioridade: number;
-  tempoMedio: string;
+  tempoMedioDias: number;
 }
 
-interface OcorrenciaAntiga {
+interface AtencaoImediata {
   tipo: string;
-  categoria: CategoriaBadge;
+  classe: string;
   endereco: string;
   diasAguardando: number;
+}
+
+interface OcorrenciaApi {
+  id: number;
+  titulo: string;
+  descricao: string;
+  categoria: string;
+  localizacao: string;
+  latitude: number | null;
+  longitude: number | null;
+  criadaEm: string;
 }
 
 @Component({
@@ -46,26 +60,37 @@ interface OcorrenciaAntiga {
   styleUrl: './dashboard-admin.css',
 })
 export class DashboardAdmin implements AfterViewInit, OnDestroy {
-  protected readonly indicadores: Indicador[] = [
-    {
-      label: 'Total Ocorrências',
-      valor: '1.247',
-      badge: '↗ +12%',
-      tipo: 'positivo',
-    },
-    {
-      label: 'Alta Prioridade',
-      valor: '23',
-      badge: 'Crítica',
-      tipo: 'critico',
-    },
-    {
-      label: 'Resolvidas Este Mês',
-      valor: '156',
-      badge: 'Eficiência',
-      tipo: 'eficiencia',
-    },
-  ];
+  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
+
+  protected readonly ocorrenciasResource = httpResource<OcorrenciaApi[]>(
+    () => this.urlApi,
+    { defaultValue: [] },
+  );
+
+  protected readonly indicadores = computed<Indicador[]>(() => {
+    const total = this.ocorrenciasResource.value().length;
+
+    return [
+      {
+        label: 'Total Ocorrências',
+        valor: total.toLocaleString('pt-BR'),
+        badge: '↗ +12%',
+        tipo: 'positivo',
+      },
+      {
+        label: 'Alta Prioridade',
+        valor: '23',
+        badge: 'Crítica',
+        tipo: 'critico',
+      },
+      {
+        label: 'Resolvidas Este Mês',
+        valor: '156',
+        badge: 'Eficiência',
+        tipo: 'eficiencia',
+      },
+    ];
+  });
 
   protected readonly ocorrenciasPorStatus: StatusOcorrencia[] = [
     {
@@ -108,53 +133,53 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
 
   protected readonly regioesCriticas: RegiaoCritica[] = [
     {
-      regiao: 'Centro Histórico',
+      nome: 'Centro Histórico',
       total: 423,
       altaPrioridade: 14,
-      tempoMedio: '2.4 dias',
+      tempoMedioDias: 2.4,
     },
     {
-      regiao: 'Vila Nova',
+      nome: 'Vila Nova',
       total: 289,
       altaPrioridade: 5,
-      tempoMedio: '4.1 dias',
+      tempoMedioDias: 4.1,
     },
     {
-      regiao: 'Itoupava Norte',
+      nome: 'Itoupava Norte',
       total: 212,
       altaPrioridade: 2,
-      tempoMedio: '3.2 dias',
+      tempoMedioDias: 3.2,
     },
     {
-      regiao: 'Escola Agrícola',
+      nome: 'Escola Agrícola',
       total: 178,
       altaPrioridade: 1,
-      tempoMedio: '5.0 dias',
+      tempoMedioDias: 5.0,
     },
     {
-      regiao: 'Garcia',
+      nome: 'Garcia',
       total: 145,
       altaPrioridade: 1,
-      tempoMedio: '4.5 dias',
+      tempoMedioDias: 4.5,
     },
   ];
 
-  protected readonly atencaoImediata: OcorrenciaAntiga[] = [
+  protected readonly atencaoImediata: AtencaoImediata[] = [
     {
       tipo: 'Buraco',
-      categoria: 'buraco',
+      classe: 'atencao-buraco',
       endereco: 'Rua XV de Novembro, Centro',
       diasAguardando: 20,
     },
     {
       tipo: "Vazamento d'água",
-      categoria: 'vazamento',
+      classe: 'atencao-vazamento',
       endereco: 'Av. Brasil, Ponta Aguda',
       diasAguardando: 27,
     },
     {
       tipo: 'Poste Apagado',
-      categoria: 'poste',
+      classe: 'atencao-poste',
       endereco: 'Rua Joinville, Vila Nova',
       diasAguardando: 30,
     },
@@ -164,12 +189,13 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
   private mapContainer!: ElementRef<HTMLDivElement>;
 
   private map?: L.Map;
+  private zonasLayer?: L.LayerGroup;
   private resizeObserver?: ResizeObserver;
 
   private readonly coresIntensidade: Record<string, string> = {
-    alta: '#d64545',
-    media: '#f2a13c',
-    baixa: '#13c4a3',
+    alta: '#f5484c',
+    media: '#d97706',
+    baixa: '#13b1a2',
   };
 
   private readonly zonasProvisorias = [
@@ -203,6 +229,12 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
     },
   ];
 
+  constructor() {
+    effect(() => {
+      this.montarZonas(this.ocorrenciasResource.value());
+    });
+  }
+
   ngAfterViewInit(): void {
     this.map = L.map(this.mapContainer.nativeElement);
 
@@ -212,7 +244,11 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-    this.montarZonas();
+    this.zonasLayer = L.layerGroup().addTo(this.map);
+
+    this.map.setView([-26.9184, -49.0656], 12);
+
+    this.montarZonas(this.ocorrenciasResource.value());
 
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
@@ -225,8 +261,77 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
     this.map?.remove();
   }
 
-  private montarZonas(): void {
-    if (!this.map) {
+  private montarZonas(ocorrencias: OcorrenciaApi[]): void {
+    if (!this.map || !this.zonasLayer) {
+      return;
+    }
+
+    this.zonasLayer.clearLayers();
+
+    const comCoordenadas = ocorrencias.filter(
+      (ocorrencia) => ocorrencia.latitude != null && ocorrencia.longitude != null,
+    );
+
+    if (comCoordenadas.length === 0) {
+      this.montarZonasProvisorias();
+      return;
+    }
+
+    const grupos = new Map<
+      string,
+      { coordenadas: L.LatLngTuple; quantidade: number }
+    >();
+
+    for (const ocorrencia of comCoordenadas) {
+      const chave = `${ocorrencia.latitude!.toFixed(2)}|${ocorrencia.longitude!.toFixed(2)}`;
+      const coordenadas: L.LatLngTuple = [
+        ocorrencia.latitude!,
+        ocorrencia.longitude!,
+      ];
+
+      const grupo = grupos.get(chave);
+
+      if (grupo) {
+        grupo.quantidade += 1;
+      } else {
+        grupos.set(chave, { coordenadas, quantidade: 1 });
+      }
+    }
+
+    const zonas = [...grupos.values()];
+    const maximo = Math.max(...zonas.map((zona) => zona.quantidade));
+
+    for (const zona of zonas) {
+      const razao = zona.quantidade / maximo;
+      const intensidade =
+        razao > 2 / 3 ? 'alta' : razao > 1 / 3 ? 'media' : 'baixa';
+      const cor = this.coresIntensidade[intensidade];
+
+      L.circle(zona.coordenadas, {
+        radius: 300 + 300 * razao,
+        color: cor,
+        weight: 1,
+        fillColor: cor,
+        fillOpacity: 0.4,
+      })
+        .bindTooltip(
+          `${zona.quantidade} ocorrência${zona.quantidade > 1 ? 's' : ''}`,
+        )
+        .addTo(this.zonasLayer);
+    }
+
+    if (zonas.length === 1) {
+      this.map.setView(zonas[0].coordenadas, 13);
+    } else {
+      this.map.fitBounds(
+        zonas.map((zona) => zona.coordenadas),
+        { padding: [24, 24] },
+      );
+    }
+  }
+
+  private montarZonasProvisorias(): void {
+    if (!this.map || !this.zonasLayer) {
       return;
     }
 
@@ -241,7 +346,7 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
         fillOpacity: 0.4,
       })
         .bindTooltip(`${zona.nome}: ${zona.quantidade} ocorrências`)
-        .addTo(this.map);
+        .addTo(this.zonasLayer);
     }
 
     this.map.fitBounds(

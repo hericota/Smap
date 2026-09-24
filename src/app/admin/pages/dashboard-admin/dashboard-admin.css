@@ -113,9 +113,22 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-  margin-top: 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.status-card,
+.zona-card {
+  box-sizing: border-box;
+  height: 294px;
 }
 
 .status-card {
@@ -206,6 +219,7 @@
     font-size: 11px;
   }
 }
+
 .zona-card {
   box-sizing: border-box;
   padding: 20px;
@@ -259,15 +273,15 @@
 }
 
 .zona-alta {
-  background-color: #d64545;
+  background-color: #f5484c;
 }
 
 .zona-media {
-  background-color: #f2a13c;
+  background-color: #d97706;
 }
 
 .zona-baixa {
-  background-color: #13c4a3;
+  background-color: #13b1a2;
 }
 
 .zona-mapa {
@@ -283,27 +297,8 @@
     height: 260px;
   }
 }
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px;
-  align-items: stretch;
-  margin-top: 24px;
-}
 
-.status-card,
-.zona-card {
-  box-sizing: border-box;
-  height: 294px;
-}
-
-@media (max-width: 900px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dashboard-rodape {
+.dashboard-linha-2 {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 20px;
@@ -311,71 +306,74 @@
   margin-top: 24px;
 }
 
+@media (max-width: 900px) {
+  .dashboard-linha-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 .regioes-card {
   box-sizing: border-box;
   padding: 22px 24px;
   background-color: #ffffff;
-  border: 1px solid #e9edec;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
 }
 
 .regioes-card h3 {
-  margin: 0 0 16px;
-  color: #1f2a24;
-  font-size: 18px;
+  margin: 0 0 12px;
+  color: #0d1b2a;
+  font-size: 16px;
   font-weight: 700;
 }
 
-.regioes-linha {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 90px 120px 100px;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid #e9edec;
-  color: #1f2a24;
-  font-size: 14px;
-}
-
-.regioes-linha:last-child {
-  border-bottom: 0;
-  padding-bottom: 2px;
-}
-
-.regioes-linha span:not(.regioes-nome) {
-  text-align: center;
-}
-
-.regioes-cabecalho {
-  color: #68736d;
+.regioes-tabela {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 13px;
 }
 
-.regioes-alerta {
-  color: #f5484c;
+.regioes-tabela th {
+  padding: 10px 12px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.regioes-tabela td {
+  padding: 13px 12px;
+  color: #0d1b2a;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.regioes-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.regiao-alerta {
+  color: #ef4444;
   font-weight: 700;
 }
 
-.atencao-col h3 {
-  margin: 0;
-  color: #1f2a24;
-  font-size: 18px;
+.atencao-coluna h3 {
+  margin: 0 0 14px;
+  color: #0d1b2a;
+  font-size: 16px;
   font-weight: 700;
 }
 
-.atencao-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.atencao-item {
+.atencao-card {
   box-sizing: border-box;
   padding: 16px 18px;
   background-color: #ffffff;
-  border: 1px solid #e9edec;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
+}
+
+.atencao-card + .atencao-card {
+  margin-top: 12px;
 }
 
 .atencao-linha {
@@ -387,47 +385,34 @@
 
 .atencao-badge {
   padding: 5px 12px;
-  border-radius: 999px;
+  border-radius: 8px;
   color: #ffffff;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.badge-buraco {
-  background-color: #95502a;
+.atencao-buraco {
+  background-color: #a9663d;
 }
 
-.badge-vazamento {
-  background-color: #0e72c2;
+.atencao-vazamento {
+  background-color: #3b82f6;
 }
 
-.badge-poste {
-  background-color: #db8627;
+.atencao-poste {
+  background-color: #d97706;
 }
 
 .atencao-dias {
-  color: #f5484c;
+  color: #ef4444;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .atencao-endereco {
   margin: 10px 0 0;
-  color: #1f2a24;
+  color: #0d1b2a;
   font-size: 14px;
   font-weight: 600;
-}
-
-@media (max-width: 900px) {
-  .dashboard-rodape {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 560px) {
-  .regioes-linha {
-    grid-template-columns: minmax(0, 1fr) 64px 96px 80px;
-    font-size: 13px;
-  }
 }
