@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ConsumoApi } from '../posts/consumo-api';
 
 @Component({
   imports: [],
@@ -6,4 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './ocorrencias-registradas.css',
   templateUrl: './ocorrencias-registradas.html',
 })
-export class OcorrenciasRegistradas {}
+export class OcorrenciasRegistradas {
+
+  protected readonly consumoService = inject(ConsumoApi)
+
+}

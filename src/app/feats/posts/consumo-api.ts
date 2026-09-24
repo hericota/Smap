@@ -23,9 +23,9 @@ export class ConsumoApi {
         return this.httpClient.get<Ocorrencia[]>(this.urlApi+"/"+this.id);
     }
 
-    // readonly listarOcorrencias = httpResource<Ocorrencia[]>(
-    //     () => this.urlApi,
-    //     {defaultValue:[]}
-    // )
+    readonly listarOcorrenciasResource = httpResource<Ocorrencia[]>(
+        () => this.urlApi,
+        {defaultValue:[]}
+    )
 
 }
