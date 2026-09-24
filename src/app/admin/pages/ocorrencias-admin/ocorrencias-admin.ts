@@ -12,13 +12,21 @@ import { httpResource } from '@angular/common/http';
   templateUrl: './ocorrencias-admin.html',
 })
 export class OcorrenciasAdmin {
-  protected consumoService = inject(ConsumoApi)
-  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
+ protected consumoService = inject(ConsumoApi)
+private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
 
   private route = inject(ActivatedRoute);
+
   
-   readonly PegandoOcorrencias = httpResource<Ocorrencia[]>(
-        () => this.urlApi
+
+
+  // colocando o valor do ID na variavel id
+  id = this.route.snapshot.paramMap.get('id')
+  
+  // metodo get
+   readonly ocorrenciaDetail = httpResource<Ocorrencia[]>(
+        () => this.urlApi+'/'+ this.id
     )
-    ocorrencias = this.PegandoOcorrencias.value
+
+
 }
