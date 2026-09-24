@@ -37,9 +37,15 @@ Criar uma plataforma simples, acessível e colaborativa que permita:
 - organizar e atualizar os atendimentos em um painel administrativo;
 - melhorar a transparência entre a comunidade e os responsáveis pela solução.
 
-## Funcionalidades planejadas
+## Funcionalidades e andamento
 
-### Área do cidadão
+O frontend já contém páginas inicial, login, cadastro, perfil, mapa e registro de ocorrências. O formulário de registro seleciona um ponto no mapa ou utiliza a geolocalização do navegador, valida os dados e envia a ocorrência para a API. O mapa exibe as ocorrências recebidas da API. Também existem listagem de ocorrências registradas, confirmação após envio e páginas administrativas de dashboard, ocorrências, detalhes, mapa, regiões e configurações.
+
+**Integrações em andamento:** os formulários de login e cadastro ainda não autenticam usuários na API. Parte das telas administrativas usa dados de interface e ainda precisa ser conectada ao backend. As rotas administrativas ainda não têm proteção por perfil. A API de ocorrências precisa estar disponível para cadastro e listagem funcionarem.
+
+### Recursos em evolução
+
+### Área do cidadão — visão planejada
 
 - cadastro e autenticação de usuários;
 - mapa com as ocorrências registradas;
@@ -51,7 +57,7 @@ Criar uma plataforma simples, acessível e colaborativa que permita:
 - listagem das ocorrências criadas pelo usuário;
 - perfil e notificações de atualização.
 
-### Área administrativa
+### Área administrativa — visão planejada
 
 - painel com indicadores gerais;
 - listagem e filtragem das ocorrências;
@@ -95,32 +101,29 @@ Criar uma plataforma simples, acessível e colaborativa que permita:
 - Angular Forms
 - Vitest
 
-### Integrações previstas
+### Integrações
 
-- API REST para gerenciamento dos dados;
-- banco de dados para usuários e ocorrências;
-- serviço de mapas e geolocalização;
-- armazenamento das imagens;
-- autenticação e controle de acesso.
+- API REST de ocorrências: GET, POST e consulta por ID no frontend;
+- Leaflet com tiles do OpenStreetMap e geolocalização do navegador;
+- configuração da URL da API em `src/environments/environment.ts`;
+Integrações previstas para próximas etapas: persistência de usuários, armazenamento de imagens, autenticação e controle de acesso.
 
-As tecnologias do back-end e os serviços externos ainda serão definidos durante o desenvolvimento.
+O backend é um projeto separado. Consulte [API.md](API.md) para o contrato esperado pelo frontend e detalhes da configuração.
 
-## Telas previstas
+## Rotas disponíveis
 
-1. página inicial;
-2. login;
-3. cadastro;
-4. mapa de ocorrências;
-5. formulário de nova ocorrência;
-6. detalhes da ocorrência;
-7. minhas ocorrências;
-8. acompanhamento do atendimento;
-9. perfil do usuário;
-10. dashboard administrativo;
-11. gerenciamento de ocorrências;
-12. detalhes administrativos da ocorrência.
+| Rota | Página |
+|---|---|
+| `/home` | Início |
+| `/login`, `/cadastro` | Acesso e cadastro |
+| `/registrar-ocorrencia` | Formulário e mapa |
+| `/confirmacao-ocorrencia/:id` | Confirmação do registro |
+| `/ocorrenciasRegistrada`, `/ocorrencias`, `/mapa-separado` | Ocorrências e mapa |
+| `/perfil-usuario`, `/perfil-config` | Perfil |
+| `/admin/dashboard`, `/admin/ocorrencias`, `/admin/ocorrencias/:codigo` | Visão geral, listagem e detalhes administrativos |
+| `/admin/mapa`, `/admin/regioes`, `/admin/configuracoes` | Outras páginas administrativas |
 
-Também serão criados estados de carregamento, erro, lista vazia, envio concluído e ausência de conexão.
+A rota `/` redireciona para `/home`.
 
 ## Protótipo
 
@@ -170,6 +173,8 @@ A aplicação ficará disponível em:
 http://localhost:4200/
 ```
 
+Para carregar e cadastrar ocorrências, execute uma API compatível com [API.md](API.md). O endereço padrão é `http://localhost:8080`; se necessário, altere `apiUrl` em `src/environments/environment.ts`. A API deve permitir a origem `http://localhost:4200` por CORS. O mapa precisa de internet para carregar os tiles do OpenStreetMap; a localização automática depende da permissão do navegador.
+
 ## Scripts disponíveis
 
 | Comando | Função |
@@ -186,20 +191,20 @@ http://localhost:4200/
 - [x] Criação do projeto em Angular
 - [x] Protótipo inicial no Figma
 - [ ] Definição do design system
-- [ ] Criação dos componentes principais
-- [ ] Configuração das rotas
+- [x] Criação dos componentes principais
+- [x] Configuração das rotas
 
 ### Etapa 2 — MVP do cidadão
 
 - [ ] Cadastro e login
-- [ ] Mapa de ocorrências
-- [ ] Cadastro de ocorrência
+- [x] Mapa de ocorrências com integração de listagem
+- [x] Formulário de cadastro de ocorrência integrado ao POST da API
 - [ ] Listagem e detalhes
 - [ ] Acompanhamento de status
 
 ### Etapa 3 — Administração
 
-- [ ] Dashboard administrativo
+- [x] Interface do dashboard administrativo
 - [ ] Gerenciamento das ocorrências
 - [ ] Atualização de prioridade e status
 - [ ] Histórico do atendimento
@@ -215,8 +220,8 @@ http://localhost:4200/
 
 ## Status do projeto
 
-O SMAP está em **fase inicial de desenvolvimento**. A estrutura Angular já foi criada e as próximas etapas são concluir os fluxos do protótipo, organizar os componentes e implementar o MVP.
+O SMAP está **em desenvolvimento**. O frontend de registro e visualização de ocorrências já faz chamadas à API. Autenticação, proteção das rotas administrativas e integração completa dos fluxos administrativos ainda estão pendentes.
 
 ## Autor
 
-Desenvolvido por [Henrique Galvão](https://github.com/hericota) durante o programa Entra21.
+Desenvolvido por [Henrique Galvão](https://github.com/hericota) e colaboradores durante o programa Entra21.
