@@ -1,20 +1,18 @@
-.btn{
+/* .btn{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 10px;
-    gap: 20px;
+    gap: 40px;
 }
 
 
-.btn-regitrar{
+.btn-register{
     padding: 12.5px;
     border-radius: 16px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    width: 85%;
+    width: 350px;
     background: #16C1A3; 
     cursor: pointer;
     transition: 0.3s;
@@ -22,11 +20,11 @@
     font-weight: 500;
 }
 
-.btn-regitrar:hover{
+.btn-register:hover{
      transform: scale(1.03);
 }
 
-.btn-ocorrencia{
+.btn-check{
     border: 1px solid #0D1B2A;
     margin-top: 10px;
     width: 85%;
@@ -38,18 +36,18 @@
     text-align: center;
 }
 
-.btn-ocorrencia:hover{
+.btn-check:hover{
     transform: scale(1.03);
 }
 
-.btn-ocorrencia a {
+.btn-check a {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
     text-decoration: none;
     color: #0D1B2A;
-}
+} */
 
 .card {
     width: min(100% - 32px, 600px);
@@ -176,3 +174,124 @@
         font-size: 17px;
     }
 }
+
+.check-circle{
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.check-circle img {
+    animation: checkPulse 1.8s ease-in-out 0.6s infinite;
+}
+
+.text-container {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.text {
+    margin: 0;
+    padding: 10px 20px 0;
+    color: #64748B;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.btn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.btn-check,
+.btn-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 350px;
+    padding: 12.5px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn-check {
+    border: 1px solid #0D1B2A;
+    font-weight: bold;
+    color: #0D1B2A;
+}
+
+.btn-register {
+    background: #16C1A3;
+    color: #fff;
+    font-weight: 500;
+}
+
+.btn-check:hover,
+.btn-register:hover {
+    transform: scale(1.03);
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 0;
+    font-size: 1.5rem;    
+}
+
+.check-circle svg {
+    width: 100px;
+    height: 100px;
+}
+
+/* Círculo */
+.check-bg {
+    fill: #16C1A3;
+    transform-origin: center;
+    animation: circleAppear 0.5s ease-out forwards;
+}
+
+/* Check */
+.check-mark {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    stroke-dasharray: 70;
+    stroke-dashoffset: 70;
+
+    animation: drawCheck 0.5s ease-out 0.4s forwards;
+}
+
+@keyframes circleAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes drawCheck {
+    to {
+        stroke-dashoffset: 0;
+    }
+} 
