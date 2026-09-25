@@ -1,4 +1,4 @@
-section {
+.container {
     background-color: #F7F8FA;
     color: #0D1B2A;
     width: 100%;
@@ -18,6 +18,12 @@ section {
 
 }
 
+.nomeUser {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .header h1 {
     font-size: 24px;
     font-weight: bold;
@@ -28,19 +34,22 @@ section {
     color: #64748B;
     font-weight: 500;
 }
+
 .fotouser {
     width: 58px;
     height: 58px;
     border-radius: 50%;
     object-fit: cover;
-    object-position:center;
+    object-position: center;
 }
-.icon-camera{
+
+.icon-camera {
     width: 48px;
     height: 48px;
 }
+
 button {
-    width: 350px;
+    width: 100%;
     height: 88px;
     background-color: #16C1A3;
     color: #ffffff;
@@ -52,15 +61,52 @@ button {
     align-items: center;
     justify-content: space-evenly;
 }
-.text-button{
+
+.text-button {
     display: flex;
     flex-direction: column;
 }
-.text-h1{
-    font: 16px;
-    font-weight: 600;
+
+.text-h1 {
+    font-size: 16px;
+    font-weight: 700;
+
 }
-.text-p{
-    font: 12px;
+
+.text-p {
+    font-size: 13px;
     font-weight: 500;
+}
+
+.text-minhas-ocorrencias {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-minhas-ocorrencias h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.text-minhas-ocorrencias a {
+    font-size: 13px;
+    font-weight: 700;
+    color: #16C1A3;
+}
+
+.list-ocorrencia {
+    width: 100%;
+    height: 73px;
+    background-color: #ffffff;
+    padding: 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+}
+
+.ocorrencias {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
 }

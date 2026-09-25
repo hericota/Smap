@@ -1,16 +1,16 @@
-<section>
+<section class="container">
 
     <div class="header">
-        <div>
-            <h1>Olá, Nome 👋</h1>
+        <div class="nomeUser">
+            <h1>Olá, Jordan 👋</h1>
             <p>data atual</p>
         </div>
-        <img class="fotouser" src="/login-img/user.jpg" alt="foto do usuario">
+        <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
     </div>
 
     <button>
         <div>
-            <img class="icon-camera" src="/login-img/camera-icon.svg">
+            <img class="icon-camera" src="/assets/camera-icon.svg">
         </div>
         <div class="text-button">
             <span class="text-h1">Registrar nova ocorrência</span>
@@ -18,16 +18,20 @@
         </div>
     </button>
 
-    <section>
-        <div>
+    <section class="ocorrencias">
+        <div class="text-minhas-ocorrencias">
             <h2>Minhas ocorrências</h2>
             <a routerLink="/">Ver todas</a>
         </div>
+        <div class="list-ocorrencia">
+            <img src="" width="40px" height="40px" loading="lazy" >
+        </div>
+
     </section>
 
     <h3>Mapa do bairro </h3>
-            <div id="mapa">
-            <app-mapa-separado></app-mapa-separado>
-        </div>
+    <div id="mapa">
+        <app-mapa-separado></app-mapa-separado>
+    </div>
 </section>
 <app-bottom-nav></app-bottom-nav>
