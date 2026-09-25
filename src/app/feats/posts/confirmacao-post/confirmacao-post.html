@@ -1,3 +1,23 @@
+
+
+<div class="check-circle">
+    <svg viewBox="0 0 100 100" aria-label="Ocorrência confirmada">
+        <circle class="check-bg" cx="50" cy="50" r="45"></circle>
+        <path class="check-mark" d="M30 52 L43 65 L70 36"></path>
+    </svg>
+</div>
+
+<div>
+    <h1 class="title">Ocorrência registrada</h1> 
+    
+    <div class="text-container">
+        <p class="text">
+           Seu registro de #{{id}} foi enviado com sucesso. 
+           Você pode acompanhar o progresso a qualquer
+        momento.
+        </p>
+    </div>
+</div>
 <div class="card">
 
     @if (ocorrenciaDetail.isLoading()) {
@@ -34,4 +54,14 @@
 
     }
 
+</div>
+
+<div class="btn">
+
+        <a routerLink="/ocorrenciasRegistrada" class="btn-check">Ver minhas ocorrências</a>
+    
+
+
+        <a routerLink="/registrar-ocorrencia" class="btn-register"> Registrar outra ocorrência</a>
+    
 </div>

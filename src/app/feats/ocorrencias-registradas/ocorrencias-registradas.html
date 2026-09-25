@@ -1,0 +1,39 @@
+<div>
+    <h1 class="title">Minhas ocorrências</h1>
+</div>
+
+    @if (consumoService.listarOcorrenciasResource.isLoading()) {
+
+        <div class="card-loading">
+            <span class="loader"></span>
+            <p>Carregando ocorrência...</p>
+        </div>
+
+    } @else if (consumoService.listarOcorrenciasResource.error()) {
+
+        <div class="card-error">
+            <span>!</span>
+            <p>Não foi possível carregar a ocorrência.</p>
+        </div>
+
+    } @else if (consumoService.listarOcorrenciasResource.hasValue()) {
+
+        @for (ocorrencia of consumoService.listarOcorrenciasResource.value(); track ocorrencia.id) {
+            <div class="card-content">
+    
+                <div class="success-icon">
+                    ✓
+                </div>
+    
+                <div class="card-info">
+                    <span>Ocorrência registrada</span>
+    
+                    <h2>
+                        {{ocorrencia.titulo}}
+                    </h2>
+                </div>
+    
+            </div>
+        }
+
+    }
