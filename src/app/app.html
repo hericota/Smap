@@ -1,1 +1,6 @@
-<router-outlet/>
+@if (networkService.isOnline()) {
+    <router-outlet/>
+  } @else {
+    <app-pagina-offline />
+  }
+
