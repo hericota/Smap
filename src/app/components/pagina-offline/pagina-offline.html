@@ -1,13 +1,21 @@
 <div class="offline-container">
     <div class="offline-media">
-        
+        <svg class="media" width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="160" height="160" rx="80" fill="#FEE2E2" />
+            <path
+                d="M79.9998 69.9976V83.3309M79.9998 96.6643H80.0332M112.435 99.9983L85.7679 53.3317C85.1864 52.3057 84.3432 51.4523 83.3243 50.8586C82.3054 50.2648 81.1472 49.952 79.9679 49.952C78.7886 49.952 77.6304 50.2648 76.6115 50.8586C75.5926 51.4523 74.7493 52.3057 74.1679 53.3317L47.5012 99.9983C46.9135 101.016 46.6053 102.171 46.6079 103.347C46.6105 104.522 46.9238 105.676 47.5161 106.691C48.1083 107.706 48.9584 108.547 49.9802 109.128C51.002 109.709 52.1593 110.009 53.3346 109.998H106.668C107.838 109.997 108.986 109.688 109.999 109.103C111.011 108.517 111.852 107.675 112.436 106.662C113.021 105.649 113.328 104.5 113.328 103.33C113.327 102.16 113.019 101.011 112.435 99.9983Z"
+                stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
+        </svg>
+
     </div>
     <div class="offline-text">
         <h2>Algo deu errado</h2>
         <p>Verifique sua conexão de internet e tente novamente.</p>
     </div>
     <div class="offline-btns">
-        <a routerLink="#">Voltar ao inicio</a>
-        <a routerLink="#">Tentar novamente</a>
+        <a class="home-btn" routerLink="/home">Voltar ao inicio</a>
+        <a class="try-again-btn" (click)="recarregar($event)">Tentar novamente</a>
     </div>
 </div>
+
+<app-bottom-nav></app-bottom-nav>
