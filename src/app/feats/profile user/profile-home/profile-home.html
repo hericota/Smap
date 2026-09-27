@@ -5,10 +5,15 @@
             <h1>Olá, Jordan 👋</h1>
             <p>data atual</p>
         </div>
-        <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
+        <div class="user-actions">
+            <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
+            <a routerLink="/perfil-config">
+            <img class="config" src="/assets/settings-icons.png" ></a>
+
+        </div>
     </div>
 
-    <button>
+    <a class="registrar" routerLink="/registrar-ocorrencia">
         <div>
             <img class="icon-camera" src="/assets/camera-icon.svg">
         </div>
@@ -16,15 +21,15 @@
             <span class="text-h1">Registrar nova ocorrência</span>
             <span class="text-p">Tire uma foto e reporte agora mesmo</span>
         </div>
-    </button>
+    </a>
 
     <section class="ocorrencias">
         <div class="text-minhas-ocorrencias">
             <h2>Minhas ocorrências</h2>
-            <a routerLink="/">Ver todas</a>
+            <a routerLink="/ocorrenciasRegistrada">Ver todas</a>
         </div>
         <div class="list-ocorrencia">
-            <img src="" width="40px" height="40px" loading="lazy" >
+            <img src="" width="40px" height="40px" loading="lazy">
         </div>
 
     </section>
