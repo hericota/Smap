@@ -139,12 +139,12 @@ section h1 {
 }
 
 .box-config {
-    width: 350px;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 20px;
+    
 }
 
 .box-ul {
