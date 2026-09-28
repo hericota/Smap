@@ -2,30 +2,26 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Ocorrencia } from '../ocorrencia';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
 
 @Service()
 export class ConsumoApi {
-    private route = inject(ActivatedRoute);
-    private readonly httpClient = inject(HttpClient);
-    private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
-    id = this.route.snapshot.paramMap.get('id')
+  private readonly httpClient = inject(HttpClient);
+  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
 
-    cadastrarOcorrencia(ocorrencia:Ocorrencia){
-        return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia)
-    }
+  cadastrarOcorrencia(ocorrencia: Ocorrencia) {
+    return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia);
+  }
 
-    listarOcorrencias() {
-        return this.httpClient.get<Ocorrencia[]>(this.urlApi);
-    }
+  listarOcorrencias() {
+    return this.httpClient.get<Ocorrencia[]>(this.urlApi);
+  }
 
-    pegarOcorrencia() {
-        return this.httpClient.get<Ocorrencia[]>(this.urlApi+"/"+this.id);
-    }
+  pegarOcorrencia(id: number | string) {
+    return this.httpClient.get<Ocorrencia>(`${this.urlApi}/${id}`);
+  }
 
-    readonly listarOcorrenciasResource = httpResource<Ocorrencia[]>(
-        () => this.urlApi,
-        {defaultValue:[]}
-    )
-
+  readonly listarOcorrenciasResource = httpResource<Ocorrencia[]>(
+    () => this.urlApi,
+    { defaultValue: [] },
+  );
 }
