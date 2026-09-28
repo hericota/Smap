@@ -10,6 +10,7 @@ import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
 import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
 import { OcorrenciasRegistradas } from './feats/ocorrencias-registradas/ocorrencias-registradas';
+import { DetalheOcorrecia } from './feats/detalhe-ocorrecia/detalhe-ocorrecia';
 
 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
   {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
   {path:'ocorrenciasRegistrada', component:OcorrenciasRegistradas},
+  {path: 'detalheOcorrencia' , component:DetalheOcorrecia},
   {path:'confirmacao-ocorrencia/:id' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
