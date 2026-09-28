@@ -9,12 +9,14 @@ import { MapaSeparado } from './components/mapa-separado/mapa-separado';
 import { ProfileHome } from './feats/profile user/profile-home/profile-home';
 import { ProfileConfig } from './feats/profile user/profile-config/profile-config';
 import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
+import { OcorrenciaDetalhes } from './admin/pages/ocorrencia-detalhe-admin/ocorrencia-detalhe-admin';
 import { OcorrenciasRegistradas } from './feats/ocorrencias-registradas/ocorrencias-registradas';
 import { DetalheOcorrecia } from './feats/detalhe-ocorrecia/detalhe-ocorrecia';
 import { FullMap } from './pages/full-map/full-map';
 
 
 export const routes: Routes = [
+  {path:'home', component:Home},
   {path:'header', component:Header},
   {path:'home', component:Home},
   {path:'hero', component:Hero},
@@ -22,8 +24,9 @@ export const routes: Routes = [
   {path: 'perfil-usuario' , component: ProfileHome},
   {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
+  {path:'confirmacao-ocorrencia' , component:ConfirmacaoPost},
   {path:'ocorrenciasRegistrada', component:OcorrenciasRegistradas},
-  {path: 'detalheOcorrencia' , component:DetalheOcorrecia},
+  {path: 'detalheOcorrencia/:id' , component:DetalheOcorrecia},
   {path:'confirmacao-ocorrencia/:id' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
@@ -67,12 +70,12 @@ export const routes: Routes = [
       },
 
       {
-        path: 'ocorrencias/:codigo',
+        path: 'ocorrencias/:id',
         title: 'Detalhe da ocorrência | SMAP',
         loadComponent: () =>
           import(
             './admin/pages/ocorrencia-detalhe-admin/ocorrencia-detalhe-admin'
-          ).then((m) => m.OcorrenciaDetalheAdmin),
+          ).then((m) => m.OcorrenciaDetalhes),
       },
 
 
@@ -107,5 +110,11 @@ export const routes: Routes = [
     ],
   },
   {path:'ocorrencias', component: TelaOcorrencias},
-  {path:"mapa", component:FullMap}
+  {path:"mapa", component:FullMap},
+
+
+{
+  path: 'admin/ocorrencias/:id',
+  component: OcorrenciaDetalhes,
+},
 ];

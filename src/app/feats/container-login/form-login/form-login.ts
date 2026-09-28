@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginInterface } from './login-interface';
-import { email, form, required, FormField, minLength, maxLength, pattern } from '@angular/forms/signals';
-import { min } from 'rxjs';
+import { email, form, required, FormField } from '@angular/forms/signals';
+
 
 @Component({
   imports: [RouterLink, FormField],

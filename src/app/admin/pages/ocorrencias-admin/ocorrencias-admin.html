@@ -1,29 +1,206 @@
 <section class="admin-page">
-  <p class="page-eyebrow">Ocorrências</p>
-  <h2>Gestão de ocorrências</h2>
+  <header class="pagina-cabecalho">
+    <div>
+      <h2>Ocorrências</h2>
 
-  @if (ocorrenciaDetail.isLoading()) {
-  <p>Carregando ocorrências...</p>
-  } @else if (ocorrenciaDetail.error()) {
-  <p class="erro">
-    Não foi possível carregar as ocorrências.
-  </p>
-  } @else {
-  <div class="lista-ocorrencias">
-    @for (
-    ocorrencia of ocorrenciaDetail.value() ?? [];
-    track ocorrencia.id
-    ) {
-    <div class="ocorrencia-card">
-      <h3>Ocorrência #{{ ocorrencia.id }}</h3>
-      <p>Titulo: {{ocorrencia.titulo}}</p>
-      <p>Descricao: {{ocorrencia.descricao}}</p>
-      <p>Categoria: {{ocorrencia.categoria}}</p>
-
+      <p class="page-description">
+        {{ totalRegistros().toLocaleString('pt-BR') }} ocorrências registradas no sistema
+      </p>
     </div>
-    } @empty {
-    <p>Nenhuma ocorrência encontrada.</p>
+
+    <button class="botao-exportar" type="button" (click)="exportarCsv()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+      </svg>
+
+      Exportar CSV
+    </button>
+  </header>
+
+  <div class="painel">
+    <div class="busca-wrap">
+      <svg class="busca-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+
+      <input
+        class="busca-campo"
+        type="search"
+        placeholder="Buscar por código SMAP, endereço ou descrição..."
+        [value]="busca()"
+        #campoBusca
+        (input)="aoDigitar(campoBusca.value)"
+      />
+    </div>
+
+    <div class="filtros">
+      <select class="filtro" aria-label="Prioridade">
+        <option>Prioridade</option>
+      </select>
+
+      <select class="filtro" aria-label="Status">
+        <option>Status</option>
+      </select>
+
+      <select
+        class="filtro"
+        aria-label="Categoria"
+        #seletorCategoria
+        (change)="aoFiltrarCategoria(seletorCategoria.value)"
+      >
+        @for (opcao of categoriasDisponiveis(); track opcao.valor) {
+        <option [value]="opcao.valor" [selected]="opcao.valor === categoriaSelecionada()">
+          {{ opcao.rotulo }}
+        </option>
+        }
+      </select>
+
+      <select class="filtro" aria-label="Região">
+        <option>Região</option>
+      </select>
+
+      <select class="filtro" aria-label="Período">
+        <option>Período</option>
+      </select>
+    </div>
+
+    @if (temFiltrosAtivos()) {
+    <div class="filtros-ativos">
+      <span>Filtros ativos:</span>
+
+      @if (busca()) {
+      <button class="chip" type="button" (click)="limparBusca()">
+        Busca: {{ busca() }} <span class="chip-x">×</span>
+      </button>
+      }
+
+      @if (categoriaSelecionada() !== 'todas') {
+      <button class="chip chip-categoria" type="button" (click)="limparCategoria()">
+        Categoria: {{ rotuloCategoriaAtiva() }} <span class="chip-x">×</span>
+      </button>
+      }
+
+      <button class="limpar-todos" type="button" (click)="limparFiltros()">
+        Limpar todos
+      </button>
+    </div>
     }
   </div>
-  }
+
+  <div class="painel">
+    @if (ocorrenciasResource.isLoading()) {
+    <p class="estado-simples">Carregando ocorrências…</p>
+    } @else if (ocorrenciasResource.error()) {
+    <div class="estado estado-erro" role="alert">
+      <strong>Não foi possível carregar as ocorrências</strong>
+
+      <p>Verifique se a API está rodando em http://localhost:8080 e tente novamente.</p>
+
+      <button class="botao-recarregar" type="button" (click)="recarregar()">
+        Tentar novamente
+      </button>
+    </div>
+    } @else if (!temRegistros()) {
+    <div class="estado">
+      <strong>Nenhuma ocorrência registrada ainda</strong>
+
+      <p>Os registros enviados pelo mapa público vão aparecer aqui automaticamente.</p>
+    </div>
+    } @else if (totalFiltrados() === 0) {
+    <div class="estado">
+      <strong>Nenhuma ocorrência encontrada</strong>
+
+      <p>Ajuste a busca ou os filtros para ver outros resultados.</p>
+    </div>
+    } @else {
+    <div class="tabela-wrap">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Foto</th>
+            <th>Categoria</th>
+            <th>Localização</th>
+            <th>Prioridade</th>
+            <th>Status</th>
+            <th>Aguardando</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (ocorrencia of ocorrenciasPaginadas(); track ocorrencia.id) {
+          <tr class="linha-clicavel" (click)="abrirDetalhes(ocorrencia.id)">
+            <td>
+              <a class="protocolo" [routerLink]="['/admin/ocorrencias', ocorrencia.id]">
+                {{ formatarProtocolo(ocorrencia.id) }}
+              </a>
+            </td>
+
+            <td>
+              <span class="foto-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </span>
+            </td>
+
+            <td>
+              <span [class]="'badge-categoria ' + classeCategoria(ocorrencia.categoria)">
+                {{ ocorrencia.categoria || 'Outros' }}
+              </span>
+            </td>
+
+            <td class="local">{{ ocorrencia.localizacao || '—' }}</td>
+
+            <td><span class="sem-dado">—</span></td>
+
+            <td><span class="badge-status">—</span></td>
+
+            <td>
+              <span class="aguardando" [class.aguardando-zero]="diasAguardando(ocorrencia.criadaEm) === 0">
+                {{ diasAguardando(ocorrencia.criadaEm) }} dias
+              </span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="tabela-rodape">
+      <span>
+        Mostrando {{ inicioContagem() }}-{{ fimContagem() }} de
+        {{ totalFiltrados().toLocaleString('pt-BR') }} ocorrências
+      </span>
+
+      <div class="paginacao">
+        <button type="button" [disabled]="pagina() === 1" (click)="paginar(pagina() - 1)">
+          Anterior
+        </button>
+
+        @for (numero of paginas(); track numero) {
+        <button type="button" [class.ativa]="numero === pagina()" (click)="paginar(numero)">
+          {{ numero }}
+        </button>
+        }
+
+        <button
+          type="button"
+          [disabled]="pagina() === totalPaginas()"
+          (click)="paginar(pagina() + 1)"
+        >
+          Próxima
+        </button>
+      </div>
+    </footer>
+    }
+  </div>
 </section>
