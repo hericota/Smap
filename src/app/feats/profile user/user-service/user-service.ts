@@ -13,6 +13,7 @@ export class UserService {
   // ];
   // selecionaravatar = signal<string | null>(null);
 
+  //cadastro
   usuarios = signal<CadastroInterface[]>(this.carregarUsuarios()); //recebe todos os cadastros
 
   cadastrar(usuario: CadastroInterface) {
@@ -20,13 +21,13 @@ export class UserService {
     this.salvarUsuarios();
     console.log(this.usuarios());
   }
-  private salvarUsuarios(){ //transforma o objeto em um texto para armazenar no local
-    const dados = JSON.stringify(this.usuarios())
+  private salvarUsuarios() {
+    //transforma o objeto em um texto para armazenar no local
+    const dados = JSON.stringify(this.usuarios());
     localStorage.setItem('usuarios', dados);
   }
 
-
-   private carregarUsuarios(): CadastroInterface[] {
+  private carregarUsuarios(): CadastroInterface[] {
     const dados = localStorage.getItem('usuarios');
 
     if (dados) {
@@ -34,5 +35,34 @@ export class UserService {
     }
 
     return [];
+  }
+
+  //login
+  usuarioLogado = signal<CadastroInterface | null>(this.carregarlogin());;
+  login(email: string, senha: string): boolean {
+    const usuario = this.usuarios().find(
+      (usuario) => usuario.email === email && usuario.senha === senha,
+    ); 
+    this.usuarioLogado.set(usuario ?? null); console.log(this.usuarioLogado());
+    this.salvarLogin() ;
+    if (usuario) {
+      return true;
+    }else{return false}
+    
+ 
+  }
+
+  private salvarLogin() {
+    const dadosLogin = JSON.stringify(this.usuarioLogado());
+    localStorage.setItem('usuarioLogado', dadosLogin);
+  }
+
+   private carregarlogin(): CadastroInterface | null {
+    const dadosLogin = localStorage.getItem('usuarioLogado');
+
+    if (dadosLogin) {
+      return JSON.parse(dadosLogin);
+    }
+      return null;
   }
 }
