@@ -9,6 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 
 interface OcorrenciaApi {
@@ -20,33 +21,27 @@ interface OcorrenciaApi {
   latitude?: number | null;
   longitude?: number | null;
   criadaEm?: string | null;
+  // ⚠️ ADICIONAR quando API tiver:
+  // status?: string;
+  // prioridade?: string;
 }
 
-type Nivel = 'alta' | 'media' | 'baixa';
-
-interface RegiaoResumo {
+interface CategoriaLegenda {
   nome: string;
-  total: number;
-  nivel: Nivel;
+  cor: string;
+  icone: string;
 }
 
 @Component({
   selector: 'app-mapa-admin',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './mapa-admin.html',
   styleUrl: './mapa-admin.css',
 })
 export class MapaAdmin implements AfterViewInit, OnDestroy {
   private readonly http = inject(HttpClient);
-
   private readonly apiBase = 'http://localhost:8080/ocorrencias';
-
-  private readonly coresNivel: Record<Nivel, string> = {
-    alta: '#e11d48',
-    media: '#f59e0b',
-    baixa: '#10b981',
-  };
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;
@@ -55,11 +50,44 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
   private resizeObserver?: ResizeObserver;
   private registros = L.layerGroup();
 
+  // ===== ESTADO =====
   protected readonly ocorrencias = signal<OcorrenciaApi[]>([]);
   protected readonly carregando = signal(true);
   protected readonly comErro = signal(false);
   protected readonly selecionadaId = signal<number | null>(null);
 
+  // ===== FILTROS =====
+  protected readonly filtroBusca = signal('');
+  protected readonly filtroPrioridade = signal('');
+  protected readonly filtroStatus = signal('');
+  protected readonly filtroCategoria = signal('');
+
+  // ===== CORES POR CATEGORIA (extraídas do Print 1) =====
+  protected readonly categoriasLegenda: CategoriaLegenda[] = [
+    { nome: 'Buraco', cor: '#8B5E3C', icone: '🕳️' },
+    { nome: 'Iluminação', cor: '#F59E0B', icone: '💡' },
+    { nome: 'Sinalização', cor: '#EF4444', icone: '🚦' },
+    { nome: 'Saneamento', cor: '#3B82F6', icone: '💧' },
+  ];
+
+  private readonly coresCategoria: Record<string, string> = {
+    buraco: '#8B5E3C',
+    asfalto: '#8B5E3C',
+    iluminacao: '#F59E0B',
+    iluminação: '#F59E0B',
+    sinalizacao: '#EF4444',
+    sinalização: '#EF4444',
+    saneamento: '#3B82F6',
+    esgoto: '#3B82F6',
+    vazamento: '#3B82F6',
+    lixo: '#7C8B3A',
+    entulho: '#F97316',
+    arvore: '#10B981',
+    árvore: '#10B981',
+    acessibilidade: '#8B5CF6',
+  };
+
+  // ===== COMPUTED =====
   protected readonly comCoordenadas = computed(() =>
     this.ocorrencias().filter(
       (o) =>
@@ -70,53 +98,70 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
     ),
   );
 
+  protected readonly ocorrenciasFiltradas = computed(() => {
+    let lista = this.comCoordenadas();
+
+    const busca = this.filtroBusca().toLowerCase().trim();
+    if (busca) {
+      lista = lista.filter(
+        (o) =>
+          o.titulo.toLowerCase().includes(busca) ||
+          o.descricao.toLowerCase().includes(busca) ||
+          o.localizacao.toLowerCase().includes(busca),
+      );
+    }
+
+    if (this.filtroCategoria()) {
+      lista = lista.filter((o) =>
+        o.categoria?.toLowerCase().includes(this.filtroCategoria().toLowerCase()),
+      );
+    }
+
+    return lista;
+  });
+
   protected readonly semCoordenadas = computed(
     () => this.ocorrencias().length - this.comCoordenadas().length,
   );
 
-  protected readonly regioesResumo = computed<RegiaoResumo[]>(() => {
-    const contagem = new Map<string, number>();
-
-    for (const o of this.comCoordenadas()) {
-      const nome = this.regiaoDe(o.localizacao);
-      contagem.set(nome, (contagem.get(nome) ?? 0) + 1);
-    }
-
-    const ordenadas = [...contagem.entries()].sort((a, b) => b[1] - a[1]);
-    const terco = Math.ceil(ordenadas.length / 3);
-
-    return ordenadas.map(([nome, total], indice) => ({
-      nome,
-      total,
-      nivel: (indice < terco ? 'alta' : indice < terco * 2 ? 'media' : 'baixa') as Nivel,
-    }));
-  });
-
-  protected readonly contagemNiveis = computed(() => {
-    const contagem: Record<Nivel, number> = { alta: 0, media: 0, baixa: 0 };
-    for (const regiao of this.regioesResumo()) {
-      contagem[regiao.nivel] += 1;
-    }
-    return contagem;
-  });
-
   protected readonly recentes = computed(() =>
-    [...this.ocorrencias()]
+    [...this.ocorrenciasFiltradas()]
       .sort((a, b) => (b.criadaEm ?? '').localeCompare(a.criadaEm ?? ''))
       .slice(0, 5),
   );
+
+  // Resumo de status para o painel direito (mock por enquanto)
+  protected readonly statusResumo = computed(() => {
+    const total = this.ocorrenciasFiltradas().length;
+    // ⚠️ Substituir por dados reais quando API tiver `status`
+    const altaPrioridade = Math.round(total * 0.4);
+    const emExecucao = Math.round(total * 0.5);
+    const concluidos = total - altaPrioridade - emExecucao;
+    return { total, altaPrioridade, emExecucao, concluidos };
+  });
+
+  // Região exibida no painel direito
+  protected readonly regiaoAtual = computed(() => {
+    // Por enquanto fixo; depois pode ser calculado por bounding box
+    return 'Região Centro';
+  });
 
   constructor() {
     this.carregar();
   }
 
+  // ===== LIFECYCLE =====
   ngAfterViewInit(): void {
-    this.map = L.map(this.mapContainer.nativeElement).setView([-26.92, -49.07], 12);
+    this.map = L.map(this.mapContainer.nativeElement, {
+      zoomControl: false, // vamos reposicionar
+      attributionControl: false,
+    }).setView([-26.92, -49.07], 13);
+
+    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '© OpenStreetMap',
     }).addTo(this.map);
 
     this.registros.addTo(this.map);
@@ -133,22 +178,12 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
     this.map?.remove();
   }
 
-  protected regiaoDe(localizacao: string): string {
-    const partes = (localizacao ?? '').split('-');
-    const bruta = partes.length > 1 ? partes[partes.length - 1] : (localizacao ?? '');
-    return bruta.trim() || 'Sem região';
-  }
-
-  protected diasAtras(valor?: string | null): string {
-    if (!valor) {
-      return 'sem data';
-    }
-    const data = new Date(valor);
-    if (Number.isNaN(data.getTime())) {
-      return 'sem data';
-    }
-    const dias = Math.floor((Date.now() - data.getTime()) / 86_400_000);
-    return dias === 0 ? 'hoje' : `${dias} dia${dias === 1 ? '' : 's'}`;
+  // ===== HELPERS =====
+  protected corDaCategoria(categoria: string): string {
+    const chave = Object.keys(this.coresCategoria).find((k) =>
+      categoria?.toLowerCase().includes(k),
+    );
+    return chave ? this.coresCategoria[chave] : '#6B7280';
   }
 
   protected carregar(): void {
@@ -172,38 +207,56 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
     if (typeof ocorrencia.latitude !== 'number' || typeof ocorrencia.longitude !== 'number') {
       return;
     }
-
     this.selecionadaId.set(ocorrencia.id);
     this.map?.setView([ocorrencia.latitude, ocorrencia.longitude], 16);
   }
 
+  protected limparFiltros(): void {
+    this.filtroBusca.set('');
+    this.filtroPrioridade.set('');
+    this.filtroStatus.set('');
+    this.filtroCategoria.set('');
+    this.renderizar();
+  }
+
+  protected alternarFullscreen(): void {
+    const el = document.querySelector('.mapa-wrapper');
+    if (!el) return;
+
+    if (!document.fullscreenElement) {
+      el.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  }
+
+  protected recarregarMapa(): void {
+    this.renderizar();
+  }
+
+  // ===== RENDERIZAÇÃO =====
   private renderizar(): void {
     this.registros.clearLayers();
 
-    const niveis = new Map(this.regioesResumo().map((r) => [r.nome, r.nivel]));
+    for (const ocorrencia of this.ocorrenciasFiltradas()) {
+      const cor = this.corDaCategoria(ocorrencia.categoria);
 
-    for (const ocorrencia of this.comCoordenadas()) {
       const popup = document.createElement('div');
-
-      const titulo = document.createElement('strong');
-      titulo.textContent = `#${ocorrencia.id} ${ocorrencia.titulo}`;
-
-      const meta = document.createElement('p');
-      meta.textContent = `${ocorrencia.categoria} — ${ocorrencia.localizacao}`;
-
-      const descricao = document.createElement('p');
-      descricao.textContent = ocorrencia.descricao;
-
-      popup.append(titulo, meta, descricao);
-
-      const nivel = niveis.get(this.regiaoDe(ocorrencia.localizacao)) ?? ('baixa' as Nivel);
+      popup.className = 'popup-ocorrencia';
+      popup.innerHTML = `
+        <strong>#${ocorrencia.id} ${ocorrencia.titulo}</strong>
+        <p>${ocorrencia.categoria} — ${ocorrencia.localizacao}</p>
+        <p>${ocorrencia.descricao}</p>
+      `;
 
       const marcador = L.circleMarker(
         [ocorrencia.latitude as number, ocorrencia.longitude as number],
         {
-          radius: 9,
-          color: this.coresNivel[nivel],
-          fillOpacity: 0.7,
+          radius: 10,
+          color: cor,
+          fillColor: cor,
+          fillOpacity: 0.9,
+          weight: 2,
           bubblingMouseEvents: false,
         },
       )
@@ -213,12 +266,12 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
       marcador.on('click', () => this.selecionadaId.set(ocorrencia.id));
     }
 
-    if (this.comCoordenadas().length > 0) {
+    if (this.ocorrenciasFiltradas().length > 0) {
       this.map?.fitBounds(
-        this.comCoordenadas().map(
+        this.ocorrenciasFiltradas().map(
           (o) => [o.latitude as number, o.longitude as number] as L.LatLngTuple,
         ),
-        { maxZoom: 16, padding: [24, 24] },
+        { maxZoom: 15, padding: [60, 60] },
       );
     }
   }
