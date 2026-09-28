@@ -10,6 +10,7 @@ import {
   required,
   FormField,
 } from '@angular/forms/signals';
+import { UserService } from '../../profile user/user-service/user-service';
 
 @Component({
   imports: [RouterLink, FormField],
@@ -28,7 +29,7 @@ export class FormCadastro {
     senha: '',
     check: false,
   });
-
+  private usuarioService = inject(UserService);
   private router = inject(Router);
 
   cadastroForm = form(this.cadastroModel, (schemaPath) => {
@@ -64,9 +65,8 @@ export class FormCadastro {
   cadastrar(event: SubmitEvent) {
     event.preventDefault();
     if (this.cadastroForm().invalid()) return;
-    else {
-      this.cadastroForm().reset();
-      this.router.navigate(['/perfil-usuario']); //pagina principal de perfil do usuario
-    }
+    this.usuarioService.cadastrar(this.cadastroModel());
+    this.cadastroForm().reset();
+    this.router.navigate(['/perfil-usuario']); //pagina principal de perfil do usuario
   }
 }

@@ -1,66 +1,134 @@
-section {
-    background-color: #F7F8FA;
-    color: #0D1B2A;
-    width: 100%;
-    max-width: 400px;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    gap: 24px;
+.container {
+  background-color: #f7f8fa;
+  color: #0d1b2a;
+  width: 100%;
+  max-width: 400px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 24px;
 }
 
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    overflow: hidden;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  overflow: hidden;
+  align-items: center;
 }
-
+.config {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+.nomeUser {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.user-actions {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
 .header h1 {
-    font-size: 24px;
-    font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .header p {
-    font-size: 12px;
-    color: #64748B;
-    font-weight: 500;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
 }
+
 .fotouser {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position:center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  position: static;
 }
-.icon-camera{
-    width: 48px;
-    height: 48px;
+
+.icon-camera {
+  width: 48px;
+  height: 48px;
 }
-button {
-    width: 350px;
-    height: 88px;
-    background-color: #16C1A3;
-    color: #ffffff;
-    border-radius: 16px;
-    border: none;
-    display: flex;
-    flex-direction: row;
-    text-align: start;
-    align-items: center;
-    justify-content: space-evenly;
+
+.registrar {
+  width: 100%;
+  height: 88px;
+  background-color: #16c1a3;
+  color: #ffffff;
+  border-radius: 16px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  text-align: start;
+  align-items: center;
+  justify-content: space-evenly;
 }
-.text-button{
-    display: flex;
-    flex-direction: column;
+
+.text-button {
+  display: flex;
+  flex-direction: column;
 }
-.text-h1{
-    font: 16px;
-    font-weight: 600;
+
+.text-h1 {
+  font-size: 16px;
+  font-weight: 700;
 }
-.text-p{
-    font: 12px;
-    font-weight: 500;
+
+.text-p {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.text-minhas-ocorrencias {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-minhas-ocorrencias h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.text-minhas-ocorrencias a {
+  font-size: 13px;
+  font-weight: 700;
+  color: #16c1a3;
+}
+
+.list-ocorrencia {
+  width: 100%;
+  height: 73px;
+  background-color: #ffffff;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.ocorrencias {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+#mapa {
+  width: 100%;
+  height: 250px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
 }
