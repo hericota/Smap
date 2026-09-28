@@ -20,7 +20,7 @@
         } @else if (consumoService.listarOcorrenciasResource.hasValue()) {
     
             @for (ocorrencia of consumoService.listarOcorrenciasResource.value(); track ocorrencia.id) {
-              <a routerLink="/detalheOcorrencia">
+              <a [routerLink]="['/detalheOcorrencia', ocorrencia.id]">
                   <div class="card-content">
           
                       <div class="success-icon">
