@@ -9,9 +9,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './profile-config.html',
 })
 export class ProfileConfig {
-
-  notificacao = false
+  notificacao = false;
   aceitarNotificacao() {
-    this.notificacao = !this.notificacao
+    this.notificacao = !this.notificacao;
   }
+  
 }
