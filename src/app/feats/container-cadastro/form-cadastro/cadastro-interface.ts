@@ -9,5 +9,6 @@ telefone: string;
 cep: string;
 senha: string;
  check:  boolean;
+ username: string;
 
 }

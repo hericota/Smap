@@ -28,6 +28,7 @@ export class FormCadastro {
     cep: '',
     senha: '',
     check: false,
+    username: ''
   });
   private usuarioService = inject(UserService);
   private router = inject(Router);

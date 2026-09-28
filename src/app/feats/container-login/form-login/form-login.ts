@@ -35,4 +35,5 @@ export class FormLogin {
     )
     if (resultado){this.router.navigate(['/perfil-usuario']);}//pagina principal de perfil do usuario
   }
+  
 }
