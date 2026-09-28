@@ -24,6 +24,178 @@
   color: #68736d;
   font-size: 16px;
 }
-#mapa{
-  height: 700px;
+
+.mapa-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.mapa-card {
+  box-sizing: border-box;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.mapa-container {
+  height: 480px;
+  border-radius: 8px;
+}
+
+.mapa-estado {
+  margin: 0 0 12px;
+  color: #68736d;
+  font-size: 14px;
+}
+
+.botao-tentar {
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #334155;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lista-card {
+  box-sizing: border-box;
+  padding: 20px 22px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.lista-card h3 {
+  margin: 0;
+  color: #1f2a24;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.lista-item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.lista-item:hover {
+  border-color: #13c4a3;
+}
+
+.lista-item.ativa {
+  border-color: #13c4a3;
+  background-color: #eefaf7;
+}
+
+.lista-item strong {
+  display: block;
+  color: #1f2a24;
+  font-size: 14px;
+}
+
+.lista-meta {
+  display: block;
+  margin-top: 4px;
+  color: #68736d;
+  font-size: 12px;
+}
+
+.lista-vazia {
+  color: #68736d;
+  font-size: 14px;
+}
+
+.lista-aviso {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+  color: #8a6d3b;
+  font-size: 13px;
+}
+
+@media (max-width: 1020px) {
+  .mapa-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.mapa-legenda {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+
+.legenda-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b5651;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.legenda-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-alta { background-color: #e11d48; }
+.dot-media { background-color: #f59e0b; }
+.dot-baixa { background-color: #10b981; }
+
+.legenda-nota {
+  color: #8b969e;
+  font-size: 11.5px;
+}
+
+.regioes-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.regiao-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #eef2f1;
+  color: #4b5651;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.lista-subtitulo {
+  margin: 18px 0 4px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+  color: #1f2a24;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.recente-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #eef2f1;
+}
+
+.recente-item strong {
+  display: block;
+  color: #1f2a24;
+  font-size: 14px;
 }
