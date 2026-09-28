@@ -1,0 +1,169 @@
+.content {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 25px;
+    box-sizing: border-box;
+}
+
+/* TÍTULO */
+
+.content > div:first-child {
+    margin-bottom: 25px;
+}
+
+h1 {
+    margin: 0;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    color: #0D1B2A;
+}
+
+/* CARD */
+
+.card {
+    width: 100%;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background-color: #ffffff;
+
+    border: 2px solid #e8eeee;
+    border-radius: 16px;
+
+    box-shadow: 0 4px 15px rgba(13, 27, 42, 0.08);
+}
+
+/* TÍTULO DA OCORRÊNCIA */
+
+.card h2 {
+    margin: 0 0 25px;
+
+    font-size: 1.6rem;
+    font-weight: 700;
+
+    color: #0D1B2A;
+}
+
+/* TEXTOS */
+
+.card p {
+    margin: 0 0 18px;
+
+    padding: 15px 18px;
+
+    background-color: #f7fafa;
+
+    border-radius: 10px;
+
+    font-size: 1rem;
+    line-height: 1.5;
+
+    color: #384653;
+}
+
+.card p:last-child {
+    margin-bottom: 0;
+}
+
+/* LOADING */
+
+.card-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 200px;
+
+    color: #7a858d;
+}
+
+.loader {
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 15px;
+
+    border: 4px solid #e8eeee;
+    border-top-color: #16C1A3;
+
+    border-radius: 50%;
+
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ERRO */
+
+.card-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 200px;
+
+    text-align: center;
+
+    color: #7a858d;
+}
+
+.card-error span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 45px;
+    height: 45px;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background-color: #e74c3c;
+    color: white;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.card-error p {
+    margin: 0;
+}
+
+/* CELULAR */
+
+@media (max-width: 600px) {
+
+    .content {
+        padding: 25px 15px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+
+    .card p {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+}

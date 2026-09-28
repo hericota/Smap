@@ -4,9 +4,10 @@ import { httpResource } from '@angular/common/http';
 import { Ocorrencia } from '../ocorrencia';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
 @Component({
-  imports: [],
+  imports: [BottomNav],
   selector: 'app-detalhe-ocorrecia',
   styleUrl: './detalhe-ocorrecia.css',
   templateUrl: './detalhe-ocorrecia.html',
