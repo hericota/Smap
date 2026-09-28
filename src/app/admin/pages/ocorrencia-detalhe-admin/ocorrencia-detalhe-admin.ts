@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { httpResource } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import * as L from 'leaflet';
 import { environment } from '../../../../environments/environment';
 
@@ -33,18 +35,24 @@ interface OcorrenciaApi {
 })
 export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly idOcorrencia = Number(this.route.snapshot.paramMap.get('id'));
-  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia}`;
+  private readonly idOcorrencia = toSignal(
+    this.route.paramMap.pipe(map((params) => Number(params.get('id')))),
+    { initialValue: Number(this.route.snapshot.paramMap.get('id')) },
+  );
+  private readonly urlApi = computed(
+    () =>
+      `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia()}`,
+  );
 
   protected readonly ocorrenciaResource = httpResource<OcorrenciaApi>(
-    () => this.urlApi,
+    () => this.urlApi(),
   );
 
   protected readonly ocorrencia = computed(() => this.ocorrenciaResource.value());
 
   protected readonly protocolo = computed(() =>
     this.ocorrencia()
-      ? `SMAP-${this.anoProtocolo()}-${String(this.idOcorrencia).padStart(6, '0')}`
+      ? `SMAP-${this.anoProtocolo()}-${String(this.idOcorrencia()).padStart(6, '0')}`
       : '',
   );
 
@@ -97,9 +105,7 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
       return '—';
     }
 
-    const mes = data
-      .toLocaleDateString('pt-BR', { month: 'short' })
-      .replace('.', '');
+    const mes = data.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
     const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
     const horas = data.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
@@ -114,8 +120,7 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const temCoordenadas =
-      ocorrencia.latitude != null && ocorrencia.longitude != null;
+    const temCoordenadas = ocorrencia.latitude != null && ocorrencia.longitude != null;
 
     const coordenadas: L.LatLngTuple = temCoordenadas
       ? [ocorrencia.latitude!, ocorrencia.longitude!]
