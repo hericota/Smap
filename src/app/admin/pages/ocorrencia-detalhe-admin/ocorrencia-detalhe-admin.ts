@@ -5,162 +5,78 @@ import {
   OnDestroy,
   ViewChild,
   computed,
+  effect,
   inject,
-  signal,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { httpResource } from '@angular/common/http';
 import * as L from 'leaflet';
+import { environment } from '../../../../environments/environment';
 
-type StatusOcorrencia =
-  | 'Enviada'
-  | 'Em análise'
-  | 'Encaminhada'
-  | 'Concluída'
-  | 'Pausada'
-  | 'Rejeitada';
-
-type Prioridade = 'Alta' | 'Média' | 'Baixa';
-
-interface RegistroHistorico {
+interface OcorrenciaApi {
+  id: number;
   titulo: string;
   descricao: string;
-  autor: string;
-  momento: string;
-  statusDaEpoca: StatusOcorrencia;
-}
-
-interface Transicao {
-  novoStatus: StatusOcorrencia;
-  rotuloBotao: string;
-  tituloHistorico: string;
-  descricaoHistorico: string;
-  fraseModal: string;
+  categoria: string;
+  localizacao: string;
+  latitude: number | null;
+  longitude: number | null;
+  criadaEm: string | null;
 }
 
 @Component({
+  selector: 'app-ocorrencia-detalhes',
+  standalone: true,
   imports: [RouterLink],
-  selector: 'app-ocorrencia-detalhe-admin',
-  styleUrl: './ocorrencia-detalhe-admin.css',
   templateUrl: './ocorrencia-detalhe-admin.html',
+  styleUrl: './ocorrencia-detalhe-admin.css',
 })
-export class OcorrenciaDetalheAdmin implements AfterViewInit, OnDestroy {
+export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly idOcorrencia = Number(this.route.snapshot.paramMap.get('id'));
+  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia}`;
 
-  protected readonly codigo =
-    this.route.snapshot.paramMap.get('codigo') ?? 'SMAP-2026-001245';
-
-  protected readonly status = signal<StatusOcorrencia>('Em análise');
-  protected readonly prioridade: Prioridade = 'Alta';
-  protected readonly secretaria = 'SEINFRA';
-
-  protected readonly fotoAtiva = signal(0);
-  protected readonly indicesFotos = [0, 1, 2];
-
-  protected readonly modalAberto = signal(false);
-  protected readonly modalMensagem = signal('');
-
-  protected readonly historico = signal<RegistroHistorico[]>([
-    {
-      titulo: 'Em análise',
-      descricao:
-        'Registro em verificação e classificação pela equipe administrativa.',
-      autor: 'Carlos Silva (SEINFRA)',
-      momento: '28 jan 2026, 11:02',
-      statusDaEpoca: 'Em análise',
-    },
-    {
-      titulo: 'Recebida pelo sistema',
-      descricao:
-        'Registro criado e aceito pelo sistema. Protocolo gerado e cidadã notificada.',
-      autor: 'Sistema Automático',
-      momento: '28 jan 2026, 10:45',
-      statusDaEpoca: 'Enviada',
-    },
-  ]);
-
-  private readonly transicoesPrimarias: Record<StatusOcorrencia, Transicao | null> = {
-    'Enviada': {
-      novoStatus: 'Em análise',
-      rotuloBotao: 'Iniciar análise',
-      tituloHistorico: 'Em análise',
-      descricaoHistorico:
-        'Triagem iniciada pelo operador administrativo.',
-      fraseModal: 'movida para "Em análise"',
-    },
-    'Em análise': {
-      novoStatus: 'Encaminhada',
-      rotuloBotao: 'Encaminhar para execução',
-      tituloHistorico: 'Encaminhada para execução',
-      descricaoHistorico:
-        'Ocorrência encaminhada ao setor responsável (SEINFRA).',
-      fraseModal: 'encaminhada para execução',
-    },
-    'Encaminhada': {
-      novoStatus: 'Concluída',
-      rotuloBotao: 'Marcar como concluída',
-      tituloHistorico: 'Ocorrência concluída',
-      descricaoHistorico:
-        'Problema tratado e finalizado pelo setor responsável.',
-      fraseModal: 'marcada como concluída',
-    },
-    'Pausada': {
-      novoStatus: 'Em análise',
-      rotuloBotao: 'Retomar análise',
-      tituloHistorico: 'Análise retomada',
-      descricaoHistorico:
-        'Ocorrência retornou para a fila de análise administrativa.',
-      fraseModal: 'retornada para análise',
-    },
-    'Concluída': null,
-    'Rejeitada': null,
-  };
-
-  protected readonly acaoPrimariaLabel = computed(() => {
-    const transicao = this.transicoesPrimarias[this.status()];
-
-    return transicao ? transicao.rotuloBotao : null;
-  });
-
-  protected readonly pausarVisivel = computed(() =>
-    ['Enviada', 'Em análise', 'Encaminhada'].includes(this.status()),
+  protected readonly ocorrenciaResource = httpResource<OcorrenciaApi>(
+    () => this.urlApi,
   );
 
-  protected readonly rejeitarVisivel = computed(() =>
-    ['Enviada', 'Em análise', 'Encaminhada', 'Pausada'].includes(this.status()),
+  protected readonly ocorrencia = computed(() => this.ocorrenciaResource.value());
+
+  protected readonly protocolo = computed(() =>
+    this.ocorrencia()
+      ? `SMAP-${this.anoProtocolo()}-${String(this.idOcorrencia).padStart(6, '0')}`
+      : '',
   );
 
-  @ViewChild('mapaContainer', { static: true })
-  private mapaContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('mapContainer', { static: true })
+  private mapContainer!: ElementRef<HTMLDivElement>;
 
   private map?: L.Map;
+  private marcador?: L.Marker;
   private resizeObserver?: ResizeObserver;
 
+  constructor() {
+    effect(() => {
+      this.aplicarMarcador(this.ocorrencia());
+    });
+  }
+
   ngAfterViewInit(): void {
-    const container = this.mapaContainer.nativeElement;
-
-    const map = L.map(container, {
-      center: [-26.9155, -49.0709],
-      zoom: 16,
-      scrollWheelZoom: false,
+    this.map = L.map(this.mapContainer.nativeElement, {
+      zoomControl: false,
+      attributionControl: false,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-    }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(this.map);
 
-    const icone = L.divIcon({
-      className: 'pino-ocorrencia',
-      html: `<svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5z" fill="#f5484c" stroke="#ffffff" stroke-width="1"/></svg>`,
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-    });
+    this.aplicarMarcador(this.ocorrencia());
 
-    L.marker([-26.9155, -49.0709], { icon: icone }).addTo(map);
-
-    this.resizeObserver = new ResizeObserver(() => map.invalidateSize());
-    this.resizeObserver.observe(container);
-
-    this.map = map;
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
+      this.resizeObserver.observe(this.mapContainer.nativeElement);
+    }
   }
 
   ngOnDestroy(): void {
@@ -168,97 +84,73 @@ export class OcorrenciaDetalheAdmin implements AfterViewInit, OnDestroy {
     this.map?.remove();
   }
 
-  protected selecionarFoto(indice: number): void {
-    this.fotoAtiva.set(indice);
+  protected formatadoEnviado(): string {
+    const ocorrencia = this.ocorrencia();
+
+    if (!ocorrencia?.criadaEm) {
+      return '—';
+    }
+
+    const data = new Date(ocorrencia.criadaEm);
+
+    if (Number.isNaN(data.getTime())) {
+      return '—';
+    }
+
+    const mes = data
+      .toLocaleDateString('pt-BR', { month: 'short' })
+      .replace('.', '');
+    const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
+    const horas = data.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    return `${data.getDate()} ${mesCapitalizado}, ${horas}`;
   }
 
-  protected executarAcaoPrimaria(): void {
-    const transicao = this.transicoesPrimarias[this.status()];
-
-    if (!transicao) {
+  private aplicarMarcador(ocorrencia: OcorrenciaApi | undefined | null): void {
+    if (!this.map || !ocorrencia) {
       return;
     }
 
-    this.registrarMudanca(transicao);
+    const temCoordenadas =
+      ocorrencia.latitude != null && ocorrencia.longitude != null;
+
+    const coordenadas: L.LatLngTuple = temCoordenadas
+      ? [ocorrencia.latitude!, ocorrencia.longitude!]
+      : [-26.9184, -49.0656];
+
+    if (this.marcador) {
+      this.marcador.remove();
+      this.marcador = undefined;
+    }
+
+    if (temCoordenadas) {
+      this.marcador = L.marker(coordenadas, {
+        icon: L.divIcon({
+          className: 'pin-ocorrencia',
+          html: `<svg viewBox="0 0 24 32" width="36" height="48" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="#ef4444"/><circle cx="12" cy="12" r="4.5" fill="#ffffff"/></svg>`,
+          iconSize: [36, 48],
+          iconAnchor: [18, 46],
+        }),
+      }).addTo(this.map);
+    }
+
+    this.map.setView(coordenadas, temCoordenadas ? 15 : 12);
   }
 
-  protected pausar(): void {
-    this.registrarMudanca({
-      novoStatus: 'Pausada',
-      tituloHistorico: 'Ocorrência pausada',
-      descricaoHistorico: 'Atendimento pausado temporariamente pelo operador.',
-      fraseModal: 'pausada',
-    });
-  }
+  private anoProtocolo(): number {
+    const criadaEm = this.ocorrencia()?.criadaEm;
 
-  protected rejeitar(): void {
-    this.registrarMudanca({
-      novoStatus: 'Rejeitada',
-      tituloHistorico: 'Ocorrência rejeitada',
-      descricaoHistorico:
-        'Registro não atende aos critérios definidos para atendimento.',
-      fraseModal: 'rejeitada',
-    });
-  }
+    if (criadaEm) {
+      const data = new Date(criadaEm);
 
-  protected fecharModal(): void {
-    this.modalAberto.set(false);
-  }
+      if (!Number.isNaN(data.getTime())) {
+        return data.getFullYear();
+      }
+    }
 
-  private registrarMudanca(transicao: Omit<Transicao, 'rotuloBotao'>): void {
-    const momento = this.momentoAgora();
-
-    this.status.set(transicao.novoStatus);
-
-    this.historico.update((registros) => [
-      {
-        titulo: transicao.tituloHistorico,
-        descricao: transicao.descricaoHistorico,
-        autor: 'Carlos Silva (SEINFRA)',
-        momento,
-        statusDaEpoca: transicao.novoStatus,
-      },
-      ...registros,
-    ]);
-
-    this.modalMensagem.set(
-      `A ocorrência ${this.codigo} foi ${transicao.fraseModal}. O cidadão será notificado.`,
-    );
-    this.modalAberto.set(true);
-  }
-
-  protected classeStatus(status: StatusOcorrencia): string {
-    const mapa: Record<StatusOcorrencia, string> = {
-      'Enviada': 'chip-enviada',
-      'Em análise': 'chip-analise',
-      'Encaminhada': 'chip-encaminhada',
-      'Concluída': 'chip-concluida',
-      'Pausada': 'chip-pausada',
-      'Rejeitada': 'chip-rejeitada',
-    };
-
-    return mapa[status];
-  }
-
-  protected classePrioridade(prioridade: Prioridade): string {
-    const mapa: Record<Prioridade, string> = {
-      'Alta': 'ponto-alta',
-      'Média': 'ponto-media',
-      'Baixa': 'ponto-baixa',
-    };
-
-    return mapa[prioridade];
-  }
-
-  private momentoAgora(): string {
-    const agora = new Date();
-    const meses = [
-      'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
-      'jul', 'ago', 'set', 'out', 'nov', 'dez',
-    ];
-    const hora = String(agora.getHours()).padStart(2, '0');
-    const minuto = String(agora.getMinutes()).padStart(2, '0');
-
-    return `${agora.getDate()} ${meses[agora.getMonth()]} ${agora.getFullYear()}, ${hora}:${minuto}`;
+    return new Date().getFullYear();
   }
 }
