@@ -25,4 +25,8 @@ export class DetalheOcorrecia {
    readonly ocorrenciaDetail = httpResource<Ocorrencia>(
         () => this.urlApi+'/'+ this.id
     )
+
+    constructor() {
+  console.log('ID:', this.id);
+}
 }

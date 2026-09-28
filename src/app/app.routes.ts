@@ -22,7 +22,7 @@ export const routes: Routes = [
   {path: 'perfil-config' , component: ProfileConfig},
   {path: 'cadastro' , component: ContainerCadastro},
   {path:'ocorrenciasRegistrada', component:OcorrenciasRegistradas},
-  {path: 'detalheOcorrencia' , component:DetalheOcorrecia},
+  {path: 'detalheOcorrencia/:id' , component:DetalheOcorrecia},
   {path:'confirmacao-ocorrencia/:id' , component:ConfirmacaoPost},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
