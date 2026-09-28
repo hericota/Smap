@@ -11,6 +11,7 @@ import { ProfileConfig } from './feats/profile user/profile-config/profile-confi
 import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
 import { OcorrenciasRegistradas } from './feats/ocorrencias-registradas/ocorrencias-registradas';
 import { DetalheOcorrecia } from './feats/detalhe-ocorrecia/detalhe-ocorrecia';
+import { FullMap } from './pages/full-map/full-map';
 
 
 export const routes: Routes = [
@@ -106,5 +107,5 @@ export const routes: Routes = [
     ],
   },
   {path:'ocorrencias', component: TelaOcorrencias},
-  {path:"mapa-separado", component:MapaSeparado}
+  {path:"mapa", component:FullMap}
 ];
