@@ -87,3 +87,68 @@ button {
   font-size: 12px;
   
 }
+
+@media (min-width: 768px) {
+
+    form {
+        width: 100%;
+        max-width: 600px;
+
+        gap: 24px;
+    }
+
+    .caixa-input {
+        width: 100%;
+
+        font-size: 16px;
+        gap: 10px;
+    }
+
+    input {
+        width: 100%;
+        height: 64px;
+
+        box-sizing: border-box;
+
+        padding: 20px;
+
+        border-radius: 14px;
+
+        font-size: 16px;
+    }
+
+    .box-validators {
+        gap: 10px;
+    }
+
+    .errorValidators {
+        font-size: 13px;
+    }
+
+    a {
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        height: 55px;
+
+        padding: 14px;
+
+        border-radius: 14px;
+
+        font-size: 16px;
+    }
+
+    .detalhe {
+        width: 100%;
+    }
+
+    .detalhe div {
+        width: 45%;
+    }
+
+    .detalhe p {
+        font-size: 14px;
+    }
+} 

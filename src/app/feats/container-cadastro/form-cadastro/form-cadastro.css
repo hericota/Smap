@@ -111,3 +111,59 @@ input.input-error {
   20%, 60% { transform: translateX(-6px); }
   40%, 80% { transform: translateX(6px); }
 }
+
+
+@media (min-width: 768px) {
+
+    form {
+        width: 100%;
+        max-width: 650px;
+        gap: 18px;
+    }
+
+    .box-input {
+        font-size: 15px;
+        gap: 9px;
+    }
+
+    .nomeSobrenome {
+        gap: 16px;
+    }
+
+    input:not([type='checkbox']) {
+        width: 100%;
+        height: 52px;
+
+        box-sizing: border-box;
+
+        padding: 12px;
+
+        font-size: 15px;
+
+        border-radius: 12px;
+    }
+
+    .errorValidators {
+        font-size: 13px;
+    }
+
+    .check-box {
+        font-size: 14px;
+    }
+
+    input[type='checkbox'] {
+        width: 19px;
+        height: 19px;
+    }
+
+    button {
+        width: 100%;
+        height: 56px;
+
+        margin: 26px 0;
+
+        border-radius: 16px;
+
+        font-size: 16px;
+    }
+}
