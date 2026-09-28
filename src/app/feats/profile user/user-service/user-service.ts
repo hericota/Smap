@@ -13,10 +13,26 @@ export class UserService {
   // ];
   // selecionaravatar = signal<string | null>(null);
 
-  usuarios = signal<CadastroInterface[]>([]); //recebe todos os cadastros
+  usuarios = signal<CadastroInterface[]>(this.carregarUsuarios()); //recebe todos os cadastros
 
   cadastrar(usuario: CadastroInterface) {
     this.usuarios.update((usuarios) => [...usuarios, usuario]); //ao cadastrar mais uma pessoa, a array n substitui oq ja esta cadastrado, apenas adiciona mais um na array
+    this.salvarUsuarios();
     console.log(this.usuarios());
+  }
+  private salvarUsuarios(){ //transforma o objeto em um texto para armazenar no local
+    const dados = JSON.stringify(this.usuarios())
+    localStorage.setItem('usuarios', dados);
+  }
+
+
+   private carregarUsuarios(): CadastroInterface[] {
+    const dados = localStorage.getItem('usuarios');
+
+    if (dados) {
+      return JSON.parse(dados);
+    }
+
+    return [];
   }
 }
