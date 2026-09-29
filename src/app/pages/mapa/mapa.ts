@@ -43,6 +43,8 @@ export class Mapa implements AfterViewInit, OnDestroy {
   readonly erroCarregamento = signal('');
   readonly carregando = signal(false);
   readonly salvando = signal(false);
+  readonly imagemSelecionada = signal<File | null>(null);
+  readonly imagemPreview = signal<string | null>(null);
   readonly ocorrencias = signal<Ocorrencia[]>([]);
   private selecao?: L.CircleMarker;
   private registros = L.layerGroup();
@@ -77,6 +79,8 @@ export class Mapa implements AfterViewInit, OnDestroy {
     this.destroyed = true;
     this.requestId++;
     this.resizeObserver?.disconnect();
+    const preview = this.imagemPreview();
+    if (preview) URL.revokeObjectURL(preview);
     this.map?.remove();
   }
 
@@ -121,6 +125,29 @@ export class Mapa implements AfterViewInit, OnDestroy {
     }).addTo(this.map!);
   }
 
+  selecionarImagem(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files?.[0] ?? null;
+
+    if (!arquivo) {
+      this.imagemSelecionada.set(null);
+      this.imagemPreview.set(null);
+      return;
+    }
+
+    if (!arquivo.type.startsWith('image/')) {
+      input.value = '';
+      this.imagemSelecionada.set(null);
+      this.imagemPreview.set(null);
+      this.erro.set('Selecione um arquivo de imagem válido.');
+      return;
+    }
+
+    this.imagemSelecionada.set(arquivo);
+    this.imagemPreview.set(URL.createObjectURL(arquivo));
+    this.erro.set('');
+  }
+
   cadastrar(form: NgForm, event?: SubmitEvent): void {
     if (event) {
       event.preventDefault();
@@ -134,7 +161,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
     const dados = this.ocorrenciaModel();
 
     // 1. Validação dos campos e da seleção de mapa
-    if (form.invalid || !ponto || !dados.titulo.trim() || !dados.localizacao.trim() || !this.categorias.includes(dados.categoria) || dados.descricao.trim().length < 10 || dados.descricao.length > 1000) {
+    if (form.invalid || !ponto || !this.imagemSelecionada() || !dados.titulo.trim() || !dados.localizacao.trim() || !this.categorias.includes(dados.categoria) || dados.descricao.trim().length < 10 || dados.descricao.length > 1000) {
       form.control.markAllAsTouched();
       this.erro.set('Preencha os campos obrigatórios (descrição com no mínimo 10 caracteres) e selecione um ponto no mapa.');
       return;
@@ -152,7 +179,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
 
     // 3. Executa a requisição HTTP
     this.salvando.set(true);
-    this.consumoService.cadastrarOcorrencia(registro).pipe(
+    this.consumoService.cadastrarOcorrencia(registro, this.imagemSelecionada()!).pipe(
       takeUntilDestroyed(this.destroyRef),
       finalize(() => this.salvando.set(false)),
     ).subscribe({
