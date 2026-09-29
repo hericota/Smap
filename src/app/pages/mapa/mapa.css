@@ -217,3 +217,13 @@ article .hint {
         margin: 16px 14px 0;
     }
 }
+
+.imagem-preview {
+    display: block;
+    width: 100%;
+    max-height: 220px;
+    margin-top: 10px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #cbdcd1;
+}
