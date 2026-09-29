@@ -8,8 +8,18 @@ export class ConsumoApi {
   private readonly httpClient = inject(HttpClient);
   private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
 
-  cadastrarOcorrencia(ocorrencia: NovaOcorrencia) {
-    return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia);
+  cadastrarOcorrencia(ocorrencia: NovaOcorrencia, imagem: File) {
+    const formData = new FormData();
+    formData.append(
+      'ocorrencia',
+      new Blob([JSON.stringify(ocorrencia)], { type: 'application/json' }),
+    );
+    formData.append('imagem', imagem);
+    return this.httpClient.post<Ocorrencia>(this.urlApi, formData);
+  }
+
+  imagemUrl(id: number | string): string {
+    return `${this.urlApi}/${id}/imagem`;
   }
 
   listarOcorrencias() {
