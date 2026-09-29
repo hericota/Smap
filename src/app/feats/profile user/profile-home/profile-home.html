@@ -2,7 +2,7 @@
 
     <div class="header">
         <div class="nomeUser">
-            <h1>Olá, Jordan 👋</h1>
+            <h1>{{usuarioLogado()?.nome}}👋</h1>
             <p>data atual</p>
         </div>
         <div class="user-actions">
@@ -38,5 +38,7 @@
     <div id="mapa">
         <app-mapa-separado></app-mapa-separado>
     </div>
+
+
 </section>
 <app-bottom-nav></app-bottom-nav>

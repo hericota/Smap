@@ -28,6 +28,7 @@ export class FormCadastro {
     cep: '',
     senha: '',
     check: false,
+    username: ''
   });
   private usuarioService = inject(UserService);
   private router = inject(Router);
@@ -57,6 +58,6 @@ export class FormCadastro {
     if (this.cadastroForm().invalid()) return;
     this.usuarioService.cadastrar(this.cadastroModel());
     this.cadastroForm().reset();
-    this.router.navigate(['/perfil-usuario']);
-  }
+    this.router.navigate(['/login']);
+}
 }

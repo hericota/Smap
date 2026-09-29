@@ -6,7 +6,7 @@
                 <img class="foto-user" src="/assets/user.jpg" alt="usuario">
                 <button class="icon-edit"><img src="/assets/edit-icon.png"></button>
             </div>
-            <h2>Jordan</h2>
+            <h2>{{usuarioLogado()?.nome}}</h2>
             <p>Jordan_67</p>
         </div>
 
@@ -75,11 +75,12 @@
         </div>
     </div>
 
-    <button class="sairDaConta">
+    <button class="sairDaConta" (click)="sair()">
     <div>
         <img class="exit-icon" src="/assets/exit-icon.png" >
     </div>
        <p>Sair da conta</p>
     </button>
+    
 </section>
 <app-bottom-nav></app-bottom-nav>

@@ -17,9 +17,20 @@ export class UserService {
   usuarios = signal<CadastroInterface[]>(this.carregarUsuarios()); //recebe todos os cadastros
 
   cadastrar(usuario: CadastroInterface) {
-    this.usuarios.update((usuarios) => [...usuarios, usuario]); //ao cadastrar mais uma pessoa, a array n substitui oq ja esta cadastrado, apenas adiciona mais um na array
+    const username = this.gerarUserName(usuario);
+    const usuarioComUsername = {
+      ...usuario,
+      username,
+    };
+    this.usuarios.update((usuarios) => [...usuarios, usuarioComUsername]);
     this.salvarUsuarios();
-    console.log(this.usuarios());
+  }
+
+  private gerarUserName(usuario: CadastroInterface): string {
+    const nome = usuario.nome.trim().replace(/\s+/g, '_');
+    const sobreNome = usuario.sobreNome.trim().replace(/\s+/g, '_');
+    const numero = Math.floor(Math.random() * 900) + 100;
+    return `${nome}_${sobreNome}_${numero}`.toLowerCase();
   }
   private salvarUsuarios() {
     //transforma o objeto em um texto para armazenar no local
@@ -38,18 +49,23 @@ export class UserService {
   }
 
   //login
-  usuarioLogado = signal<CadastroInterface | null>(this.carregarlogin());;
+  usuarioLogado = signal<CadastroInterface | null>(this.carregarlogin());
   login(email: string, senha: string): boolean {
     const usuario = this.usuarios().find(
       (usuario) => usuario.email === email && usuario.senha === senha,
-    ); 
-    this.usuarioLogado.set(usuario ?? null); console.log(this.usuarioLogado());
-    this.salvarLogin() ;
+    );
+
+    console.log('Usuários:', this.usuarios());
+    console.log('Usuário encontrado:', usuario);
+
+    this.usuarioLogado.set(usuario ?? null);
+    console.log(this.usuarioLogado());
+    this.salvarLogin();
     if (usuario) {
       return true;
-    }else{return false}
-    
- 
+    } else {
+      return false;
+    }
   }
 
   private salvarLogin() {
@@ -57,12 +73,16 @@ export class UserService {
     localStorage.setItem('usuarioLogado', dadosLogin);
   }
 
-   private carregarlogin(): CadastroInterface | null {
+  private carregarlogin(): CadastroInterface | null {
     const dadosLogin = localStorage.getItem('usuarioLogado');
 
     if (dadosLogin) {
       return JSON.parse(dadosLogin);
     }
-      return null;
+    return null;
+  }
+  logout() {
+    this.usuarioLogado.set(null);
+    localStorage.removeItem('usuarioLogado');
   }
 }
