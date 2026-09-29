@@ -27,3 +27,64 @@ p a[routerLink='/login']{
   display: flex;
   justify-content: center;
 }
+
+
+@media (min-width: 768px) {
+
+    section {
+        width: 100%;
+        max-width: 750px;
+
+        min-height: 100dvh;
+
+        margin: 0 auto;
+
+        padding: 40px 30px;
+
+        box-sizing: border-box;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+    }
+
+    .criarConta {
+        width: 100%;
+        max-width: 650px;
+
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+
+        margin-bottom: 30px;
+    }
+
+    .criarConta a {
+        display: flex;
+        align-items: center;
+    }
+
+    .criarConta svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .criarConta h1 {
+        margin: 0;
+
+        font-size: 32px;
+    }
+
+    .login {
+        width: 100%;
+        max-width: 650px;
+
+        text-align: center;
+    }
+
+    .login p {
+        font-size: 15px;
+    }
+}

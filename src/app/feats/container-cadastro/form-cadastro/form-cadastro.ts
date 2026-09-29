@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CadastroInterface } from './cadastro-interface';
 import {
   email,
@@ -13,7 +13,7 @@ import {
 import { UserService } from '../../profile user/user-service/user-service';
 
 @Component({
-  imports: [RouterLink, FormField],
+  imports: [FormField],
   selector: 'app-form-cadastro',
   styleUrl: './form-cadastro.css',
   templateUrl: './form-cadastro.html',
@@ -43,23 +43,13 @@ export class FormCadastro {
     required(schemaPath.senha);
     required(schemaPath.check);
     email(schemaPath.email, { message: '*' });
-    maxLength(schemaPath.senha, 16, {
-      message: '*A senha deve ter no máximo 16 caracteres!',
-    });
+    maxLength(schemaPath.senha, 16, { message: '*A senha deve ter no máximo 16 caracteres!' });
     minLength(schemaPath.senha, 8, { message: '*Mínimo 8 caracteres!' });
-    pattern(schemaPath.senha, /.*[A-Z].*/, {
-      message: '*Ao menos 1 letra maiúscula!',
-    });
-    pattern(schemaPath.senha, /.*\d.*/, {
-      message: '*Ao menos 1 número!',
-    });
-    pattern(schemaPath.senha, /.*[@$!%*?&].*/, {
-      message: '*Ao menos 1 caractere especial!',
-    });
+    pattern(schemaPath.senha, /.*[A-Z].*/, { message: '*Ao menos 1 letra maiúscula!' });
+    pattern(schemaPath.senha, /.*\d.*/, { message: '*Ao menos 1 número!' });
+    pattern(schemaPath.senha, /.*[@$!%*?&].*/, { message: '*Ao menos 1 caractere especial!' });
     pattern(schemaPath.cpf, /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/, { message: '*CPF inválido!' });
-    pattern(schemaPath.telefone, /^(\(\d{2}\)\s?\d{4,5}-\d{4}|\d{10,11})$/, {
-      message: '*Telefone inválido!',
-    });
+    pattern(schemaPath.telefone, /^(\(\d{2}\)\s?\d{4,5}-\d{4}|\d{10,11})$/, { message: '*Telefone inválido!' });
     pattern(schemaPath.cep, /^(\d{5}-\d{3}|\d{8})$/, { message: '*CEP inválido!' });
   });
 

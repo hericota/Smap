@@ -1,12 +1,159 @@
-<section class="admin-page">
-  <p class="page-eyebrow">Mapa</p>
+<div class="mapa-wrapper">
+  <!-- MAPA FULLSCREEN -->
+  <div #mapContainer class="mapa-fullscreen" role="region" aria-label="Mapa de ocorrências"></div>
 
-  <h2>Mapa de ocorrências</h2>
-  <div id="mapa">
-  <app-mapa-separado></app-mapa-separado>
+  <!-- OVERLAY TOPO ESQUERDO: BUSCA + FILTROS -->
+  <div class="overlay overlay-top-left">
+    <div class="busca-filtros">
+      <div class="busca">
+        <svg class="icone-busca" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Filtrar mapa..."
+          [ngModel]="filtroBusca()"
+          (ngModelChange)="filtroBusca.set($event); recarregarMapa()"
+        />
+      </div>
+
+      <select
+        class="filtro-select"
+        [ngModel]="filtroPrioridade()"
+        (ngModelChange)="filtroPrioridade.set($event)"
+      >
+        <option value="">Prioridade</option>
+        <option value="alta">Alta</option>
+        <option value="media">Média</option>
+        <option value="baixa">Baixa</option>
+      </select>
+
+      <select
+        class="filtro-select"
+        [ngModel]="filtroStatus()"
+        (ngModelChange)="filtroStatus.set($event)"
+      >
+        <option value="">Status</option>
+        <option value="recebido">Recebido</option>
+        <option value="em-analise">Em análise</option>
+        <option value="em-andamento">Em andamento</option>
+        <option value="resolvido">Resolvido</option>
+      </select>
+
+      <select
+        class="filtro-select"
+        [ngModel]="filtroCategoria()"
+        (ngModelChange)="filtroCategoria.set($event); recarregarMapa()"
+      >
+        <option value="">Categoria</option>
+        <option value="buraco">Buraco</option>
+        <option value="iluminacao">Iluminação</option>
+        <option value="sinalizacao">Sinalização</option>
+        <option value="saneamento">Saneamento</option>
+      </select>
+
+      <button
+        type="button"
+        class="btn-fullscreen"
+        (click)="alternarFullscreen()"
+        aria-label="Tela cheia"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+    </div>
+
+    @if (carregando()) {
+      <p class="estado-msg">Carregando ocorrências…</p>
+    } @else if (comErro()) {
+      <div class="estado-msg erro">
+        <p>Não foi possível carregar as ocorrências. Confirme se a API está rodando em http://localhost:8080.</p>
+        <button type="button" class="btn-tentar" (click)="carregar()">Tentar novamente</button>
+      </div>
+    }
   </div>
 
-  <p class="page-description">
-    Visualize a distribuição das ocorrências urbanas no mapa.
-  </p>
-</section>
+  <!-- OVERLAY TOPO DIREITO: PAINEL REGIÃO -->
+  <aside class="overlay overlay-top-right">
+    <div class="painel-regiao">
+      <header class="painel-header">
+        <h3>{{ regiaoAtual() }}</h3>
+        <p>{{ statusResumo().total }} ocorrências encontradas</p>
+      </header>
+
+      <section class="painel-secao">
+        <h4>STATUS DAS OCORRÊNCIAS</h4>
+
+        <div class="barra-item">
+          <div class="barra-info">
+            <span>Alta Prioridade</span>
+            <strong class="valor-alta">{{ statusResumo().altaPrioridade }}</strong>
+          </div>
+          <div class="barra-track">
+            <div class="barra-fill fill-alta" [style.width.%]="(statusResumo().altaPrioridade / statusResumo().total) * 100"></div>
+          </div>
+        </div>
+
+        <div class="barra-item">
+          <div class="barra-info">
+            <span>Em Execução</span>
+            <strong class="valor-exec">{{ statusResumo().emExecucao }}</strong>
+          </div>
+          <div class="barra-track">
+            <div class="barra-fill fill-exec" [style.width.%]="(statusResumo().emExecucao / statusResumo().total) * 100"></div>
+          </div>
+        </div>
+
+        <div class="barra-item">
+          <div class="barra-info">
+            <span>Concluídos</span>
+            <strong class="valor-conc">{{ statusResumo().concluidos }}</strong>
+          </div>
+          <div class="barra-track">
+            <div class="barra-fill fill-conc" [style.width.%]="(statusResumo().concluidos / statusResumo().total) * 100"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="painel-secao">
+        <h4>OCORRÊNCIAS RECENTES</h4>
+
+        @for (ocorrencia of recentes(); track ocorrencia.id) {
+          <button type="button" class="recente-card" (click)="focar(ocorrencia)">
+            <div class="recente-linha">
+              <span class="recente-codigo">SMAP-{{ ocorrencia.id }}</span>
+              <span
+                class="recente-badge"
+                [style.background-color]="corDaCategoria(ocorrencia.categoria)"
+              >
+                {{ ocorrencia.categoria }}
+              </span>
+            </div>
+            <span class="recente-endereco">{{ ocorrencia.localizacao }}</span>
+          </button>
+        } @empty {
+          <p class="painel-vazio">Nenhuma ocorrência recente.</p>
+        }
+      </section>
+    </div>
+  </aside>
+
+  <!-- OVERLAY RODAPÉ ESQUERDO: LEGENDA -->
+  <div class="overlay overlay-bottom-left">
+    <div class="legenda-card">
+      <h4>Legenda Ocorrências</h4>
+      <ul>
+        @for (cat of categoriasLegenda; track cat.nome) {
+          <li>
+            <span class="legenda-dot" [style.background-color]="cat.cor"></span>
+            {{ cat.nome }}
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
