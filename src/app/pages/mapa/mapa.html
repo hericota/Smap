@@ -60,18 +60,19 @@
         placeholder="Descreva o que aconteceu neste local"
       ></textarea>
 
-      <!-- Imagem opcional: a API armazena somente a URL -->
-      <label for="imagemUrl">Imagem (URL opcional)</label>
+      <label for="imagem">Imagem</label>
       <input
-        type="url"
-        id="imagemUrl"
-        name="imagemUrl"
-        [(ngModel)]="ocorrenciaModel().imagemUrl"
-        maxlength="2048"
-        pattern="https?://.*"
-        placeholder="https://exemplo.com/foto.jpg"
+        type="file"
+        id="imagem"
+        name="imagem"
+        accept="image/*"
+        required
+        (change)="selecionarImagem($event)"
       />
-      <p class="hint">Use um link público HTTP ou HTTPS para a imagem.</p>
+      @if (imagemPreview()) {
+        <img class="imagem-preview" [src]="imagemPreview()" alt="Pré-visualização da imagem selecionada">
+      }
+      <p class="hint">Selecione uma imagem do problema. A imagem é obrigatória.</p>
 
       <!-- Botão para Geolocalização -->
       <button type="button" class="secondary" (click)="localizar()" [disabled]="localizando()">
