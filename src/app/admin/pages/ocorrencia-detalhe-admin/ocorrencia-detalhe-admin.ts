@@ -14,17 +14,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import * as L from 'leaflet';
 import { environment } from '../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Ocorrencia, StatusOcorrencia } from '../../../feats/ocorrencia';
 
-interface OcorrenciaApi {
-  id: number;
-  titulo: string;
-  descricao: string;
-  categoria: string;
-  localizacao: string;
-  latitude: number | null;
-  longitude: number | null;
-  criadaEm: string | null;
-}
+type OcorrenciaApi = Ocorrencia & { id: number };
 
 @Component({
   selector: 'app-ocorrencia-detalhes',
@@ -35,6 +28,7 @@ interface OcorrenciaApi {
 })
 export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly http = inject(HttpClient);
   private readonly idOcorrencia = toSignal(
     this.route.paramMap.pipe(map((params) => Number(params.get('id')))),
     { initialValue: Number(this.route.snapshot.paramMap.get('id')) },
@@ -90,6 +84,19 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.map?.remove();
+  }
+
+  protected rotuloStatus(status?: StatusOcorrencia): string {
+    return ({ PENDENTE: 'Pendente', EM_ANDAMENTO: 'Em andamento', RESOLVIDA: 'Resolvida' } as const)[status ?? 'PENDENTE'];
+  }
+
+  protected atualizarStatus(status: StatusOcorrencia): void {
+    const atual = this.ocorrencia();
+    if (!atual) return;
+    const { id, criadaEm, ...dados } = atual;
+    this.http.put<OcorrenciaApi>(this.urlApi(), { ...dados, status }).subscribe({
+      next: () => this.ocorrenciaResource.reload(),
+    });
   }
 
   protected formatadoEnviado(): string {

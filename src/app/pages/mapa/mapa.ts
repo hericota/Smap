@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Header } from '../../component/header/header';
-import { Ocorrencia } from '../../feats/ocorrencia';
+import { NovaOcorrencia, Ocorrencia } from '../../feats/ocorrencia';
 import { ConsumoApi } from '../../feats/posts/consumo-api';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
@@ -22,7 +22,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
   readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  ocorrenciaModel = signal<Ocorrencia>({
+  ocorrenciaModel = signal<NovaOcorrencia>({
     categoria: '',
     descricao: '',
     latitude: 0,
@@ -142,7 +142,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
     }
 
     // 2. Monta o objeto completo incluindo todos os campos da interface Ocorrencia
-    const registro: Ocorrencia = {
+    const registro: NovaOcorrencia = {
       ...dados,
       titulo: dados.titulo.trim(),
       localizacao: dados.localizacao.trim(),

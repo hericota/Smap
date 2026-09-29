@@ -10,6 +10,7 @@ import {
 import { httpResource } from '@angular/common/http';
 import * as L from 'leaflet';
 import { environment } from '../../../../environments/environment';
+import { Ocorrencia } from '../../../feats/ocorrencia';
 
 type TipoBadge = 'positivo' | 'critico' | 'eficiencia';
 
@@ -41,16 +42,7 @@ interface AtencaoImediata {
   diasAguardando: number;
 }
 
-interface OcorrenciaApi {
-  id: number;
-  titulo: string;
-  descricao: string;
-  categoria: string;
-  localizacao: string;
-  latitude: number | null;
-  longitude: number | null;
-  criadaEm: string;
-}
+type OcorrenciaApi = Ocorrencia & { id: number };
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -92,44 +84,16 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
     ];
   });
 
-  protected readonly ocorrenciasPorStatus: StatusOcorrencia[] = [
-    {
-      nome: 'Enviada',
-      quantidade: 184,
-      percentual: 38,
-      classe: 'status-enviada',
-    },
-    {
-      nome: 'Em análise',
-      quantidade: 245,
-      percentual: 51,
-      classe: 'status-analise',
-    },
-    {
-      nome: 'Encaminhada',
-      quantidade: 192,
-      percentual: 40,
-      classe: 'status-encaminhada',
-    },
-    {
-      nome: 'Concluída',
-      quantidade: 482,
-      percentual: 100,
-      classe: 'status-concluida',
-    },
-    {
-      nome: 'Pausada',
-      quantidade: 32,
-      percentual: 7,
-      classe: 'status-pausada',
-    },
-    {
-      nome: 'Rejeitada',
-      quantidade: 23,
-      percentual: 5,
-      classe: 'status-rejeitada',
-    },
-  ];
+  protected readonly ocorrenciasPorStatus = computed<StatusOcorrencia[]>(() => {
+    const ocorrencias = this.ocorrenciasResource.value();
+    const total = ocorrencias.length || 1;
+    const itens = [
+      ['Pendente', ocorrencias.filter((o) => (o.status ?? 'PENDENTE') === 'PENDENTE').length, 'status-enviada'],
+      ['Em andamento', ocorrencias.filter((o) => o.status === 'EM_ANDAMENTO').length, 'status-analise'],
+      ['Resolvida', ocorrencias.filter((o) => o.status === 'RESOLVIDA').length, 'status-concluida'],
+    ] as const;
+    return itens.map(([nome, quantidade, classe]) => ({ nome, quantidade, percentual: Math.round((quantidade / total) * 100), classe }));
+  });
 
   protected readonly regioesCriticas: RegiaoCritica[] = [
     {

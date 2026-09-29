@@ -2,17 +2,9 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { httpResource } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { Ocorrencia, StatusOcorrencia } from '../../../feats/ocorrencia';
 
-interface OcorrenciaApi {
-  id: number;
-  titulo: string;
-  descricao: string;
-  categoria: string;
-  localizacao: string;
-  latitude: number | null;
-  longitude: number | null;
-  criadaEm: string | null;
-}
+type OcorrenciaApi = Ocorrencia & { id: number };
 
 interface CategoriaOpcao {
   valor: string;
@@ -37,6 +29,7 @@ export class OcorrenciasAdmin {
 
   protected readonly busca = signal('');
   protected readonly categoriaSelecionada = signal('todas');
+  protected readonly statusSelecionado = signal<'todos' | StatusOcorrencia>('todos');
   protected readonly pagina = signal(1);
 
   private readonly tamanhoPagina = 8;
@@ -69,6 +62,7 @@ export class OcorrenciasAdmin {
   protected readonly ocorrenciasFiltradas = computed<OcorrenciaApi[]>(() => {
     const busca = this.normalizar(this.busca());
     const categoria = this.categoriaSelecionada();
+    const status = this.statusSelecionado();
 
     return this.ocorrenciasResource
       .value()
@@ -77,6 +71,10 @@ export class OcorrenciasAdmin {
           categoria !== 'todas' &&
           this.normalizar(ocorrencia.categoria) !== categoria
         ) {
+          return false;
+        }
+
+        if (status !== 'todos' && (ocorrencia.status ?? 'PENDENTE') !== status) {
           return false;
         }
 
@@ -130,7 +128,7 @@ export class OcorrenciasAdmin {
   );
 
   protected readonly temFiltrosAtivos = computed(
-    () => this.busca().length > 0 || this.categoriaSelecionada() !== 'todas',
+    () => this.busca().length > 0 || this.categoriaSelecionada() !== 'todas' || this.statusSelecionado() !== 'todos',
   );
 
   protected readonly rotuloCategoriaAtiva = computed(() => {
@@ -152,6 +150,20 @@ export class OcorrenciasAdmin {
     this.pagina.set(1);
   }
 
+  protected aoFiltrarStatus(valor: string): void {
+    this.statusSelecionado.set(valor as 'todos' | StatusOcorrencia);
+    this.pagina.set(1);
+  }
+
+  protected limparStatus(): void {
+    this.statusSelecionado.set('todos');
+    this.pagina.set(1);
+  }
+
+  protected rotuloStatus(status?: StatusOcorrencia): string {
+    return ({ PENDENTE: 'Pendente', EM_ANDAMENTO: 'Em andamento', RESOLVIDA: 'Resolvida' } as const)[status ?? 'PENDENTE'];
+  }
+
   protected limparBusca(): void {
     this.busca.set('');
     this.pagina.set(1);
@@ -165,6 +177,7 @@ export class OcorrenciasAdmin {
   protected limparFiltros(): void {
     this.limparBusca();
     this.limparCategoria();
+    this.limparStatus();
   }
 
   protected paginar(numero: number): void {
@@ -248,13 +261,15 @@ export class OcorrenciasAdmin {
 
   protected exportarCsv(): void {
     const linhas = [
-      ['Codigo', 'Titulo', 'Categoria', 'Localizacao', 'Data', 'Dias aguardando'],
+      ['Codigo', 'Titulo', 'Categoria', 'Localizacao', 'Status', 'Imagem', 'Data', 'Dias aguardando'],
       ...this.ocorrenciasFiltradas().map((ocorrencia) => [
         this.formatarProtocolo(ocorrencia.id),
         ocorrencia.titulo,
         ocorrencia.categoria,
         ocorrencia.localizacao,
-        this.formatarData(ocorrencia.criadaEm),
+        this.rotuloStatus(ocorrencia.status),
+        ocorrencia.imagemUrl ?? '',
+        this.formatarData(ocorrencia.criadaEm ?? null),
         String(this.diasAguardando(ocorrencia.criadaEm)),
       ]),
     ];

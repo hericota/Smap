@@ -33,13 +33,12 @@
       <select
         class="filtro-select"
         [ngModel]="filtroStatus()"
-        (ngModelChange)="filtroStatus.set($event)"
+        (ngModelChange)="filtroStatus.set($event); recarregarMapa()"
       >
         <option value="">Status</option>
-        <option value="recebido">Recebido</option>
-        <option value="em-analise">Em análise</option>
-        <option value="em-andamento">Em andamento</option>
-        <option value="resolvido">Resolvido</option>
+        <option value="PENDENTE">Pendente</option>
+        <option value="EM_ANDAMENTO">Em andamento</option>
+        <option value="RESOLVIDA">Resolvida</option>
       </select>
 
       <select
@@ -90,11 +89,11 @@
 
         <div class="barra-item">
           <div class="barra-info">
-            <span>Alta Prioridade</span>
-            <strong class="valor-alta">{{ statusResumo().altaPrioridade }}</strong>
+            <span>Pendentes</span>
+            <strong class="valor-alta">{{ statusResumo().pendentes }}</strong>
           </div>
           <div class="barra-track">
-            <div class="barra-fill fill-alta" [style.width.%]="(statusResumo().altaPrioridade / statusResumo().total) * 100"></div>
+            <div class="barra-fill fill-alta" [style.width.%]="statusResumo().total ? (statusResumo().pendentes / statusResumo().total) * 100 : 0"></div>
           </div>
         </div>
 
@@ -104,7 +103,7 @@
             <strong class="valor-exec">{{ statusResumo().emExecucao }}</strong>
           </div>
           <div class="barra-track">
-            <div class="barra-fill fill-exec" [style.width.%]="(statusResumo().emExecucao / statusResumo().total) * 100"></div>
+            <div class="barra-fill fill-exec" [style.width.%]="statusResumo().total ? (statusResumo().emExecucao / statusResumo().total) * 100 : 0"></div>
           </div>
         </div>
 
@@ -114,7 +113,7 @@
             <strong class="valor-conc">{{ statusResumo().concluidos }}</strong>
           </div>
           <div class="barra-track">
-            <div class="barra-fill fill-conc" [style.width.%]="(statusResumo().concluidos / statusResumo().total) * 100"></div>
+            <div class="barra-fill fill-conc" [style.width.%]="statusResumo().total ? (statusResumo().concluidos / statusResumo().total) * 100 : 0"></div>
           </div>
         </div>
       </section>

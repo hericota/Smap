@@ -1,34 +1,19 @@
 <div>
-  <div>
-    <h1>Ocorrência #{{ id }}</h1>
-  </div>
-
+  <div><h1>Ocorrência #{{ id }}</h1></div>
   @if (ocorrenciaDetail.isLoading()) {
-
-    <div class="card-loading">
-      <span class="loader"></span>
-      <p>Carregando ocorrência...</p>
-    </div>
-
+    <div class="card-loading"><span class="loader"></span><p>Carregando ocorrência...</p></div>
   } @else if (ocorrenciaDetail.error()) {
-
-    <div class="card-error">
-      <span>!</span>
-      <p>Não foi possível carregar a ocorrência.</p>
-    </div>
-
+    <div class="card-error"><span>!</span><p>Não foi possível carregar a ocorrência.</p></div>
   } @else if (ocorrenciaDetail.hasValue()) {
-
     <div class="card">
+      @if (ocorrenciaDetail.value().imagemUrl) {
+        <img [src]="ocorrenciaDetail.value().imagemUrl" [alt]="'Imagem da ocorrência ' + ocorrenciaDetail.value().titulo">
+      }
       <h2>{{ ocorrenciaDetail.value().titulo }}</h2>
-
       <p>{{ ocorrenciaDetail.value().descricao }}</p>
-
       <p>{{ ocorrenciaDetail.value().categoria }}</p>
-
       <p>{{ ocorrenciaDetail.value().localizacao }}</p>
+      <p>Status: {{ ocorrenciaDetail.value().status ?? 'PENDENTE' }}</p>
     </div>
-
   }
 </div>
-

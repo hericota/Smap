@@ -10,21 +10,11 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+import { Ocorrencia, StatusOcorrencia } from '../../../feats/ocorrencia';
 import * as L from 'leaflet';
 
-interface OcorrenciaApi {
-  id: number;
-  titulo: string;
-  descricao: string;
-  categoria: string;
-  localizacao: string;
-  latitude?: number | null;
-  longitude?: number | null;
-  criadaEm?: string | null;
-  // ⚠️ ADICIONAR quando API tiver:
-  // status?: string;
-  // prioridade?: string;
-}
+type OcorrenciaApi = Ocorrencia & { id: number };
 
 interface CategoriaLegenda {
   nome: string;
@@ -41,7 +31,7 @@ interface CategoriaLegenda {
 })
 export class MapaAdmin implements AfterViewInit, OnDestroy {
   private readonly http = inject(HttpClient);
-  private readonly apiBase = 'http://localhost:8080/ocorrencias';
+  private readonly apiBase = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;
@@ -111,6 +101,10 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
       );
     }
 
+    if (this.filtroStatus()) {
+      lista = lista.filter((o) => (o.status ?? 'PENDENTE') === this.filtroStatus());
+    }
+
     if (this.filtroCategoria()) {
       lista = lista.filter((o) =>
         o.categoria?.toLowerCase().includes(this.filtroCategoria().toLowerCase()),
@@ -130,14 +124,14 @@ export class MapaAdmin implements AfterViewInit, OnDestroy {
       .slice(0, 5),
   );
 
-  // Resumo de status para o painel direito (mock por enquanto)
   protected readonly statusResumo = computed(() => {
-    const total = this.ocorrenciasFiltradas().length;
-    // ⚠️ Substituir por dados reais quando API tiver `status`
-    const altaPrioridade = Math.round(total * 0.4);
-    const emExecucao = Math.round(total * 0.5);
-    const concluidos = total - altaPrioridade - emExecucao;
-    return { total, altaPrioridade, emExecucao, concluidos };
+    const lista = this.ocorrenciasFiltradas();
+    return {
+      total: lista.length,
+      pendentes: lista.filter((o) => (o.status ?? 'PENDENTE') === 'PENDENTE').length,
+      emExecucao: lista.filter((o) => o.status === 'EM_ANDAMENTO').length,
+      concluidos: lista.filter((o) => o.status === 'RESOLVIDA').length,
+    };
   });
 
   // Região exibida no painel direito

@@ -43,8 +43,11 @@
         <option>Prioridade</option>
       </select>
 
-      <select class="filtro" aria-label="Status">
-        <option>Status</option>
+      <select class="filtro" aria-label="Status" #seletorStatus (change)="aoFiltrarStatus(seletorStatus.value)">
+        <option value="todos">Status</option>
+        <option value="PENDENTE">Pendente</option>
+        <option value="EM_ANDAMENTO">Em andamento</option>
+        <option value="RESOLVIDA">Resolvida</option>
       </select>
 
       <select
@@ -142,6 +145,9 @@
             </td>
 
             <td>
+              @if (ocorrencia.imagemUrl) {
+                <img class="foto-placeholder" [src]="ocorrencia.imagemUrl" [alt]="'Foto de ' + ocorrencia.titulo">
+              } @else {
               <span class="foto-placeholder" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -150,6 +156,7 @@
                   <polyline points="21 15 16 10 5 21" />
                 </svg>
               </span>
+              }
             </td>
 
             <td>
@@ -162,11 +169,11 @@
 
             <td><span class="sem-dado">—</span></td>
 
-            <td><span class="badge-status">—</span></td>
+            <td><span class="badge-status">{{ rotuloStatus(ocorrencia.status) }}</span></td>
 
             <td>
-              <span class="aguardando" [class.aguardando-zero]="diasAguardando(ocorrencia.criadaEm) === 0">
-                {{ diasAguardando(ocorrencia.criadaEm) }} dias
+              <span class="aguardando" [class.aguardando-zero]="diasAguardando(ocorrencia.criadaEm ?? null) === 0">
+                {{ diasAguardando(ocorrencia.criadaEm ?? null) }} dias
               </span>
             </td>
           </tr>
