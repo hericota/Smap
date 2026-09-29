@@ -11,12 +11,14 @@ import { TelaOcorrencias } from './pages/tela-ocorrencias/tela-ocorrencias';
 import { OcorrenciasRegistradas } from './feats/ocorrencias-registradas/ocorrencias-registradas';
 import { DetalheOcorrecia } from './feats/detalhe-ocorrecia/detalhe-ocorrecia';
 import { FullMap } from './pages/full-map/full-map';
+import { LoginComponente } from './admin/pages/login-componente/login-componente';
 
 export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'header', component: Header },
   { path: 'hero', component: Hero },
   { path: 'login', component: ContainerLogin },
+  { path: 'loginAdmin', component: LoginComponente },
   { path: 'perfil-usuario', component: ProfileHome },
   { path: 'perfil-config', component: ProfileConfig },
   { path: 'cadastro', component: ContainerCadastro },
