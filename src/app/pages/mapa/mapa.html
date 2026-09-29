@@ -60,6 +60,19 @@
         placeholder="Descreva o que aconteceu neste local"
       ></textarea>
 
+      <!-- Imagem opcional: a API armazena somente a URL -->
+      <label for="imagemUrl">Imagem (URL opcional)</label>
+      <input
+        type="url"
+        id="imagemUrl"
+        name="imagemUrl"
+        [(ngModel)]="ocorrenciaModel().imagemUrl"
+        maxlength="2048"
+        pattern="https?://.*"
+        placeholder="https://exemplo.com/foto.jpg"
+      />
+      <p class="hint">Use um link público HTTP ou HTTPS para a imagem.</p>
+
       <!-- Botão para Geolocalização -->
       <button type="button" class="secondary" (click)="localizar()" [disabled]="localizando()">
         {{ localizando() ? 'Buscando localização…' : 'Usar minha localização' }}
