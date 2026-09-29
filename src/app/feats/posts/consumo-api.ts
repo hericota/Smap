@@ -1,9 +1,9 @@
 import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Ocorrencia } from '../ocorrencia';
 import { environment } from '../../../environments/environment';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class ConsumoApi {
   private readonly httpClient = inject(HttpClient);
   private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
+import { environment } from '../../../../environments/environment';
 
 interface OcorrenciaApi {
   id: number;
@@ -41,7 +42,7 @@ interface CategoriaLegenda {
 })
 export class MapaAdmin implements AfterViewInit, OnDestroy {
   private readonly http = inject(HttpClient);
-  private readonly apiBase = 'http://localhost:8080/ocorrencias';
+  private readonly apiBase = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;

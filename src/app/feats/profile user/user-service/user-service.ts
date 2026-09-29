@@ -1,7 +1,7 @@
-import { Service, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CadastroInterface } from '../../container-cadastro/form-cadastro/cadastro-interface';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class UserService {
   // avatars = [
   //   { id: '1', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Felix' },
