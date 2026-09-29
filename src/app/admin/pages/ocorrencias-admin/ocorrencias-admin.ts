@@ -270,7 +270,7 @@ export class OcorrenciasAdmin {
         this.rotuloStatus(ocorrencia.status),
         ocorrencia.imagemUrl ?? '',
         this.formatarData(ocorrencia.criadaEm ?? null),
-        String(this.diasAguardando(ocorrencia.criadaEm)),
+        String(this.diasAguardando(ocorrencia.criadaEm ?? null)),
       ]),
     ];
 
