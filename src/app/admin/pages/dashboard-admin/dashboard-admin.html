@@ -44,7 +44,7 @@
     <h3>Ocorrências por Status</h3>
 
     <div class="status-list">
-      @for (status of ocorrenciasPorStatus; track status.nome) {
+      @for (status of ocorrenciasPorStatus(); track status.nome) {
       <div class="status-row">
         <span class="status-name">{{ status.nome }}</span>
 
