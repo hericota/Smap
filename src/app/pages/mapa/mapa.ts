@@ -27,7 +27,6 @@ export class Mapa implements AfterViewInit, OnDestroy {
     descricao: '',
     latitude: 0,
     longitude: 0,
-    criadaEm: '',
     titulo: '',
     localizacao: '',
   });
@@ -149,7 +148,6 @@ export class Mapa implements AfterViewInit, OnDestroy {
       descricao: dados.descricao.trim(),
       latitude: ponto.latitude,
       longitude: ponto.longitude,
-      criadaEm: new Date().toISOString(),
     };
 
     // 3. Executa a requisição HTTP
