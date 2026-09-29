@@ -1,75 +1,57 @@
 <app-header></app-header>
 <app-hero></app-hero>
-<!-- Sessão de ocorrências -->
-<div class="occurrences-section">
-    <h2>Ocorrências em Blumenau</h2>
-    <div class="occurrences-section-content">
-        <p>Veja o que foi mapeado por cidades próximas a sua região.</p>
-        <a routerLink="/mapa" class="occurrences-section-link">Ver mapa completo <img
-                src="/assets/arrow-right.png" alt="Seta pra direita"></a>
-    </div>
-</div>
-<!-- Sessão explicativa -->
-<div class="how-it-work-section">
-    <div class="title">
-        <h3>Como funciona?</h3>
-        <p>Simples, rápido e 100% online.</p>
-    </div>
-    <ul class="list">
-        <li class="list-item">
-            <div class="list-icons">
-                <img src="/assets/phone-img.png" alt="Icone de um celular">
-            </div>
-            <div class="list-content">
-                <h4>Tire uma foto</h4><br>
-                <span>Mostre o problema claramente para triagem rápida.</span>
-            </div>
-        </li>
-        <li class="list-item">
-            <div class="list-icon">
-                <img src="/assets/map-pin-img.png" alt="Icone de um pino em um mapa">
-            </div>
-            <div class="list-content">
-                <h4>Confirme o local</h4><br>
-                <span>Usamos seu GPS para marcar o ponto exato no mapa.</span>
-            </div>
-        </li>
-        <li class="list-item">
-            <div class="list-icons">
-                <img src="/assets/list-img.png" alt="Icone de uma lista">
-            </div>
-            <div class="list-content">
-                <h4>Escolha a categoria</h4><br>
-                <span>Selecione buracos, iluminação, lixo ou outros</span>
-            </div>
-        </li>
-        <li class="list-item">
-            <div class="list-icons">
-                <img src="/assets/upper-img.png" alt="Icone de setas apontando pra cima">
-            </div>
-            <div class="list-content">
-                <h4>Acompanhe</h4><br>
-                <span>Receba atualizações do status até a resolução.</span>
-            </div>
-        </li>
-    </ul>
-</div>
 
-<!-- Sessão de Registro -->
-<div class="register-section">
-    <div class="register-img">
-        <img src="/assets/cellphone-map-img.png"
-            alt="Imagem de um celular com um mapa dinâmico dentro dentro ">
-    </div>
-    <div class="register-link">
-        <h3>Sua cidade precisa <br>
-            de <span>você.</span></h3>
-        <p>Registre sua primeira ocorrência agora!</p>
-        <div class="button-container">
-        <a routerLink="#" class="register-btn">Começar agora</a>
+<main>
+    <section class="occurrences-section">
+        <div class="section-container occurrences-container">
+            <div>
+                <h2>Ocorrências em Blumenau</h2>
+                <p>Veja o que já foi mapeado por cidadãos próximos a sua região.</p>
+            </div>
+            <a routerLink="/mapa" class="occurrences-section-link">
+                Ver mapa completo <img src="/assets/arrow-right.png" alt="">
+            </a>
         </div>
-    </div>
-</div>
-<app-footer></app-footer>
+    </section>
 
+    <section id="como-funciona" class="how-it-work-section">
+        <div class="section-container">
+            <div class="section-title">
+                <h2>Como funciona?</h2>
+                <p>Simples, rápido e 100% online.</p>
+            </div>
+            <ul class="steps-list">
+                <li class="step-item">
+                    <div class="step-icon"><img src="/assets/phone-img.png" alt=""></div>
+                    <div class="step-content"><h3>Tire uma foto</h3><p>Mostre o problema claramente para triagem rápida.</p></div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon"><img src="/assets/map-pin-img.png" alt=""></div>
+                    <div class="step-content"><h3>Confirme o local</h3><p>Usamos seu GPS para marcar o ponto exato no mapa.</p></div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon"><img src="/assets/list-img.png" alt=""></div>
+                    <div class="step-content"><h3>Escolha a categoria</h3><p>Selecione buracos, iluminação, lixo ou outros.</p></div>
+                </li>
+                <li class="step-item">
+                    <div class="step-icon"><img src="/assets/upper-img.png" alt=""></div>
+                    <div class="step-content"><h3>Acompanhe</h3><p>Receba atualizações do status até a resolução.</p></div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="register-section">
+        <div class="section-container register-container">
+            <div class="register-img"><img src="/assets/cellphone-map-img.png" alt="Celular exibindo um mapa da cidade"></div>
+            <div class="register-card">
+                <h2>Sua cidade precisa<br>de <span>você.</span></h2>
+                <p>Registre sua primeira ocorrência agora!</p>
+                <a routerLink="/registrar-ocorrencia" class="register-btn">Começar agora</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<app-footer></app-footer>
 <app-bottom-nav></app-bottom-nav>
