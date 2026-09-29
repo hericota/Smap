@@ -17,7 +17,6 @@ export class UserService {
   usuarios = signal<CadastroInterface[]>(this.carregarUsuarios()); //recebe todos os cadastros
 
   cadastrar(usuario: CadastroInterface) {
-  
     const username = this.gerarUserName(usuario);
     const usuarioComUsername = {
       ...usuario,
@@ -55,6 +54,10 @@ export class UserService {
     const usuario = this.usuarios().find(
       (usuario) => usuario.email === email && usuario.senha === senha,
     );
+
+    console.log('Usuários:', this.usuarios());
+    console.log('Usuário encontrado:', usuario);
+
     this.usuarioLogado.set(usuario ?? null);
     console.log(this.usuarioLogado());
     this.salvarLogin();

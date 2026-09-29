@@ -68,6 +68,6 @@ export class FormCadastro {
     if (this.cadastroForm().invalid()) return;
     this.usuarioService.cadastrar(this.cadastroModel());
     this.cadastroForm().reset();
-    this.router.navigate(['/perfil-usuario']); //pagina principal de perfil do usuario
-  }
+    this.router.navigate(['/login']);
+}
 }
