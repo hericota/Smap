@@ -33,7 +33,7 @@ describe('Mapa API', () => {
   async function abrir() {
     const fixture = TestBed.createComponent(Mapa);
     fixture.detectChanges();
-    http.expectOne(url).flush([registro]);
+    http.match({ method: 'GET', url }).forEach((request) => request.flush([registro]));
     await fixture.whenStable();
     return fixture;
   }
@@ -70,7 +70,7 @@ describe('Mapa API', () => {
     expect(TestBed.inject(Router).navigate).not.toHaveBeenCalled();
     request.flush({ ...registro, id: 8 });
     expect(component.salvando()).toBe(false);
-    expect(TestBed.inject(Router).navigate).toHaveBeenCalledWith(['/confirmacao-ocorrencia']);
+    expect(TestBed.inject(Router).navigate).toHaveBeenCalledWith(['/confirmacao-ocorrencia', 8]);
     expect(read).not.toHaveBeenCalled();
     fixture.destroy();
   });
@@ -94,7 +94,8 @@ describe('Mapa API', () => {
   it('allows saving even when listing fails and offers a list retry', async () => {
     const fixture = TestBed.createComponent(Mapa);
     fixture.detectChanges();
-    http.expectOne(url).flush('Unavailable', { status: 503, statusText: 'Unavailable' });
+    http.match({ method: 'GET', url }).forEach((request) =>
+      request.flush('Unavailable', { status: 503, statusText: 'Unavailable' }));
     expect(fixture.componentInstance.erroCarregamento()).toContain('API');
     const form = await preencher(fixture);
     fixture.componentInstance.cadastrar(form);
@@ -108,7 +109,8 @@ describe('Mapa API', () => {
   it('ignores invalid coordinates when drawing server reports', () => {
     const fixture = TestBed.createComponent(Mapa);
     fixture.detectChanges();
-    http.expectOne(url).flush([registro, { ...registro, id: 8, latitude: null }, { ...registro, id: 9, longitude: 190 }]);
+    http.match({ method: 'GET', url }).forEach((request) =>
+      request.flush([registro, { ...registro, id: 8, latitude: null }, { ...registro, id: 9, longitude: 190 }]));
     expect(fixture.componentInstance.ocorrencias()).toHaveLength(3);
     expect(fixture.nativeElement.querySelectorAll('.leaflet-interactive').length).toBe(1);
     fixture.destroy();

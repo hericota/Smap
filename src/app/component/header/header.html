@@ -1,12 +1,13 @@
 <header>
-    <div class="logo">
-        <img src="/assets/logo.png" alt="">
-        <img src="/assets/smap.png" alt="">
-    </div>
+    <div class="header-inner">
+        <a class="logo" routerLink="/home" aria-label="SMAP - Página inicial">
+            <img src="/assets/logo.png" alt="">
+            <img src="/assets/smap.png" alt="SMAP">
+        </a>
 
-    <div class="login">
-        <a routerLink="/login" class="btn-entrar">Entrar</a>
-        <a routerLink="/cadastro" class="btn-conta">Criar Conta</a>
+        <nav class="login" aria-label="Acesso">
+            <a routerLink="/login" class="btn-entrar">Entrar</a>
+            <a routerLink="/cadastro" class="btn-conta">Criar conta</a>
+        </nav>
     </div>
-    
 </header>
