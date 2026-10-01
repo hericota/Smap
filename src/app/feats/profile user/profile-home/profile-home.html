@@ -1,44 +1,27 @@
-<section class="container">
-
-    <div class="header">
-        <div class="nomeUser">
-            <h1>{{usuarioLogado()?.name}}👋</h1>
-            <p>data atual</p>
-        </div>
-        <div class="user-actions">
-            <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
-            <a routerLink="/perfil-config">
-            <img class="config" src="/assets/settings-icons.png" ></a>
-
-        </div>
+<app-header />
+<main class="profile-page">
+  <div class="profile-heading">
+    <div class="identity"><span class="avatar" aria-hidden="true">{{ usuarioLogado()?.name?.charAt(0)?.toUpperCase() }}</span>
+      <div><p class="eyebrow">Sua área no SMAP</p><h1>Olá, {{ usuarioLogado()?.name }} 👋</h1><p>{{ hoje }}</p></div>
     </div>
-
-    <a class="registrar" routerLink="/registrar-ocorrencia">
-        <div>
-            <img class="icon-camera" src="/assets/camera-icon.svg">
-        </div>
-        <div class="text-button">
-            <span class="text-h1">Registrar nova ocorrência</span>
-            <span class="text-p">Tire uma foto e reporte agora mesmo</span>
-        </div>
-    </a>
-
-    <section class="ocorrencias">
-        <div class="text-minhas-ocorrencias">
-            <h2>Minhas ocorrências</h2>
-            <a routerLink="/ocorrenciasRegistrada">Ver todas</a>
-        </div>
-        <div class="list-ocorrencia">
-            <img src="" width="40px" height="40px" loading="lazy">
-        </div>
-
+    <a class="secondary-link" routerLink="/perfil-config">Minha conta</a>
+  </div>
+  <div class="profile-grid">
+    <div class="profile-sidebar">
+      <a class="registrar" routerLink="/registrar-ocorrencia">
+        <img src="/assets/camera-icon.svg" alt="" width="48" height="48">
+        <span><strong>Registrar nova ocorrência</strong><span>Tire uma foto e reporte agora mesmo</span></span>
+      </a>
+      <section class="panel" aria-labelledby="minhas-title">
+        <h2 id="minhas-title">Minhas ocorrências</h2>
+        <p>O histórico individual ainda não está disponível. Por enquanto, você pode consultar as ocorrências públicas da cidade.</p>
+        <a class="text-link" routerLink="/ocorrencias">Ver ocorrências da cidade →</a>
+      </section>
+    </div>
+    <section class="panel map-panel" aria-labelledby="map-title">
+      <div class="section-heading"><h2 id="map-title">Mapa da cidade</h2><a class="text-link" routerLink="/mapa">Ampliar mapa</a></div>
+      <div class="map-frame"><app-mapa-separado /></div>
     </section>
-
-    <h3>Mapa do bairro </h3>
-    <div id="mapa">
-        <app-mapa-separado></app-mapa-separado>
-    </div>
-
-
-</section>
-<app-bottom-nav></app-bottom-nav>
+  </div>
+</main>
+<app-bottom-nav />

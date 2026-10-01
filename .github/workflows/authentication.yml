@@ -15,5 +15,5 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - run: npx ng test --watch=false --include=src/app/auth/auth.spec.ts
+      - run: npx ng test --watch=false --include="src/app/auth/*.spec.ts" --include=src/app/component/header/header.spec.ts
       - run: npm run build

@@ -4,10 +4,16 @@
     <div class="box-input">
       <label for="nome">Nome</label>
       <input [formField]="cadastroForm.nome" id="nome" autocomplete="given-name" placeholder="Nome">
+      @if (cadastroForm.nome().touched() && cadastroForm.nome().invalid()) {
+        <span class="errorValidators">Informe seu nome (até 59 caracteres).</span>
+      }
     </div>
     <div class="box-input">
       <label for="sobrenome">Sobrenome</label>
       <input [formField]="cadastroForm.sobreNome" id="sobrenome" autocomplete="family-name" placeholder="Sobrenome">
+      @if (cadastroForm.sobreNome().touched() && cadastroForm.sobreNome().invalid()) {
+        <span class="errorValidators">Informe seu sobrenome (até 60 caracteres).</span>
+      }
     </div>
   </div>
   <div class="box-input">
@@ -19,7 +25,8 @@
   </div>
   <div class="box-input">
     <label for="password">Senha</label>
-    <input [formField]="cadastroForm.senha" id="password" type="password" autocomplete="new-password" placeholder="Pelo menos 12 caracteres">
+    <input [formField]="cadastroForm.senha" id="password" type="password" autocomplete="new-password" aria-describedby="password-hint" placeholder="Pelo menos 12 caracteres">
+    <span class="hint" id="password-hint">Use pelo menos 12 caracteres e uma senha exclusiva.</span>
     @if (cadastroForm.senha().touched() && cadastroForm.senha().invalid()) {
       @for (error of cadastroForm.senha().errors(); track $index) {
         <span class="errorValidators">{{ error.message }}</span>
@@ -27,5 +34,5 @@
     }
   </div>
   <button type="submit" [disabled]="carregando() || cadastroForm().invalid()">{{ carregando() ? 'Criando conta…' : 'Criar conta' }}</button>
-  <a routerLink="/login" [queryParams]="{ returnUrl: route.snapshot.queryParamMap.get('returnUrl') }">Já tenho uma conta</a>
+  <p class="form-footer">Já tem uma conta? <a routerLink="/login" [queryParams]="{ returnUrl: route.snapshot.queryParamMap.get('returnUrl') }">Entrar</a></p>
 </form>

@@ -26,14 +26,19 @@ export class FormLogin {
   readonly erro = signal('');
 
   loginForm = form(this.loginModel, (schemaPath) => {
-    required(schemaPath.email, { message: '*' });
-    email(schemaPath.email, { message: '*' });
-    required(schemaPath.senha, { message: '*' });
+    required(schemaPath.email, { message: 'Informe seu e-mail.' });
+    email(schemaPath.email, { message: 'Informe um e-mail válido.' });
+    required(schemaPath.senha, { message: 'Informe sua senha.' });
   });
 
   fazerLogin(event: SubmitEvent) {
     event.preventDefault();
-    if (this.loginForm().invalid() || this.carregando()) return;
+    if (this.carregando()) return;
+    if (this.loginForm().invalid()) {
+      this.loginForm.email().markAsTouched();
+      this.loginForm.senha().markAsTouched();
+      return;
+    }
     this.erro.set('');
     this.carregando.set(true);
     this.usuarioService.login(this.loginModel().email, this.loginModel().senha, this.codigo())
