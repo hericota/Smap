@@ -1,0 +1,58 @@
+<section class="form-container">
+    <div class="form-header">
+        <h2>Painel Administrativo</h2>
+        <p class="subtitulo">Acesse sua conta para continuar gerenciando os serviços urbanos.</p>
+    </div>
+
+    <form (submit)="fazerLogin($event)">
+
+        <div class="caixa-input">
+            <div class="box-validators">
+                <label [class.label-error]="loginForm.email().touched() && loginForm.email().invalid()" for="email">E-mail</label>
+                @if (loginForm.email().touched() && loginForm.email().invalid()) {
+                @for (error of loginForm.email().errors(); track error.kind) {
+                <span class="errorValidators">{{ error.message }}</span>
+                }
+                }
+            </div>
+            <input [formField]="loginForm.email" id="email" type="email" placeholder="admin@smap.gov.br" [class.input-error]="loginForm.email().touched() && loginForm.email().invalid()">
+        </div>
+
+        <div class="caixa-input">
+            <div class="box-validators">
+                <label [class.label-error]="loginForm.senha().touched() && loginForm.senha().invalid()" for="password">
+                    Senha
+                </label>
+            </div>
+
+            <div class="input-password-wrapper">
+                <input [formField]="loginForm.senha" id="password" type="password" placeholder="••••••••••••" [class.input-error]="loginForm.senha().touched() && loginForm.senha().invalid()">
+            </div>
+            @if (loginForm.senha().touched() && loginForm.senha().invalid()) {
+            <div class="lista-erros">
+                @for (error of loginForm.senha().errors(); track $index) {
+                <span class="errorValidators">{{ error.message }}</span>
+                }
+            </div>
+            }
+        </div>
+
+        <div class="opcoes-row">
+            <label class="lembrar-me">
+                <input type="checkbox" id="lembrar">
+                <span class="checkmark"></span>
+                <span class="label-text">Lembrar de mim</span>
+            </label>
+            <a routerLink="/" class="esqueceu-senha">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="btn-entrar">Entrar</button>
+        @if (false) {
+        <div class="detalhe">
+            <div></div>
+            <p>ou</p>
+            <div></div>
+        </div>
+        }
+    </form>
+</section>
