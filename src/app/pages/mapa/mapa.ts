@@ -9,6 +9,7 @@ import { Header } from '../../component/header/header';
 import { Ocorrencia } from '../../feats/ocorrencia';
 import { ConsumoApi } from '../../feats/posts/consumo-api';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
+import { UserService } from '../../feats/profile user/user-service/user-service';
 
 @Component({
   selector: 'app-mapa',
@@ -21,6 +22,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
 
   readonly consumoService = inject(ConsumoApi);
   readonly router = inject(Router);
+  private readonly auth = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
 
   ocorrenciaModel = signal<Ocorrencia>({
@@ -183,6 +185,10 @@ export class Mapa implements AfterViewInit, OnDestroy {
       event.preventDefault();
     }
     if (this.salvando()) return;
+    if (!this.auth.token()) {
+      void this.router.navigate(['/login'], { queryParams: { returnUrl: '/registrar-ocorrencia' } });
+      return;
+    }
 
     this.erro.set('');
     this.mensagem.set('');
@@ -230,8 +236,15 @@ export class Mapa implements AfterViewInit, OnDestroy {
 
       },
       error: (error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.auth.limparSessao();
+          void this.router.navigate(['/login'], { queryParams: { returnUrl: '/registrar-ocorrencia' } });
+          return;
+        }
         this.erro.set(error.status === 0
           ? 'Não foi possível conectar à API. Verifique se o servidor está disponível e tente novamente.'
+          : error.status === 503
+            ? 'O serviço de autenticação está indisponível. Seus dados continuam aqui; tente novamente.'
           : error.status === 413
             ? 'A imagem ficou maior que o limite aceito pela API.'
             : 'O servidor não conseguiu salvar a ocorrência. Confira os dados e tente novamente.');
