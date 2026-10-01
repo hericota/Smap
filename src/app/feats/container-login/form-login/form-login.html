@@ -1,4 +1,11 @@
 <form (submit)="fazerLogin($event)">
+  @if (route.snapshot.queryParamMap.get('returnUrl')) {
+    <p role="status">Entre na sua conta para continuar.</p>
+  }
+  @if (route.snapshot.queryParamMap.get('cadastro') === 'sucesso') {
+    <p role="status">Conta criada! Entre com seu e-mail e senha.</p>
+  }
+  @if (erro()) { <p class="errorValidators" role="alert">{{ erro() }}</p> }
 
   <div class="caixa-input">
 
@@ -22,13 +29,15 @@
 
   </div>
 
-  <a routerLink="/">Esqueceu a senha?</a>
-  <button>Entrar</button>
+  <details>
+    <summary>Tenho um código de autenticação em duas etapas</summary>
+    <div class="caixa-input">
+      <label for="codigo">Código do autenticador</label>
+      <input id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code"
+        maxlength="6" pattern="[0-9]{6}" [value]="codigo()" (input)="codigo.set($any($event.target).value)" />
+    </div>
+  </details>
+  <a routerLink="/cadastro" [queryParams]="{ returnUrl: route.snapshot.queryParamMap.get('returnUrl') }">Criar uma conta</a>
+  <button type="submit" [disabled]="carregando()">{{ carregando() ? 'Entrando…' : 'Entrar' }}</button>
 
-  <div class="detalhe">
-    <div></div>
-    <p>ou</p>
-    <div></div>
-
-  </div>
 </form>

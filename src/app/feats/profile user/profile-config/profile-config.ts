@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { BottomNav } from '../../../components/bottom-nav/bottom-nav';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../user-service/user-service';
 
 @Component({
@@ -12,6 +12,7 @@ import { UserService } from '../user-service/user-service';
 export class ProfileConfig {
   
    private usuarioService = inject(UserService);
+   private router = inject(Router);
 
   notificacao = false;
   aceitarNotificacao() {
@@ -20,7 +21,8 @@ export class ProfileConfig {
   
 
   sair(){
-    this.usuarioService.logout()
+    this.usuarioService.logout().subscribe({ error: () => { /* Local session is already cleared. */ } });
+    void this.router.navigate(['/login']);
   }
   usuarioLogado = this.usuarioService.usuarioLogado;
 }
