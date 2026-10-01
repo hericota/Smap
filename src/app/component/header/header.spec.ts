@@ -15,7 +15,7 @@ describe('Header session', () => {
     logoutCalls = 0;
     await TestBed.configureTestingModule({
       imports: [Header],
-      providers: [provideRouter([]), { provide: UserService, useValue: {
+      providers: [provideRouter([{ path: 'home', component: Header }]), { provide: UserService, useValue: {
         usuarioLogado: account,
         logout: () => { logoutCalls++; account.set(null); return of(undefined); },
       } }],
