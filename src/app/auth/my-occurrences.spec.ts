@@ -19,7 +19,7 @@ describe('My occurrences', () => {
   });
   afterEach(() => TestBed.inject(HttpTestingController).verify());
 
-  it('requests only the authenticated endpoint and shows an empty state, never the public feed', () => {
+  it('requests only the authenticated endpoint and shows an empty state, never the public feed', async () => {
     const fixture = TestBed.createComponent(OcorrenciasRegistradas);
     fixture.detectChanges();
     TestBed.tick();
@@ -27,6 +27,7 @@ describe('My occurrences', () => {
     const request = http.expectOne(environment.apiUrl.replace(/\/+$/, '') + '/ocorrencias/minhas');
     expect(request.request.headers.get('Authorization')).toBe('Bearer test-token');
     request.flush([]);
+    await fixture.whenStable();
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Você ainda não tem ocorrências');
     expect(fixture.nativeElement.querySelector('app-tela-ocorrencias')).toBeNull();
@@ -34,6 +35,7 @@ describe('My occurrences', () => {
     account.set(null);
     fixture.detectChanges();
     TestBed.tick();
+    await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain('Sua sessão terminou');
   });
 
