@@ -60,6 +60,49 @@
         placeholder="Descreva o que aconteceu neste local"
       ></textarea>
 
+      <label for="imagemArquivo">Foto da ocorrência <span class="optional">(opcional)</span></label>
+      <div class="upload-actions">
+        <input
+          #imagemInput
+          class="file-input"
+          type="file"
+          id="imagemArquivo"
+          name="imagemArquivo"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+          (change)="selecionarImagem($event)"
+          [disabled]="processandoImagem() || salvando()"
+        />
+        <label class="upload-button" for="imagemArquivo">Escolher foto</label>
+
+        <input
+          #cameraInput
+          class="file-input"
+          type="file"
+          id="imagemCamera"
+          name="imagemCamera"
+          accept="image/*"
+          capture="environment"
+          (change)="selecionarImagem($event)"
+          [disabled]="processandoImagem() || salvando()"
+        />
+        <label class="upload-button upload-button--camera" for="imagemCamera">Tirar foto</label>
+      </div>
+      <p class="hint image-hint">
+        No celular, use a câmera ou escolha uma foto. A imagem será compactada antes do envio.
+      </p>
+      @if (processandoImagem()) {
+        <p class="image-processing" role="status">Preparando e compactando imagem…</p>
+      }
+      @if (imagemPreviewUrl(); as previewUrl) {
+        <div class="image-preview">
+          <img [src]="previewUrl" alt="Pré-visualização da ocorrência">
+          <div class="image-preview__footer">
+            <span>{{ imagemInfo() }}</span>
+            <button type="button" class="remove-image" (click)="removerImagem(imagemInput, cameraInput)">Remover</button>
+          </div>
+        </div>
+      }
+
       <!-- Botão para Geolocalização -->
       <button type="button" class="secondary" (click)="localizar()" [disabled]="localizando()">
         {{ localizando() ? 'Buscando localização…' : 'Usar minha localização' }}
@@ -81,7 +124,9 @@
       }
       <p role="status">{{ mensagem() }}</p>
 
-      <button type="submit" [disabled]="localizando() || salvando()">{{ salvando() ? 'Enviando…' : 'Salvar ocorrência' }}</button>
+      <button type="submit" [disabled]="localizando() || processandoImagem() || salvando()">
+        {{ processandoImagem() ? 'Preparando foto…' : salvando() ? 'Enviando…' : 'Salvar ocorrência' }}
+      </button>
     </form>
 
     <!-- Seção do Mapa e Lista de Registros -->
@@ -99,9 +144,14 @@
       
       @for (item of ocorrencias(); track item.id) {
         <article>
+          @if (item.imagemUrl) {
+            <img class="occurrence-thumbnail" [src]="item.imagemUrl" [alt]="'Imagem da ocorrência: ' + item.titulo">
+          }
+          <div>
           <strong>{{ item.titulo || item.categoria }}</strong>
           <p class="hint">{{ item.categoria }} - {{ item.localizacao }}</p>
           <p>{{ item.descricao }}</p>
+          </div>
         </article>
       }
     </section>
