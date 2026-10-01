@@ -22,6 +22,7 @@ background-size: cover;
   align-items: center;
   justify-content: center;
   padding: 20px;
+ 
 }
 
 .card-login {
@@ -34,8 +35,13 @@ background-size: cover;
     0 10px 25px -5px rgba(0, 0, 0, 0.05),
     0 8px 10px -6px rgba(0, 0, 0, 0.03);
   border: 1px solid #e2e8f0;
-}
+   position: relative;
 
+}
+.login-main img{
+    position: relative;
+    left: -3%;
+}
 .login-footer {
   text-align: center;
   padding: 20px;
