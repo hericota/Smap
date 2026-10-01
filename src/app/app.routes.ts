@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth/auth.guard';
 import { Header } from './component/header/header';
 import { ContainerLogin } from './feats/container-login/container-login';
 import { Hero } from './feats/home/hero/hero';
@@ -23,14 +22,13 @@ export const routes: Routes = [
   { path: 'perfil-usuario', component: ProfileHome },
   { path: 'perfil-config', component: ProfileConfig },
   { path: 'cadastro', component: ContainerCadastro },
-  { path: 'confirmacao-ocorrencia', component: ConfirmacaoPost, canActivate: [authGuard] },
+  { path: 'confirmacao-ocorrencia', component: ConfirmacaoPost },
   { path: 'ocorrenciasRegistrada', component: OcorrenciasRegistradas },
   { path: 'detalheOcorrencia/:id', component: DetalheOcorrecia },
-  { path: 'confirmacao-ocorrencia/:id', component: ConfirmacaoPost, canActivate: [authGuard] },
+  { path: 'confirmacao-ocorrencia/:id', component: ConfirmacaoPost },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'registrar-ocorrencia',
-    canActivate: [authGuard],
     title: 'Mapa | SMAP',
     loadComponent: () => import('./pages/mapa/mapa').then((m) => m.Mapa),
   },

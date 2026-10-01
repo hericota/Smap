@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormCadastro } from './form-cadastro/form-cadastro';
 import { RouterLink } from '@angular/router';
-import { Header } from '../../component/header/header';
 
 
 @Component({
-  imports: [FormCadastro, RouterLink, Header],
+  imports: [FormCadastro, RouterLink],
   selector: 'app-container-cadastro',
   styleUrl: './container-cadastro.css',
   templateUrl: './container-cadastro.html',

@@ -1,53 +1,63 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { email, form, maxLength, minLength, required, FormField } from '@angular/forms/signals';
-import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
+import { CadastroInterface } from './cadastro-interface';
+import {
+  email,
+  form,
+  maxLength,
+  minLength,
+  pattern,
+  required,
+  FormField,
+} from '@angular/forms/signals';
 import { UserService } from '../../profile user/user-service/user-service';
-import { destinoAposLogin } from '../../../auth/auth.guard';
 
 @Component({
-  imports: [FormField, RouterLink],
+  imports: [FormField],
   selector: 'app-form-cadastro',
   styleUrl: './form-cadastro.css',
   templateUrl: './form-cadastro.html',
 })
 export class FormCadastro {
-  cadastroModel = signal({ nome: '', sobreNome: '', email: '', senha: '' });
+  cadastroModel = signal<CadastroInterface>({
+    nome: '',
+    sobreNome: '',
+    email: '',
+    cpf: '',
+    telefone: '',
+    cep: '',
+    senha: '',
+    check: false,
+    username: ''
+  });
   private usuarioService = inject(UserService);
   private router = inject(Router);
-  readonly route = inject(ActivatedRoute);
-  readonly carregando = signal(false);
-  readonly erro = signal('');
-  cadastroForm = form(this.cadastroModel, path => {
-    required(path.nome); required(path.sobreNome); required(path.email); required(path.senha);
-    email(path.email);
-    maxLength(path.nome, 59); maxLength(path.sobreNome, 60); maxLength(path.email, 254);
-    minLength(path.senha, 12, { message: 'Use pelo menos 12 caracteres.' });
-    maxLength(path.senha, 72, { message: 'Use no máximo 72 caracteres.' });
+
+  cadastroForm = form(this.cadastroModel, (schemaPath) => {
+    required(schemaPath.nome, { message: '*' });
+    required(schemaPath.sobreNome, { message: '*' });
+    required(schemaPath.email, { message: '*' });
+    required(schemaPath.cpf, { message: '*' });
+    required(schemaPath.telefone, { message: '*' });
+    required(schemaPath.cep, { message: '*' });
+    required(schemaPath.senha);
+    required(schemaPath.check);
+    email(schemaPath.email, { message: '*' });
+    maxLength(schemaPath.senha, 16, { message: '*A senha deve ter no máximo 16 caracteres!' });
+    minLength(schemaPath.senha, 8, { message: '*Mínimo 8 caracteres!' });
+    pattern(schemaPath.senha, /.*[A-Z].*/, { message: '*Ao menos 1 letra maiúscula!' });
+    pattern(schemaPath.senha, /.*\d.*/, { message: '*Ao menos 1 número!' });
+    pattern(schemaPath.senha, /.*[@$!%*?&].*/, { message: '*Ao menos 1 caractere especial!' });
+    pattern(schemaPath.cpf, /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/, { message: '*CPF inválido!' });
+    pattern(schemaPath.telefone, /^(\(\d{2}\)\s?\d{4,5}-\d{4}|\d{10,11})$/, { message: '*Telefone inválido!' });
+    pattern(schemaPath.cep, /^(\d{5}-\d{3}|\d{8})$/, { message: '*CEP inválido!' });
   });
 
   cadastrar(event: SubmitEvent) {
     event.preventDefault();
-    if (this.cadastroForm().invalid() || this.carregando()) return;
-    if (new TextEncoder().encode(this.cadastroModel().senha).length > 72) {
-      this.erro.set('A senha é muito longa. Reduza a quantidade de caracteres ou emojis.');
-      return;
-    }
-    this.erro.set('');
-    this.carregando.set(true);
-    this.usuarioService.cadastrar(this.cadastroModel()).pipe(
-      finalize(() => this.carregando.set(false)),
-    ).subscribe({
-      next: () => {
-        this.cadastroForm().reset();
-        void this.router.navigate(['/login'], { queryParams: {
-          cadastro: 'sucesso', returnUrl: destinoAposLogin(this.route.snapshot.queryParamMap.get('returnUrl')),
-        } });
-      },
-      error: error => this.erro.set(error.status === 409 ? 'Este e-mail já está cadastrado. Entre na sua conta.'
-        : error.status === 400 ? 'Confira o nome, e-mail e senha informados.'
-        : error.status === 429 ? 'Muitas tentativas. Aguarde um minuto.'
-        : 'Não foi possível criar sua conta. Tente novamente.'),
-    });
-  }
+    if (this.cadastroForm().invalid()) return;
+    this.usuarioService.cadastrar(this.cadastroModel());
+    this.cadastroForm().reset();
+    this.router.navigate(['/login']);
+}
 }

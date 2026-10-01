@@ -1,7 +1,6 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './auth/auth.interceptor';
+import { provideHttpClient } from '@angular/common/http';
 
 // Importações do ECharts
 import { provideEchartsCore } from 'ngx-echarts';
@@ -26,7 +25,7 @@ echarts.use([
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(),
     // Provedor do ECharts
     provideEchartsCore({ echarts })
   ]

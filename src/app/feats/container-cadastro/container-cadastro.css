@@ -1,1 +1,90 @@
-@import '../../styles/auth-page.css';
+section {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  color: #0d1b2a;
+  gap: 24px;
+  background-color: #f7f8f4;
+}
+.criarConta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+p{
+  color: #64748B;
+  font-weight: normal;
+}
+p a[routerLink='/login']{
+  color: #16C1A3 ;
+  font-weight: 600;
+}
+.login{
+  display: flex;
+  justify-content: center;
+}
+
+
+@media (min-width: 768px) {
+
+    section {
+        width: 100%;
+        max-width: 750px;
+
+        min-height: 100dvh;
+
+        margin: 0 auto;
+
+        padding: 40px 30px;
+
+        box-sizing: border-box;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+    }
+
+    .criarConta {
+        width: 100%;
+        max-width: 650px;
+
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+
+        margin-bottom: 30px;
+    }
+
+    .criarConta a {
+        display: flex;
+        align-items: center;
+    }
+
+    .criarConta svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .criarConta h1 {
+        margin: 0;
+
+        font-size: 32px;
+    }
+
+    .login {
+        width: 100%;
+        max-width: 650px;
+
+        text-align: center;
+    }
+
+    .login p {
+        font-size: 15px;
+    }
+}

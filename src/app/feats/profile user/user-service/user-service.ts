@@ -1,75 +1,88 @@
-import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, map, of, tap, timeout } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { Service, signal } from '@angular/core';
+import { CadastroInterface } from '../../container-cadastro/form-cadastro/cadastro-interface';
 
-export interface AuthProfile {
-  id: string; email: string; name: string;
-  role: 'SUPREME' | 'ADMIN' | 'CITIZEN';
-  territoryId: string | null; permissions: string[]; active: boolean;
-}
-interface AuthSession { accessToken: string; tokenType: string; expiresAt: number; user: AuthProfile; }
-
-@Injectable({ providedIn: 'root' })
+@Service()
 export class UserService {
-  private readonly http = inject(HttpClient);
-  private readonly base = environment.authUrl.replace(/\/+$/, '');
-  private readonly session = signal<AuthSession | null>(null);
-  private expiryTimer?: ReturnType<typeof setTimeout>;
-  readonly usuarioLogado = computed(() => this.session()?.user ?? null);
+  // avatars = [
+  //   { id: '1', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Felix' },
+  //   { id: '2', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Coco' },
+  //   { id: '3', url: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Gizmo' },
+  //   { id: '4', url: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Zoe' },
+  //   { id: '5', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bandit' },
+  //   { id: '6', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Precious' },
+  // ];
+  // selecionaravatar = signal<string | null>(null);
 
-  constructor() {
-    // Remove obsolete local accounts, which included plaintext passwords.
-    try { localStorage.removeItem('usuarios'); localStorage.removeItem('usuarioLogado'); } catch {}
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.expiryTimer));
+  //cadastro
+  usuarios = signal<CadastroInterface[]>(this.carregarUsuarios()); //recebe todos os cadastros
+
+  cadastrar(usuario: CadastroInterface) {
+    const username = this.gerarUserName(usuario);
+    const usuarioComUsername = {
+      ...usuario,
+      username,
+    };
+    this.usuarios.update((usuarios) => [...usuarios, usuarioComUsername]);
+    this.salvarUsuarios();
   }
 
-  token(): string | null {
-    const session = this.session();
-    return session && session.expiresAt > Date.now() ? session.accessToken : null;
+  private gerarUserName(usuario: CadastroInterface): string {
+    const nome = usuario.nome.trim().replace(/\s+/g, '_');
+    const sobreNome = usuario.sobreNome.trim().replace(/\s+/g, '_');
+    const numero = Math.floor(Math.random() * 900) + 100;
+    return `${nome}_${sobreNome}_${numero}`.toLowerCase();
+  }
+  private salvarUsuarios() {
+    //transforma o objeto em um texto para armazenar no local
+    const dados = JSON.stringify(this.usuarios());
+    localStorage.setItem('usuarios', dados);
   }
 
-  cadastrar(usuario: { nome: string; sobreNome: string; email: string; senha: string }) {
-    return this.http.post<AuthProfile>(this.base + '/auth/register', {
-      name: (usuario.nome.trim() + ' ' + usuario.sobreNome.trim()).trim(),
-      email: usuario.email.trim(), password: usuario.senha,
-    }).pipe(timeout(12000));
+  private carregarUsuarios(): CadastroInterface[] {
+    const dados = localStorage.getItem('usuarios');
+
+    if (dados) {
+      return JSON.parse(dados);
+    }
+
+    return [];
   }
 
-  login(email: string, senha: string, code?: string) {
-    return this.http.post<AuthSession>(this.base + '/auth/login', {
-      email: email.trim(), password: senha, ...(code?.trim() ? { code: code.trim() } : {}),
-    }).pipe(timeout(12000), tap(session => {
-      this.limparSessao();
-      this.session.set(session);
-      this.expiryTimer = setTimeout(() => this.limparSessao(), Math.max(0, session.expiresAt - Date.now()));
-    }));
-  }
-
-  validarSessao() {
-    const token = this.token();
-    if (!token) { this.limparSessao(); return of(false); }
-    return this.http.get<AuthProfile>(this.base + '/auth/me').pipe(
-      timeout(12000),
-      map(profile => {
-        if (this.token() !== token || !profile.active) return false;
-        this.session.update(session => session ? { ...session, user: profile } : null);
-        return true;
-      }),
-      catchError(() => of(false)),
+  //login
+  usuarioLogado = signal<CadastroInterface | null>(this.carregarlogin());
+  login(email: string, senha: string): boolean {
+    const usuario = this.usuarios().find(
+      (usuario) => usuario.email === email && usuario.senha === senha,
     );
+
+    console.log('Usuários:', this.usuarios());
+    console.log('Usuário encontrado:', usuario);
+
+    this.usuarioLogado.set(usuario ?? null);
+    console.log(this.usuarioLogado());
+    this.salvarLogin();
+    if (usuario) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
+  private salvarLogin() {
+    const dadosLogin = JSON.stringify(this.usuarioLogado());
+    localStorage.setItem('usuarioLogado', dadosLogin);
+  }
+
+  private carregarlogin(): CadastroInterface | null {
+    const dadosLogin = localStorage.getItem('usuarioLogado');
+
+    if (dadosLogin) {
+      return JSON.parse(dadosLogin);
+    }
+    return null;
+  }
   logout() {
-    const token = this.token();
-    this.limparSessao();
-    return token ? this.http.post<void>(this.base + '/auth/logout', {}, {
-      headers: { Authorization: 'Bearer ' + token },
-    }).pipe(timeout(12000)) : of(undefined);
-  }
-
-  limparSessao() {
-    clearTimeout(this.expiryTimer);
-    this.session.set(null);
+    this.usuarioLogado.set(null);
+    localStorage.removeItem('usuarioLogado');
   }
 }
