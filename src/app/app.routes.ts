@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'perfil-config', component: ProfileConfig, canActivate: [authGuard] },
   { path: 'cadastro', component: ContainerCadastro },
   { path: 'confirmacao-ocorrencia', component: ConfirmacaoPost, canActivate: [authGuard] },
-  { path: 'ocorrenciasRegistrada', component: OcorrenciasRegistradas },
+  { path: 'ocorrenciasRegistrada', component: OcorrenciasRegistradas, canActivate: [authGuard] },
   { path: 'detalheOcorrencia/:id', component: DetalheOcorrecia },
   { path: 'confirmacao-ocorrencia/:id', component: ConfirmacaoPost, canActivate: [authGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },

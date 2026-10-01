@@ -30,7 +30,7 @@ describe('Account screens', () => {
     const page = fixture.nativeElement;
     expect(page.querySelector('h1').textContent).toContain('Maria da Silva');
     expect(page.textContent).toContain(fixture.componentInstance.hoje);
-    expect(page.textContent).toContain('histórico individual ainda não está disponível');
+    expect(page.querySelector('a[href="/ocorrenciasRegistrada"]').textContent).toContain('Ver minhas ocorrências');
     expect(page.querySelector('img[src=""]')).toBeNull();
     expect(page.querySelector('img[src="/assets/user.jpg"]')).toBeNull();
   });
