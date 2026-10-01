@@ -59,6 +59,108 @@ label {
     font-weight: 700;
 }
 
+.optional {
+    color: #718078;
+    font-weight: 500;
+}
+
+.image-hint {
+    margin: 7px 0 0;
+}
+
+.file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+.upload-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.upload-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #8bb9a0;
+    border-radius: 10px;
+    background: #edf7f0;
+    color: #126a49;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.upload-button--camera {
+    border-color: #167a55;
+    background: #167a55;
+    color: #fff;
+}
+
+.file-input:focus-visible + .upload-button,
+.upload-button:focus-visible {
+    outline: 3px solid #7ccaa2;
+    outline-offset: 2px;
+}
+
+.image-processing {
+    margin: 12px 0 0;
+    color: #126a49;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.image-preview {
+    width: 100%;
+    margin-top: 12px;
+    overflow: hidden;
+    border: 1px solid #dce8e1;
+    border-radius: 12px;
+    background: #edf4f0;
+    aspect-ratio: 16 / 9;
+}
+
+.image-preview img {
+    width: 100%;
+    height: calc(100% - 48px);
+    object-fit: cover;
+}
+
+.image-preview__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    padding: 8px 12px;
+    color: #52645e;
+    font-size: 0.78rem;
+    background: #fff;
+}
+
+button.remove-image {
+    width: auto;
+    min-height: 32px;
+    margin: 0;
+    padding: 5px 10px;
+    border-color: #e3b4b0;
+    background: #fff;
+    color: #a53d35;
+    font-size: 0.78rem;
+}
+
+button.remove-image:hover:not(:disabled) {
+    background: #fff3f2;
+}
+
 input,
 select,
 textarea {
@@ -165,9 +267,35 @@ section>.hint {
 }
 
 article {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
     padding: 18px 0;
     border-top: 1px solid #e5eee8;
     overflow-wrap: anywhere;
+}
+
+.occurrence-thumbnail {
+    width: 96px;
+    height: 72px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #edf4f0;
+}
+
+article > div {
+    min-width: 0;
+}
+
+:host ::ng-deep .map-popup-image {
+    display: block;
+    width: 220px;
+    max-width: 100%;
+    height: 112px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
 article strong {
@@ -211,6 +339,11 @@ article .hint {
     .map {
         height: 360px;
         min-height: 300px;
+    }
+
+    .occurrence-thumbnail {
+        width: 80px;
+        height: 64px;
     }
 
     main>[role="alert"] {

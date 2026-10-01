@@ -1,32 +1,63 @@
 import { Component, inject } from '@angular/core';
-import { ConsumoApi } from '../posts/consumo-api';
 import { httpResource } from '@angular/common/http';
 import { Ocorrencia } from '../ocorrencia';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
 @Component({
-  imports: [],
+  imports: [BottomNav, RouterLink],
   selector: 'app-detalhe-ocorrecia',
   styleUrl: './detalhe-ocorrecia.css',
   templateUrl: './detalhe-ocorrecia.html',
 })
 export class DetalheOcorrecia {
-  // protected readonly consumoService = inject(ConsumoApi);
+  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
+  private readonly route = inject(ActivatedRoute);
 
-   private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
-   private route = inject(ActivatedRoute);
+  protected readonly id = this.route.snapshot.paramMap.get('id');
 
+  protected readonly ocorrenciaDetail = httpResource<Ocorrencia>(
+    () => `${this.urlApi}/${this.id}`,
+  );
 
-  // colocando o valor do ID na variavel id
-  id = this.route.snapshot.paramMap.get('id')
-  
-  // metodo get
-   readonly ocorrenciaDetail = httpResource<Ocorrencia>(
-        () => this.urlApi+'/'+ this.id
-    )
+  protected formatarData(valor: string): string {
+    const data = new Date(valor);
 
-    constructor() {
-  console.log('ID:', this.id);
-}
+    if (Number.isNaN(data.getTime())) {
+      return 'Data não informada';
+    }
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(data);
+  }
+
+  protected formatarStatus(status?: Ocorrencia['status']): string {
+    switch (status) {
+      case 'EM_ANDAMENTO':
+        return 'Em andamento';
+      case 'RESOLVIDA':
+        return 'Resolvida';
+      default:
+        return 'Pendente';
+    }
+  }
+
+  protected classeStatus(status?: Ocorrencia['status']): string {
+    return `status-${(status ?? 'PENDENTE').toLowerCase()}`;
+  }
+
+  protected etapaAtingida(status: Ocorrencia['status'] | undefined, etapa: number): boolean {
+    const etapaAtual = {
+      PENDENTE: 0,
+      EM_ANDAMENTO: 1,
+      RESOLVIDA: 2,
+    }[status ?? 'PENDENTE'];
+
+    return etapa <= etapaAtual;
+  }
 }

@@ -24,6 +24,16 @@ main { max-width: 1200px; margin: 0 auto; padding: 24px; }
   font-size: 14px;
 }
 
+:host ::ng-deep .conteudo-ocorrencia__imagem {
+  display: block;
+  width: 100%;
+  height: 112px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #edf4f0;
+}
+
 :host ::ng-deep .conteudo-ocorrencia__linha {
   line-height: 1.35;
 }

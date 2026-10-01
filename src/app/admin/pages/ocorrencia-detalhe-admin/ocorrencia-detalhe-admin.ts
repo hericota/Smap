@@ -24,6 +24,7 @@ interface OcorrenciaApi {
   latitude: number | null;
   longitude: number | null;
   criadaEm: string | null;
+  imagemUrl?: string | null;
 }
 
 @Component({

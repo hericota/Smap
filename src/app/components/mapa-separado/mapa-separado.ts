@@ -22,6 +22,7 @@ import { Ocorrencia } from '../../feats/ocorrencia';
   templateUrl: './mapa-separado.html',
 })
 export class MapaSeparado implements AfterViewInit, OnDestroy {
+  private readonly centroBlumenau: L.LatLngTuple = [-26.9187, -49.0661];
   private readonly consumoApi = inject(ConsumoApi);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -59,10 +60,7 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
-    this.map = L.map(this.mapContainer.nativeElement).setView(
-      [-14.235, -51.9253],
-      4,
-    );
+    this.map = L.map(this.mapContainer.nativeElement).setView(this.centroBlumenau, 12);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -104,6 +102,8 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
             ocorrencias.filter((ocorrencia) => ocorrencia != null),
           );
 
+          const pontosBlumenau: L.LatLngTuple[] = [];
+
           for (const ocorrencia of this.ocorrencias()) {
             const { latitude, longitude } = ocorrencia;
 
@@ -138,6 +138,17 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
             );
 
             marcador.addTo(this.registros);
+
+            if (this.estaEmBlumenau(latitude, longitude)) {
+              pontosBlumenau.push([latitude, longitude]);
+            }
+          }
+
+          if (pontosBlumenau.length) {
+            this.map?.fitBounds(pontosBlumenau, {
+              maxZoom: 14,
+              padding: [24, 24],
+            });
           }
         },
         error: () => {
@@ -155,6 +166,16 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
     const titulo = document.createElement('strong');
     titulo.className = 'conteudo-ocorrencia__titulo';
     titulo.textContent = ocorrencia.titulo || 'Ocorrência';
+
+    if (ocorrencia.imagemUrl) {
+      const imagem = document.createElement('img');
+      imagem.className = 'conteudo-ocorrencia__imagem';
+      imagem.src = ocorrencia.imagemUrl;
+      imagem.alt = `Imagem da ocorrência: ${ocorrencia.titulo}`;
+      imagem.addEventListener('error', () => imagem.remove());
+      container.appendChild(imagem);
+    }
+
     container.appendChild(titulo);
 
     this.adicionarInformacao(
@@ -226,6 +247,11 @@ export class MapaSeparado implements AfterViewInit, OnDestroy {
       dateStyle: 'short',
       timeStyle: 'short',
     }).format(data);
+  }
+
+  private estaEmBlumenau(latitude: number, longitude: number): boolean {
+    return latitude >= -27.05 && latitude <= -26.75 &&
+      longitude >= -49.25 && longitude <= -48.95;
   }
 
   ngOnDestroy(): void {
