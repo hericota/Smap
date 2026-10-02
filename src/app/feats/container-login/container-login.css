@@ -1,7 +1,7 @@
 .container {
   overflow-x: hidden;
   width: 100%;
-  
+
   min-height: 100dvh;
   background-image: url('/assets/fundo-mobile.jpg');
   background-repeat: no-repeat;
@@ -61,7 +61,7 @@ p {
 p a[routerLink='/cadastro'] {
   color: #16c1a3;
   text-decoration: none;
-   font-weight: 600;
+  font-weight: 600;
 }
 .entrarComGoogleApple {
   width: 100%;
@@ -87,10 +87,8 @@ p a[routerLink='/cadastro'] {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     min-height: 100dvh;
-
     background-image: url('/assets/smap-admin-login-ana.jpg');
     background-repeat: no-repeat;
     background-size: cover;
@@ -122,6 +120,8 @@ p a[routerLink='/cadastro'] {
   .saudacao {
     width: 100%;
     padding: 0;
+    display: flex;
+    align-items: center;
   }
 
   .formulario {
@@ -143,5 +143,47 @@ p a[routerLink='/cadastro'] {
   p {
     padding: 0;
     margin-top: 8px;
+  }
+}
+section {
+  width: 100%;
+  min-height: 100dvh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.personagem {
+  display: none;
+}
+@media (min-width: 800px) {
+  section {
+    width: 100%;
+    min-height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    width: 460px;
+    max-width: calc(100% - 32px);
+    min-height: auto;
+  }
+
+  .personagem {
+    display: block;
+    width: auto;
+    height: auto;
+
+    margin-left: -25px;
+    position: relative;
+    top: 90px;
+
+    z-index: 2;
   }
 }
