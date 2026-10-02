@@ -1,9 +1,39 @@
+/* ============================================================
+ * CONFIGURAÇÕES ADMIN — Perfil, categorias e prazos
+ * ------------------------------------------------------------
+ * Estrutura:
+ *   .admin-page        → wrapper da página (fade-in)
+ *   .page-header       → título + descrição
+ *   .card              → cartão genérico (branco)
+ *   .perfil-card       → card do perfil do admin
+ *   .grid-cards        → grid de 2 colunas (categorias + prazos)
+ *   .categorias-lista  → lista com CRUD de categorias
+ *   .prazos-lista      → tabela de prazos de resolução
+ *   .modal-overlay     → overlay escuro por trás dos modais
+ *   .modal             → modal de criar/editar/deletar
+ *
+ * Responsivo:
+ *   < 900px → grid vira coluna única
+ * ============================================================ */
+
+/* ============================================================
+ * PÁGINA — wrapper principal
+ * ============================================================ */
 .admin-page {
   max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 40px;
+  animation: configFadeIn 0.25s ease-out;
 }
 
+@keyframes configFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+ * CABEÇALHO — título + descrição
+ * ============================================================ */
 .page-header {
   margin-bottom: 28px;
 }
@@ -30,6 +60,9 @@
   font-size: 14px;
 }
 
+/* ============================================================
+ * CARD GENÉRICO
+ * ============================================================ */
 .card {
   padding: 20px 22px;
   background-color: #ffffff;
@@ -51,6 +84,9 @@
   margin-bottom: 16px;
 }
 
+/* ============================================================
+ * PERFIL — card do administrador
+ * ============================================================ */
 .perfil-card {
   margin-bottom: 20px;
 }
@@ -109,12 +145,18 @@
   font-weight: 700;
 }
 
+/* ============================================================
+ * GRID DE CARDS — categorias + prazos
+ * ============================================================ */
 .grid-cards {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 20px;
 }
 
+/* ============================================================
+ * BOTÃO NOVA CATEGORIA
+ * ============================================================ */
 .btn-nova {
   display: inline-flex;
   align-items: center;
@@ -128,13 +170,16 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color 150ms ease;
 }
 
 .btn-nova:hover {
   background-color: #0fb394;
 }
 
+/* ============================================================
+ * LISTA DE CATEGORIAS
+ * ============================================================ */
 .categorias-lista {
   margin: 0;
   padding: 0;
@@ -147,10 +192,15 @@
   gap: 12px;
   padding: 12px 4px;
   border-bottom: 1px solid #f0f2f1;
+  transition: background-color 100ms ease;
 }
 
 .categoria-item:last-child {
   border-bottom: none;
+}
+
+.categoria-item:hover {
+  background-color: #f9fafb;
 }
 
 .categoria-icone {
@@ -171,6 +221,7 @@
   gap: 4px;
 }
 
+/* Botões de ação (editar/deletar) */
 .btn-icone {
   display: flex;
   align-items: center;
@@ -182,7 +233,7 @@
   background-color: transparent;
   color: #68736d;
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .btn-icone:hover {
@@ -202,6 +253,9 @@
   text-align: center;
 }
 
+/* ============================================================
+ * PRAZOS DE RESOLUÇÃO
+ * ============================================================ */
 .prazos-header {
   display: flex;
   justify-content: space-between;
@@ -258,6 +312,9 @@
 .prazo-badge--media { background-color: #fef3c7; color: #92400e; }
 .prazo-badge--baixa { background-color: #f3f4f6; color: #374151; }
 
+/* ============================================================
+ * MODAIS — criar, editar, deletar
+ * ============================================================ */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -267,6 +324,12 @@
   justify-content: center;
   z-index: 1000;
   padding: 16px;
+  animation: modalOverlayIn 150ms ease-out;
+}
+
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .modal {
@@ -276,6 +339,12 @@
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  animation: modalIn 200ms ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .modal-header {
@@ -304,7 +373,7 @@
   background-color: transparent;
   color: #68736d;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color 150ms ease;
 }
 
 .modal-fechar:hover {
@@ -339,13 +408,14 @@
   font-size: 14px;
   color: #1f2a24;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 150ms ease;
 }
 
 .campo-input:focus {
   border-color: #13c4a3;
 }
 
+/* Texto do modal de deletar */
 .deletar-texto {
   margin: 0;
   color: #4b5651;
@@ -363,6 +433,7 @@
   font-size: 12px;
 }
 
+/* Rodapé dos modais */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -381,7 +452,7 @@
   font-weight: 700;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.15s;
+  transition: all 150ms ease;
 }
 
 .btn-cancelar {
@@ -417,6 +488,9 @@
   background-color: #be123c;
 }
 
+/* ============================================================
+ * RESPONSIVO
+ * ============================================================ */
 @media (max-width: 900px) {
   .grid-cards {
     grid-template-columns: 1fr;

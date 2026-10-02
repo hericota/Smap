@@ -1,24 +1,105 @@
+/* ============================================================
+ * ADMIN LAYOUT — Estrutura base do painel administrativo
+ * ------------------------------------------------------------
+ * Estrutura:
+ *   :host            → wrapper do componente (bloco, altura total)
+ *   .admin-layout    → container flex (sidebar + main)
+ *   .admin-main      → área de conteúdo (router-outlet)
+ *
+ * Layout:
+ *   [Sidebar 260px] [admin-main (flex: 1)]
+ *
+ * Responsivo:
+ *   Em telas < 760px, o padding do main é reduzido.
+ *   Em telas > 1440px, o padding aumenta (mais respiro).
+ * ============================================================ */
+
+/* ============================================================
+ * HOST — wrapper do componente
+ * ============================================================ */
 :host {
   display: block;
   min-height: 100vh;
 }
 
+/* ============================================================
+ * LAYOUT — container principal (flex: sidebar + main)
+ * ------------------------------------------------------------
+ * O flex coloca a sidebar (largura fixa) ao lado do main (flex: 1).
+ * ============================================================ */
 .admin-layout {
   display: flex;
   min-height: 100vh;
   background-color: #f6f8f9;
 }
 
+/* ============================================================
+ * MAIN — área de conteúdo
+ * ------------------------------------------------------------
+ * min-width: 0 é essencial em containers flex: evita que o
+ * conteúdo estoure o layout quando há tabelas grandes.
+ * ============================================================ */
 .admin-main {
   box-sizing: border-box;
-  flex: 1; 
-  min-width: 0; 
+  flex: 1;
+  min-width: 0;
   min-height: 100vh;
   padding: 32px 36px;
+  overflow-y: auto;
+  /* Fade-in suave ao trocar de página */
+  animation: contentFadeIn 0.25s ease-out;
 }
 
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+ * SCROLLBAR CUSTOMIZADA — apenas no main
+ * ------------------------------------------------------------
+ * Substitui a barra padrão do navegador por uma mais discreta.
+ * Ao passar o mouse, fica teal (cor do SMAP).
+ * ------------------------------------------------------------
+ * Obs: usa prefixo -webkit- (Chrome, Edge, Safari).
+ * Firefox usa `scrollbar-width` e `scrollbar-color`.
+ * ============================================================ */
+.admin-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-main::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.admin-main::-webkit-scrollbar-thumb {
+  background-color: #d1d9d6;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.admin-main::-webkit-scrollbar-thumb:hover {
+  background-color: #13c4a3;
+}
+
+/* ============================================================
+ * RESPONSIVO — telas grandes (> 1440px)
+ * ------------------------------------------------------------
+ * Mais respiro em telas grandes.
+ * ============================================================ */
+@media (min-width: 1440px) {
+  .admin-main {
+    padding: 40px 48px;
+  }
+}
+
+/* ============================================================
+ * RESPONSIVO — telas pequenas (< 760px)
+ * ------------------------------------------------------------
+ * Padding reduzido para aproveitar melhor o espaço em mobile.
+ * ============================================================ */
 @media (max-width: 760px) {
   .admin-main {
-    padding: 20px 16px; 
+    padding: 20px 16px;
   }
 }

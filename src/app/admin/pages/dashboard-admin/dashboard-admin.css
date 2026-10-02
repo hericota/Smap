@@ -1,8 +1,37 @@
+/* ============================================================
+ * DASHBOARD ADMIN — Visão geral do painel administrativo
+ * ------------------------------------------------------------
+ * Estrutura:
+ *   .dashboard-page      → wrapper da página (fade-in)
+ *   .page-header         → título + chip de período
+ *   .indicadores         → grid de 3 KPI cards
+ *   .dashboard-grid      → 2 colunas (status + zona)
+ *   .dashboard-linha-2   → 2 colunas (regiões + atenção)
+ *
+ * Responsivo:
+ *   < 1020px → KPIs em coluna única
+ *   < 900px  → grids viram coluna única
+ *   < 760px  → altura do mapa aumenta
+ *   < 560px  → tabela de status compacta
+ * ============================================================ */
+
+/* ============================================================
+ * PÁGINA — wrapper principal
+ * ============================================================ */
 .dashboard-page {
   max-width: 1200px;
   margin: 0 auto;
+  animation: dashboardFadeIn 0.25s ease-out;
 }
 
+@keyframes dashboardFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+ * CABEÇALHO — título + chip de período
+ * ============================================================ */
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -24,6 +53,7 @@
   font-size: 16px;
 }
 
+/* Chip de período (ex: "Jan 1 - Jan 31") */
 .periodo-chip {
   display: inline-flex;
   align-items: center;
@@ -36,6 +66,12 @@
   color: #334155;
   font-size: 13px;
   font-weight: 500;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.periodo-chip:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .periodo-chip svg {
@@ -45,6 +81,9 @@
   color: #64748b;
 }
 
+/* ============================================================
+ * INDICADORES — grid de 3 KPI cards
+ * ============================================================ */
 .indicadores {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -58,6 +97,17 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease,
+    border-color 150ms ease;
+}
+
+/* Hover sutil: card sobe 1px + sombra leve */
+.indicador-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 .indicador-rotulo {
@@ -90,6 +140,7 @@
   font-weight: 700;
 }
 
+/* Cores dos badges por tipo */
 .badge-positivo {
   color: #10b981;
   background-color: #d1fae5;
@@ -105,12 +156,18 @@
   background-color: rgba(19, 177, 162, 0.12);
 }
 
+/* ============================================================
+ * RESPONSIVO — KPIs em coluna única
+ * ============================================================ */
 @media (max-width: 1020px) {
   .indicadores {
     grid-template-columns: 1fr;
   }
 }
 
+/* ============================================================
+ * GRID PRINCIPAL — 2 colunas (status + zona)
+ * ============================================================ */
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -125,18 +182,27 @@
   }
 }
 
+/* Altura fixa igual para os 2 cards desta linha */
 .status-card,
 .zona-card {
   box-sizing: border-box;
   height: 294px;
 }
 
+/* ============================================================
+ * CARD DE STATUS — barras de ocorrências por status
+ * ============================================================ */
 .status-card {
-  box-sizing: border-box;
   padding: 22px 24px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.status-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .status-card h3 {
@@ -152,11 +218,17 @@
   gap: 12px;
 }
 
+/* Cada linha da barra: nome | barra | número */
 .status-row {
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr) 30px;
   align-items: center;
   gap: 12px;
+  transition: opacity 150ms ease;
+}
+
+.status-row:hover {
+  opacity: 0.85;
 }
 
 .status-name {
@@ -165,6 +237,7 @@
   white-space: nowrap;
 }
 
+/* Trilha (fundo da barra) */
 .status-track {
   height: 8px;
   overflow: hidden;
@@ -172,10 +245,12 @@
   border-radius: 999px;
 }
 
+/* Preenchimento — largura controlada via [style.width.%] */
 .status-progress {
   display: block;
   height: 100%;
   border-radius: inherit;
+  transition: width 400ms ease;
 }
 
 .status-total {
@@ -184,30 +259,17 @@
   text-align: right;
 }
 
-.status-enviada {
-  background-color: #3b82f6;
-}
+/* Cores por status */
+.status-enviada    { background-color: #3b82f6; }
+.status-analise    { background-color: #e87d00; }
+.status-encaminhada{ background-color: #334155; }
+.status-concluida  { background-color: #10b981; }
+.status-pausada    { background-color: #94a3b8; }
+.status-rejeitada  { background-color: #ef4444; }
 
-.status-analise {
-  background-color: #e87d00;
-}
-
-.status-encaminhada {
-  background-color: #334155;
-}
-
-.status-concluida {
-  background-color: #10b981;
-}
-
-.status-pausada {
-  background-color: #94a3b8;
-}
-
-.status-rejeitada {
-  background-color: #ef4444;
-}
-
+/* ============================================================
+ * RESPONSIVO — tabela de status compacta
+ * ============================================================ */
 @media (max-width: 560px) {
   .status-row {
     grid-template-columns: 70px minmax(0, 1fr) 28px;
@@ -220,12 +282,20 @@
   }
 }
 
+/* ============================================================
+ * CARD DE ZONA — mapa de calor de ocorrências
+ * ============================================================ */
 .zona-card {
-  box-sizing: border-box;
   padding: 20px;
   background-color: #ffffff;
   border: 1px solid #e1e5e4;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.zona-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .zona-cabecalho {
@@ -250,6 +320,7 @@
   font-size: 14px;
 }
 
+/* Legenda (Alta, Média, Baixa) */
 .zona-legenda {
   display: flex;
   gap: 14px;
@@ -272,18 +343,11 @@
   border-radius: 50%;
 }
 
-.zona-alta {
-  background-color: #f5484c;
-}
+.zona-alta  { background-color: #f5484c; }
+.zona-media { background-color: #d97706; }
+.zona-baixa { background-color: #13b1a2; }
 
-.zona-media {
-  background-color: #d97706;
-}
-
-.zona-baixa {
-  background-color: #13b1a2;
-}
-
+/* Container do mapa Leaflet */
 .zona-mapa {
   width: 100%;
   height: 190px;
@@ -298,6 +362,9 @@
   }
 }
 
+/* ============================================================
+ * SEGUNDA LINHA — regiões críticas + atenção imediata
+ * ============================================================ */
 .dashboard-linha-2 {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -312,12 +379,21 @@
   }
 }
 
+/* ============================================================
+ * CARD DE REGIÕES CRÍTICAS — tabela
+ * ============================================================ */
 .regioes-card {
   box-sizing: border-box;
   padding: 22px 24px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.regioes-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .regioes-card h3 {
@@ -346,17 +422,27 @@
   padding: 13px 12px;
   color: #0d1b2a;
   border-bottom: 1px solid #f1f5f9;
+  transition: background-color 100ms ease;
+}
+
+/* Hover suave nas linhas */
+.regioes-tabela tbody tr:hover td {
+  background-color: #f9fafb;
 }
 
 .regioes-tabela tbody tr:last-child td {
   border-bottom: none;
 }
 
+/* Destaque de alta prioridade (>= 10) */
 .regiao-alerta {
   color: #ef4444;
   font-weight: 700;
 }
 
+/* ============================================================
+ * COLUNA DE ATENÇÃO IMEDIATA — cards de ocorrências antigas
+ * ============================================================ */
 .atencao-coluna h3 {
   margin: 0 0 14px;
   color: #0d1b2a;
@@ -370,6 +456,17 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease,
+    border-color 150ms ease;
+}
+
+/* Hover sutil igual aos KPIs */
+.atencao-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 .atencao-card + .atencao-card {
@@ -391,17 +488,10 @@
   font-weight: 700;
 }
 
-.atencao-buraco {
-  background-color: #a9663d;
-}
-
-.atencao-vazamento {
-  background-color: #3b82f6;
-}
-
-.atencao-poste {
-  background-color: #d97706;
-}
+/* Cores dos badges por tipo */
+.atencao-buraco    { background-color: #a9663d; }
+.atencao-vazamento { background-color: #3b82f6; }
+.atencao-poste     { background-color: #d97706; }
 
 .atencao-dias {
   color: #ef4444;
