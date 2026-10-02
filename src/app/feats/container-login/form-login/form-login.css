@@ -1,19 +1,20 @@
 form {
   display: flex;
   flex-direction: column;
+
   width: 100%;
+  max-width: 300px;
+
   gap: 20px;
- 
 }
 
 .caixa-input {
   display: flex;
   flex-direction: column;
   font-size: 14px;
-  color: #94A3B8;
+  color: #94a3b8;
   font-weight: bolder;
   gap: 8px;
- 
 }
 
 input {
@@ -25,16 +26,15 @@ input {
   background-clip: padding-box;
 }
 .errorValidators {
-  
-  font-size: 12px;           
+  font-size: 12px;
   color: #ffa3a3;
   font-weight: 500;
-  white-space: wrap;       /* Impede que o texto de erro quebre em duas linhas */
+  white-space: wrap; /* Impede que o texto de erro quebre em duas linhas */
   overflow: hidden;
-  text-overflow: ellipsis;   /* Adiciona "..." se o texto for muito grande */
+  text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
   max-width: 100%;
 }
-label.label-error{
+label.label-error {
   color: #fa6c6c;
 }
 input.input-error {
@@ -43,11 +43,20 @@ input.input-error {
   animation: shake 0.3s ease-in-out;
 }
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
-.box-validators{
+.box-validators {
   display: flex;
   gap: 10px;
 }
@@ -56,8 +65,7 @@ a {
   font-size: 12px;
   text-decoration: none;
   text-align: end;
-   font-weight: 600;
-  
+  font-weight: 600;
 }
 
 button {
@@ -79,76 +87,93 @@ button {
 }
 .detalhe div {
   width: 45%;
-  color: #94A3B8;
+  color: #94a3b8;
   border-bottom: 1px solid #64748b;
 }
-.detalhe p{
-  color: #94A3B8;
+.detalhe p {
+  color: #94a3b8;
   font-size: 12px;
-  
 }
 
 @media (min-width: 768px) {
 
-    form {
-        width: 100%;
-        max-width: 600px;
+  form {
+    width: 100%;
+    max-width: 440px;
+    gap: 18px;
+  }
 
-        gap: 24px;
-    }
+  label {
+    font-size: 14px;
+  }
 
-    .caixa-input {
-        width: 100%;
+  .caixa-input {
+    width: 100%;
+    font-size: 14px;
+    gap: 7px;
+  }
 
-        font-size: 16px;
-        gap: 10px;
-    }
+  input {
+    width: 100%;
+    height: 46px;
 
-    input {
-        width: 100%;
-        height: 64px;
+    box-sizing: border-box;
 
-        box-sizing: border-box;
+    background-color: #f7f8fa;
+    border: 1px solid #e2e8f0;
 
-        padding: 20px;
+    padding: 13px;
+    border-radius: 11px;
 
-        border-radius: 14px;
+    font-size: 14px;
+  }
 
-        font-size: 16px;
-    }
+  a {
+    font-size: 13px;
+  }
 
-    .box-validators {
-        gap: 10px;
-    }
+  button {
+    width: 100%;
+    height: 48px;
 
-    .errorValidators {
-        font-size: 13px;
-    }
+    padding: 12px;
+    margin-top: 2px;
 
-    a {
-        font-size: 14px;
-    }
+    border-radius: 11px;
+    font-size: 14px;
+  }
 
-    button {
-        width: 100%;
-        height: 55px;
+  .detalhe {
+    width: 100%;
+    margin-top: 0;
+  }
 
-        padding: 14px;
+  .detalhe div {
+    width: 45%;
+    border-bottom: 1px solid #e2e8f0;
+  }
 
-        border-radius: 14px;
+  .detalhe p {
+    font-size: 12px;
+    margin: 0 8px;
+  }
+}
+@media (min-width: 1024px) {
 
-        font-size: 16px;
-    }
+  form {
+    max-width: 500px;
+    gap: 20px;
+  }
 
-    .detalhe {
-        width: 100%;
-    }
+  input {
+    height: 48px;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
 
-    .detalhe div {
-        width: 45%;
-    }
-
-    .detalhe p {
-        font-size: 14px;
-    }
-} 
+  button {
+    height: 48px;
+    border-radius: 12px;
+  }
+}
