@@ -1,6 +1,7 @@
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, tap, timeout } from 'rxjs';
+import { LEGAL_VERSION } from '../../../legal/legal-documents';
 import { environment } from '../../../../environments/environment';
 
 export interface AuthProfile {
@@ -29,10 +30,12 @@ export class UserService {
     return session && session.expiresAt > Date.now() ? session.accessToken : null;
   }
 
-  cadastrar(usuario: { nome: string; sobreNome: string; email: string; senha: string }) {
+  cadastrar(usuario: { nome: string; sobreNome: string; email: string; senha: string; cpf: string; acceptedTerms: boolean }) {
     return this.http.post<AuthProfile>(this.base + '/auth/register', {
       name: (usuario.nome.trim() + ' ' + usuario.sobreNome.trim()).trim(),
       email: usuario.email.trim(), password: usuario.senha,
+      cpf: usuario.cpf,
+      acceptedTerms: usuario.acceptedTerms, termsVersion: LEGAL_VERSION, privacyVersion: LEGAL_VERSION,
     }).pipe(timeout(12000));
   }
 

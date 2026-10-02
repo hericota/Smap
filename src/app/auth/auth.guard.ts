@@ -12,6 +12,6 @@ export const authGuard: CanActivateFn = (_route, state) => {
 };
 
 export function destinoAposLogin(value: string | null): string {
-  return value && /^\/(registrar-ocorrencia|ocorrenciasRegistrada|perfil-usuario|perfil-config|confirmacao-ocorrencia(?:\/\d+)?)(?:\?[^#\\]*)?$/.test(value)
+  return value && /^\/(registrar-ocorrencia|ocorrenciasRegistrada|perfil-usuario|perfil-config|admin\/(?:dashboard|ocorrencias(?:\/\d+)?|mapa|regioes|configuracoes)|confirmacao-ocorrencia(?:\/\d+)?)(?:\?[^#\\]*)?$/.test(value)
     ? value : '/perfil-usuario';
 }

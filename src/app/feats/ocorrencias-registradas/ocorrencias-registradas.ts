@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { OccurrenceImage } from '../../shared/occurrence-image';
 import { httpResource } from '@angular/common/http';
 import { UserService } from '../profile user/user-service/user-service';
 import { Ocorrencia } from '../ocorrencia';
@@ -8,7 +9,7 @@ import { RouterLink } from '@angular/router';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 
 @Component({
-  imports: [RouterLink, BottomNav, Header],
+  imports: [RouterLink, BottomNav, Header, OccurrenceImage],
   selector: 'app-ocorrencias-registradas',
   styleUrl: './ocorrencias-registradas.css',
   templateUrl: './ocorrencias-registradas.html',

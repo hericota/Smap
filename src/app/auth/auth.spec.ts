@@ -64,9 +64,9 @@ describe('Autenticação de ocorrências', () => {
     expect(request.request.headers.get('Authorization')).toBe('Bearer ' + token); request.flush(null);
   });
   it('cadastro envia somente os campos aceitos pela auth-smap', () => {
-    auth.cadastrar({ nome: ' Pessoa ', sobreNome: 'Teste', email: profile.email, senha: 'MinhaSenha!123' }).subscribe();
+    auth.cadastrar({ nome: ' Pessoa ', sobreNome: 'Teste', email: profile.email, senha: 'MinhaSenha!123', cpf: '52998224725', acceptedTerms: true }).subscribe();
     const request = requests.expectOne(environment.authUrl + '/auth/register');
-    expect(request.request.body).toEqual({ name: 'Pessoa Teste', email: profile.email, password: 'MinhaSenha!123' });
+    expect(request.request.body).toEqual({ name: 'Pessoa Teste', email: profile.email, password: 'MinhaSenha!123', cpf: '52998224725', acceptedTerms: true, termsVersion: '2026-10-01.1', privacyVersion: '2026-10-01.1' });
     request.flush(profile);
   });
   it('recusa destinos externos e aceita retorno ao formulário', () => {

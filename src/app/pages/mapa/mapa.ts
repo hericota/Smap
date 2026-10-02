@@ -10,10 +10,11 @@ import { Ocorrencia } from '../../feats/ocorrencia';
 import { ConsumoApi } from '../../feats/posts/consumo-api';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 import { UserService } from '../../feats/profile user/user-service/user-service';
+import { OccurrenceImage } from '../../shared/occurrence-image';
 
 @Component({
   selector: 'app-mapa',
-  imports: [FormsModule, Header, BottomNav],
+  imports: [FormsModule, Header, BottomNav, OccurrenceImage],
   templateUrl: './mapa.html',
   styleUrl: './mapa.css',
 })

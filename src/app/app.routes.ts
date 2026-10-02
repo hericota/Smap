@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { LegalPage } from './legal/legal-page';
+import { adminGuard } from './auth/admin.guard';
 import { authGuard } from './auth/auth.guard';
 import { Header } from './component/header/header';
 import { ContainerLogin } from './feats/container-login/container-login';
@@ -14,6 +16,8 @@ import { DetalheOcorrecia } from './feats/detalhe-ocorrecia/detalhe-ocorrecia';
 import { FullMap } from './pages/full-map/full-map';
 
 export const routes: Routes = [
+  { path: 'termos', component: LegalPage, data: { document: 'terms' }, title: 'Termos de Uso | SMAP' },
+  { path: 'privacidade', component: LegalPage, data: { document: 'privacy' }, title: 'Privacidade | SMAP' },
   { path: 'home', component: Home },
   { path: 'header', component: Header },
   { path: 'hero', component: Hero },
@@ -34,6 +38,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [adminGuard],
+    canActivateChild: [adminGuard],
     loadComponent: () =>
       import('./admin/layouts/admin-layout/admin-layout').then((m) => m.AdminLayout),
     children: [

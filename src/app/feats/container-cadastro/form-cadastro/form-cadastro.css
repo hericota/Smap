@@ -1,1 +1,4 @@
 @import '../../../styles/auth-form.css';
+.legal-acceptance { display:flex; align-items:flex-start; gap:12px; font-weight:400; line-height:1.6; }
+.legal-acceptance input { width:20px; height:20px; min-height:20px; flex:0 0 20px; margin-top:4px; accent-color:#087e70; }
+.legal-acceptance a { display:inline; min-height:0; text-align:left; }

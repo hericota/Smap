@@ -17,6 +17,11 @@
     </div>
   </div>
   <div class="box-input">
+    <label for="cpf">CPF</label>
+    <input [formField]="cadastroForm.cpf" id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" aria-describedby="cpf-hint">
+    <span class="hint" id="cpf-hint">Número privado, armazenado criptografado. Informá-lo não comprova identidade ou titularidade.</span>
+  </div>
+  <div class="box-input">
     <label for="email">E-mail</label>
     <input [formField]="cadastroForm.email" id="email" type="email" autocomplete="email" placeholder="email@exemplo.com">
     @if (cadastroForm.email().touched() && cadastroForm.email().invalid()) {
@@ -33,6 +38,10 @@
       }
     }
   </div>
-  <button type="submit" [disabled]="carregando() || cadastroForm().invalid()">{{ carregando() ? 'Criando conta…' : 'Criar conta' }}</button>
+  <label class="legal-acceptance" for="aceite-termos">
+    <input id="aceite-termos" type="checkbox" required [checked]="aceitouTermos()" (change)="aceitouTermos.set($any($event.target).checked)">
+    <span>Li e aceito os <a routerLink="/termos" target="_blank" rel="noopener">Termos de Uso</a> e estou ciente da <a routerLink="/privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+  </label>
+  <button type="submit" [disabled]="carregando() || cadastroForm().invalid() || !aceitouTermos()">{{ carregando() ? 'Criando conta…' : 'Criar conta' }}</button>
   <p class="form-footer">Já tem uma conta? <a routerLink="/login" [queryParams]="{ returnUrl: route.snapshot.queryParamMap.get('returnUrl') }">Entrar</a></p>
 </form>
