@@ -1,7 +1,7 @@
 .container {
   overflow-x: hidden;
   width: 100%;
-  max-width: 400px;
+  
   min-height: 100dvh;
   background-image: url('/assets/fundo-mobile.jpg');
   background-repeat: no-repeat;
@@ -82,37 +82,46 @@ p a[routerLink='/cadastro'] {
   outline: none;
   background-clip: padding-box;
 }
-@media (min-width: 1024px) {
-  
+@media (min-width: 400px) {
   :host {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+
     width: 100%;
+    min-height: 100dvh;
+
     background-image: url('/assets/smap-admin-login-ana.jpg');
-    background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center top;
   }
+
   .container {
-    background: #ffffff;
-    width: fit-content;
+    width: calc(100% - 32px);
     max-width: 460px;
     min-height: auto;
+
+    background: #ffffff;
+
     border-radius: 16px;
-    padding: 40px;
-    box-shadow: 
+    padding: 32px;
+
+    box-sizing: border-box;
+
+    box-shadow:
       0 10px 25px -5px rgba(0, 0, 0, 0.05),
       0 8px 10px -6px rgba(0, 0, 0, 0.03);
+
     border: 1px solid #e2e8f0;
+
     justify-content: flex-start;
     gap: 20px;
   }
 
   .saudacao {
+    width: 100%;
     padding: 0;
-    padding-bottom: 0; 
   }
 
   .formulario {
@@ -120,14 +129,15 @@ p a[routerLink='/cadastro'] {
   }
 
   app-form-login {
+    display: block;
     width: 100%;
   }
 
   .entrarComGoogleApple button {
     height: 44px;
+
     border: 1px solid #e2e8f0;
     background-color: #f8fafc;
-    cursor: pointer;
   }
 
   p {
