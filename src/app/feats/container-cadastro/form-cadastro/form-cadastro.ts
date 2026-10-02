@@ -49,7 +49,7 @@ export class FormCadastro {
         } });
       },
       error: error => this.erro.set(error.status === 409 ? 'Este e-mail já está cadastrado. Entre na sua conta.'
-        : error.status === 400 ? 'Confira o nome, e-mail e senha informados.'
+        : error.status === 400 ? 'Confira o nome, e-mail, senha, CPF e o aceite dos termos informados.'
         : error.status === 429 ? 'Muitas tentativas. Aguarde um minuto.'
         : 'Não foi possível criar sua conta. Tente novamente.'),
     });
