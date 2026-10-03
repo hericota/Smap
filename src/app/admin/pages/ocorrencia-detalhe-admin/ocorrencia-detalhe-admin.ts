@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { httpResource } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import * as L from 'leaflet';
 import { environment } from '../../../../environments/environment';
 
@@ -22,6 +24,7 @@ interface OcorrenciaApi {
   latitude: number | null;
   longitude: number | null;
   criadaEm: string | null;
+  imagemUrl?: string | null;
 }
 
 @Component({
@@ -33,50 +36,63 @@ interface OcorrenciaApi {
 })
 export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly idOcorrencia = Number(this.route.snapshot.paramMap.get('id'));
-  private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia}`;
+
+  private readonly idOcorrencia = toSignal(
+    this.route.paramMap.pipe(map((params) => Number(params.get('id')))),
+    { initialValue: Number(this.route.snapshot.paramMap.get('id')) },
+  );
+
+  private readonly urlApi = computed(
+    () => `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia()}`,
+  );
 
   protected readonly ocorrenciaResource = httpResource<OcorrenciaApi>(
-    () => this.urlApi,
+    () => this.urlApi(),
   );
 
   protected readonly ocorrencia = computed(() => this.ocorrenciaResource.value());
 
   protected readonly protocolo = computed(() =>
     this.ocorrencia()
-      ? `SMAP-${this.anoProtocolo()}-${String(this.idOcorrencia).padStart(6, '0')}`
+      ? `SMAP-${this.anoProtocolo()}-${String(this.idOcorrencia()).padStart(6, '0')}`
       : '',
   );
 
-  @ViewChild('mapContainer', { static: true })
-  private mapContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('mapContainer', { static: false })
+  private mapContainer?: ElementRef<HTMLDivElement>;
 
   private map?: L.Map;
   private marcador?: L.Marker;
   private resizeObserver?: ResizeObserver;
+  private mapaInicializado = false;
 
   constructor() {
+    // Reage à chegada da ocorrência (ou mudança de id).
+    // Se o mapa já estiver pronto, atualiza o marcador.
+    // Se ainda não estiver, tenta inicializar (o @else if já renderizou).
     effect(() => {
-      this.aplicarMarcador(this.ocorrencia());
+      const ocorrencia = this.ocorrencia();
+
+      if (!ocorrencia) return;
+
+      // Se o mapa não está pronto, tenta inicializar agora
+      // (o @ViewChild já pode ter resolvido após os dados chegarem)
+      if (!this.mapaInicializado) {
+        queueMicrotask(() => this.inicializarMapa());
+      }
+
+      // Se já está pronto, só atualiza o marcador
+      if (this.mapaInicializado && this.map) {
+        this.aplicarMarcador(ocorrencia);
+      }
     });
   }
 
   ngAfterViewInit(): void {
-    this.map = L.map(this.mapContainer.nativeElement, {
-      zoomControl: false,
-      attributionControl: false,
-    });
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-    }).addTo(this.map);
-
-    this.aplicarMarcador(this.ocorrencia());
-
-    if (typeof ResizeObserver !== 'undefined') {
-      this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
-      this.resizeObserver.observe(this.mapContainer.nativeElement);
-    }
+    // Tentativa inicial — se os dados já chegaram rápido,
+    // o @ViewChild já estará resolvido aqui.
+    // Se não, o effect cuida de inicializar depois.
+    this.inicializarMapa();
   }
 
   ngOnDestroy(): void {
@@ -86,20 +102,12 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
 
   protected formatadoEnviado(): string {
     const ocorrencia = this.ocorrencia();
-
-    if (!ocorrencia?.criadaEm) {
-      return '—';
-    }
+    if (!ocorrencia?.criadaEm) return '—';
 
     const data = new Date(ocorrencia.criadaEm);
+    if (Number.isNaN(data.getTime())) return '—';
 
-    if (Number.isNaN(data.getTime())) {
-      return '—';
-    }
-
-    const mes = data
-      .toLocaleDateString('pt-BR', { month: 'short' })
-      .replace('.', '');
+    const mes = data.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
     const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
     const horas = data.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
@@ -109,13 +117,41 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
     return `${data.getDate()} ${mesCapitalizado}, ${horas}`;
   }
 
-  private aplicarMarcador(ocorrencia: OcorrenciaApi | undefined | null): void {
-    if (!this.map || !ocorrencia) {
-      return;
-    }
+  /**
+   * Inicializa o mapa Leaflet.
+   * Só roda se:
+   *   - O container (#mapContainer) já existir no DOM
+   *   - O mapa ainda não foi inicializado
+   */
+  private inicializarMapa(): void {
+    if (this.mapaInicializado) return;
+    if (!this.mapContainer?.nativeElement) return;
 
-    const temCoordenadas =
-      ocorrencia.latitude != null && ocorrencia.longitude != null;
+    this.map = L.map(this.mapContainer.nativeElement, {
+      zoomControl: false,
+      attributionControl: false,
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(this.map);
+
+    this.mapaInicializado = true;
+
+    // Aplica o marcador (se a ocorrência já chegou)
+    this.aplicarMarcador(this.ocorrencia());
+
+    // Observa o tamanho do container pra ajustar o mapa ao redimensionar
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
+      this.resizeObserver.observe(this.mapContainer.nativeElement);
+    }
+  }
+
+  private aplicarMarcador(ocorrencia: OcorrenciaApi | undefined | null): void {
+    if (!this.map || !ocorrencia) return;
+
+    const temCoordenadas = ocorrencia.latitude != null && ocorrencia.longitude != null;
 
     const coordenadas: L.LatLngTuple = temCoordenadas
       ? [ocorrencia.latitude!, ocorrencia.longitude!]
@@ -142,15 +178,10 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
 
   private anoProtocolo(): number {
     const criadaEm = this.ocorrencia()?.criadaEm;
-
     if (criadaEm) {
       const data = new Date(criadaEm);
-
-      if (!Number.isNaN(data.getTime())) {
-        return data.getFullYear();
-      }
+      if (!Number.isNaN(data.getTime())) return data.getFullYear();
     }
-
     return new Date().getFullYear();
   }
 }

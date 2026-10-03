@@ -135,13 +135,13 @@
         <tbody>
           @for (ocorrencia of ocorrenciasPaginadas(); track ocorrencia.id) {
           <tr class="linha-clicavel" (click)="abrirDetalhes(ocorrencia.id)">
-            <td>
+            <td data-label="Código">
               <a class="protocolo" [routerLink]="['/admin/ocorrencias', ocorrencia.id]">
                 {{ formatarProtocolo(ocorrencia.id) }}
               </a>
             </td>
 
-            <td>
+            <td data-label="Foto">
               <span class="foto-placeholder" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -152,19 +152,25 @@
               </span>
             </td>
 
-            <td>
+            <td data-label="Categoria">
               <span [class]="'badge-categoria ' + classeCategoria(ocorrencia.categoria)">
                 {{ ocorrencia.categoria || 'Outros' }}
               </span>
             </td>
 
-            <td class="local">{{ ocorrencia.localizacao || '—' }}</td>
+            <td data-label="Localização" class="local">
+              {{ ocorrencia.localizacao || '—' }}
+            </td>
 
-            <td><span class="sem-dado">—</span></td>
+            <td data-label="Prioridade">
+              <span class="sem-dado">—</span>
+            </td>
 
-            <td><span class="badge-status">—</span></td>
+            <td data-label="Status">
+              <span class="badge-status">—</span>
+            </td>
 
-            <td>
+            <td data-label="Aguardando">
               <span class="aguardando" [class.aguardando-zero]="diasAguardando(ocorrencia.criadaEm) === 0">
                 {{ diasAguardando(ocorrencia.criadaEm) }} dias
               </span>
