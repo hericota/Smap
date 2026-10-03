@@ -2,11 +2,14 @@ section {
   width: 100%;
   min-height: 100dvh;
   box-sizing: border-box;
-  padding: 24px;
+
+  padding: 24px 18px;
+
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   color: #0d1b2a;
-  gap: 24px;
+
   background-image: url('/assets/fundo-cadastro.jpg');
   background-position: center;
   background-repeat: no-repeat;
@@ -16,16 +19,18 @@ section {
   display: flex;
   align-items: center;
   gap: 16px;
+
+  align-self: start;
 }
-p{
-  color: #64748B;
+p {
+  color: #64748b;
   font-weight: normal;
 }
-p a[routerLink='/login']{
-  color: #16C1A3 ;
+p a[routerLink='/login'] {
+  color: #16c1a3;
   font-weight: 600;
 }
-.login{
+.login {
   display: flex;
   justify-content: center;
 }
@@ -53,7 +58,8 @@ p a[routerLink='/login']{
   height: 20px;
   fill: #16c1a3;
 }
-@media (min-width: 768px) {
+
+@media (min-width: 1024px) {
   section {
     width: 100%;
     height: 100dvh;
@@ -68,7 +74,6 @@ p a[routerLink='/login']{
     align-items: center;
 
     position: relative;
-
     background-image: url('/assets/fundo-cadastro-desktop.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -95,6 +100,32 @@ p a[routerLink='/login']{
     width: 100%;
     max-width: 460px;
 
+    display: flex;
+    justify-content: center;
+  }
+}
+@media (min-width: 400px) and (max-width: 1023px) {
+  section {
+    padding: 32px 40px;
+    display: flex;
+    justify-content: center;
+    background-image: url('/assets/fundo-cadastro-desktop.jpg');
+    background-position: center;
+    background-size: cover;
+  }
+
+  .criarConta {
+    width: 100%;
+  }
+
+  section app-form-cadastro {
+    width: 100%;
+    max-width: 460px;
+    margin: auto;
+  }
+
+  .login {
+    width: 100%;
     display: flex;
     justify-content: center;
   }
