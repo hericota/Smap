@@ -41,7 +41,7 @@ interface CategoriaLegenda {
 })
 export class MapaAdmin implements AfterViewInit, OnDestroy {
   private readonly http = inject(HttpClient);
-  private readonly apiBase = 'http://localhost:8080/ocorrencias';
+  private readonly apiBase = 'http://localhost:18080/ocorrencias';
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer!: ElementRef<HTMLDivElement>;

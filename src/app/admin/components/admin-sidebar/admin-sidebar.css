@@ -1,25 +1,3 @@
-/* ============================================================
- * ADMIN SIDEBAR — Menu lateral de navegação do painel admin
- * ------------------------------------------------------------
- * Estrutura:
- *   :host                → wrapper do componente (sticky)
- *   .admin-sidebar       → container principal
- *   .brand               → logo + nome SMAP no topo
- *   .sidebar-navigation  → links de navegação principal
- *   .navigation-item     → cada item do menu
- *   .sidebar-bottom      → configurações + perfil (rodapé)
- *   .profile             → cartão do usuário logado
- *
- * Responsivo:
- *   Em telas < 760px, a sidebar colapsa para 68px (só ícones).
- * ============================================================ */
-
-/* ============================================================
- * HOST — wrapper do componente
- * ------------------------------------------------------------
- * Sticky faz a sidebar permanecer fixa ao rolar.
- * align-self: flex-start evita que ela estique junto com o pai.
- * ============================================================ */
 :host {
   display: block;
   position: sticky;
@@ -30,12 +8,6 @@
   height: 100vh;
 }
 
-/* ============================================================
- * SIDEBAR — container principal
- * ------------------------------------------------------------
- * Layout vertical com justify-content: space-between, o que
- * empurra o `.sidebar-bottom` para o rodapé.
- * ============================================================ */
 .admin-sidebar {
   display: flex;
   flex-direction: column;
@@ -47,18 +19,8 @@
   background-color: #f0f1f1;
   border-right: 1px solid #e1e5e4;
   overflow-y: auto;
-  /* Fade-in suave ao carregar o layout (250ms, discreto) */
-  animation: sidebarFadeIn 0.25s ease-out;
 }
 
-@keyframes sidebarFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ============================================================
- * BRAND — logo + nome no topo
- * ============================================================ */
 .brand {
   display: flex;
   align-items: center;
@@ -66,12 +28,6 @@
   padding: 0 6px 52px;
   color: #08182b;
   text-decoration: none;
-  /* Transição suave ao passar o mouse sobre o logo */
-  transition: opacity 200ms ease;
-}
-
-.brand:hover {
-  opacity: 0.85;
 }
 
 .brand-logo {
@@ -89,23 +45,13 @@
   object-fit: contain;
 }
 
-/* ============================================================
- * NAVEGAÇÃO — lista de links principais
- * ============================================================ */
+
 .sidebar-navigation {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* ------------------------------------------------------------
- * ITEM DE NAVEGAÇÃO — cada link do menu
- * ------------------------------------------------------------
- * Comportamento:
- *   - Padrão: cinza, sem destaque
- *   - Hover: fundo verde-claro + texto teal
- *   - Ativo (rota atual): borda teal à esquerda + fundo + texto
- * ------------------------------------------------------------ */
 .navigation-item {
   display: flex;
   align-items: center;
@@ -119,11 +65,9 @@
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  /* Transição suave para hover e troca de item ativo */
   transition:
     background-color 160ms ease,
-    color 160ms ease,
-    border-left-color 200ms ease;
+    color 160ms ease;
 }
 
 .navigation-item:hover {
@@ -131,7 +75,6 @@
   color: #1aa995;
 }
 
-/* Estado ativo (rota atual) */
 .navigation-item.active {
   border-left-color: #13c4a3;
   background-color: #d5eee9;
@@ -139,17 +82,6 @@
   font-weight: 700;
 }
 
-/* Acessibilidade: outline visível ao navegar por teclado */
-.navigation-item:focus-visible {
-  outline: 2px solid #13c4a3;
-  outline-offset: 2px;
-}
-
-/* ------------------------------------------------------------
- * ÍCONE DE NAVEGAÇÃO
- * ------------------------------------------------------------
- * Acompanha a cor do texto pai (currentColor).
- * ============================================================ */
 .navigation-icon {
   display: inline-grid;
   width: 18px;
@@ -161,8 +93,6 @@
   color: currentColor;
   font-size: 15px;
   line-height: 1;
-  /* Transição suave ao trocar de cor */
-  transition: color 160ms ease;
 }
 
 .navigation-icon svg {
@@ -172,36 +102,22 @@
   overflow: visible;
 }
 
-/* ============================================================
- * SIDEBAR BOTTOM — configurações + perfil
- * ============================================================ */
 .sidebar-bottom {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-/* Item de configurações (mesmo estilo dos outros, sem margem extra) */
 .settings-item {
   margin-bottom: 0;
 }
 
-/* ------------------------------------------------------------
- * PERFIL — cartão do usuário logado
- * ------------------------------------------------------------
- * Hover: opacidade cai e o avatar fica teal.
- * ------------------------------------------------------------ */
 .profile {
   display: flex;
   align-items: center;
   gap: 12px;
   padding-top: 18px;
   border-top: 1px solid #8b969e;
-  transition: opacity 200ms ease;
-}
-
-.profile:hover {
-  opacity: 0.85;
 }
 
 .profile-avatar {
@@ -216,12 +132,6 @@
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
-  /* Transição ao hover (muda para teal) */
-  transition: background-color 200ms ease;
-}
-
-.profile:hover .profile-avatar {
-  background-color: #1aa995;
 }
 
 .profile-information {
@@ -252,13 +162,9 @@
   white-space: nowrap;
 }
 
-/* ============================================================
- * RESPONSIVO — telas pequenas (< 760px)
- * ------------------------------------------------------------
- * A sidebar colapsa para 68px e mostra apenas os ícones.
- * Textos (nome, perfil) ficam ocultos.
- * ============================================================ */
+
 @media (max-width: 760px) {
+
   :host,
   .admin-sidebar {
     width: 68px;
@@ -274,7 +180,6 @@
     padding-bottom: 38px;
   }
 
-  /* Oculta nome do logo e textos dos itens */
   .brand-name,
   .navigation-item span:not(.navigation-icon),
   .profile-information {
