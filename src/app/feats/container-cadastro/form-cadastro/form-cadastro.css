@@ -4,6 +4,13 @@ form {
   width: 100%;
   gap: 14px;
 }
+.etapa {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
 .box-input {
   display: flex;
   flex-direction: column;
@@ -15,13 +22,16 @@ form {
 input::placeholder {
   color: #64748b;
 }
-.nomeSobrenome{
-  width: 100%;
-  display: flex;
- gap: 12px;
+
+.btn-etapa {
+  background-color: transparent;
+  color: #16c1a3;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  cursor: pointer;
 }
-.nomeSobrenome .box-input{
-  flex: 1; 
+.nomeSobrenome .box-input {
+  flex: 1;
   min-width: 0;
 }
 .check-box {
@@ -35,8 +45,8 @@ input::placeholder {
   color: #16c1a3;
   font-weight: 600;
 }
-input[type='checkbox']{
-   appearance: none;
+input[type='checkbox'] {
+  appearance: none;
   -webkit-appearance: none;
   height: 18px;
   width: 18px;
@@ -55,7 +65,6 @@ input[type='checkbox']::after {
   font-weight: 900;
   color: #16c1a3;
   display: none;
-
 }
 input[type='checkbox']:checked {
   background-color: #16c1a234;
@@ -86,19 +95,18 @@ button {
   color: #ffffff;
   font-weight: bolder;
   font-size: 16px;
-  margin: 24px 0;
+ 
 }
 .errorValidators {
-  
-  font-size: 12px;           
+  font-size: 12px;
   color: #ffa3a3;
   font-weight: 500;
-  white-space: wrap;       /* Impede que o texto de erro quebre em duas linhas */
+  white-space: wrap; /* Impede que o texto de erro quebre em duas linhas */
   overflow: hidden;
-  text-overflow: ellipsis;   /* Adiciona "..." se o texto for muito grande */
+  text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
   max-width: 100%;
 }
-label.label-error{
+label.label-error {
   color: #fa6c6c;
 }
 input.input-error {
@@ -107,63 +115,66 @@ input.input-error {
   animation: shake 0.3s ease-in-out;
 }
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
-
 @media (min-width: 768px) {
+  form {
+    width: 100%;
+    max-width: 460px;
+    height:450px;
 
-    form {
-        width: 100%;
-        max-width: 650px;
-        gap: 18px;
-    }
+    margin: 0 auto;
+    padding: 28px;
+    box-sizing: border-box;
 
-    .box-input {
-        font-size: 15px;
-        gap: 9px;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
-    .nomeSobrenome {
-        gap: 16px;
-    }
+    background: rgba(255, 255, 255, 0.94);
+    border-radius: 24px;
 
-    input:not([type='checkbox']) {
-        width: 100%;
-        height: 52px;
+    box-shadow: 0 12px 35px rgba(13, 27, 42, 0.10);
+  }
 
-        box-sizing: border-box;
+  .box-input {
+    gap: 5px;
+    font-size: 14px;
+  }
 
-        padding: 12px;
+  input:not([type='checkbox']) {
+    height: 42px;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
 
-        font-size: 15px;
+  .nomeSobrenome {
+    gap: 12px;
+  }
 
-        border-radius: 12px;
-    }
+  input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+  }
 
-    .errorValidators {
-        font-size: 13px;
-    }
-
-    .check-box {
-        font-size: 14px;
-    }
-
-    input[type='checkbox'] {
-        width: 19px;
-        height: 19px;
-    }
-
-    button {
-        width: 100%;
-        height: 56px;
-
-        margin: 26px 0;
-
-        border-radius: 16px;
-
-        font-size: 16px;
-    }
+  button {
+    height: 46px;
+    margin: 10px 0 0;
+    border-radius: 12px;
+    font-size: 15px;
+  }
 }
