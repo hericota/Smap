@@ -1,37 +1,8 @@
-/* ============================================================
- * OCORRÊNCIAS ADMIN — Listagem de ocorrências com filtros
- * ------------------------------------------------------------
- * Estrutura:
- *   .admin-page          → wrapper da página (fade-in)
- *   .pagina-cabecalho    → título + botão exportar CSV
- *   .painel              → cartões de busca, filtros e tabela
- *   .busca-wrap          → input com ícone de lupa
- *   .filtros             → selects de filtro
- *   .filtros-ativos      → chips dos filtros aplicados
- *   .tabela              → tabela de ocorrências paginada
- *   .paginacao           → rodapé com botões de página
- *
- * Responsivo:
- *   < 760px → fonte e padding reduzidos
- * ============================================================ */
-
-/* ============================================================
- * PÁGINA — wrapper principal
- * ============================================================ */
 .admin-page {
   max-width: 1200px;
   margin: 0 auto;
-  animation: ocorrenciasFadeIn 0.25s ease-out;
 }
 
-@keyframes ocorrenciasFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================================================
- * CABEÇALHO — título + botão de exportar
- * ============================================================ */
 .pagina-cabecalho {
   display: flex;
   align-items: flex-start;
@@ -53,7 +24,6 @@
   font-size: 15px;
 }
 
-/* Botão de exportar CSV (verde, ação primária) */
 .botao-exportar {
   display: inline-flex;
   align-items: center;
@@ -67,12 +37,10 @@
   border: 1px solid #10b981;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 150ms ease, box-shadow 150ms ease;
 }
 
 .botao-exportar:hover {
   background-color: #0ea371;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .botao-exportar svg {
@@ -80,9 +48,6 @@
   height: 16px;
 }
 
-/* ============================================================
- * PAINEL — cartões brancos com border-radius
- * ============================================================ */
 .painel {
   box-sizing: border-box;
   margin-top: 20px;
@@ -92,9 +57,6 @@
   border-radius: 12px;
 }
 
-/* ============================================================
- * BUSCA — input com ícone de lupa
- * ============================================================ */
 .busca-wrap {
   position: relative;
 }
@@ -108,12 +70,6 @@
   color: #94a3b8;
   transform: translateY(-50%);
   pointer-events: none;
-  transition: color 150ms ease;
-}
-
-/* Ícone fica teal quando o input está em foco */
-.busca-wrap:focus-within .busca-icone {
-  color: #10b981;
 }
 
 .busca-campo {
@@ -126,26 +82,12 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .busca-campo::placeholder {
   color: #94a3b8;
 }
 
-.busca-campo:hover {
-  border-color: #cbd5e1;
-}
-
-.busca-campo:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-  outline: none;
-}
-
-/* ============================================================
- * FILTROS — selects (Prioridade, Status, Categoria, etc.)
- * ============================================================ */
 .filtros {
   display: flex;
   gap: 10px;
@@ -162,24 +104,14 @@
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.filtro:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-/* Acessibilidade: outline visível para teclado */
 .filtro:focus-visible,
 .busca-campo:focus-visible {
   outline: 3px solid #175cd3;
   outline-offset: 2px;
 }
 
-/* ============================================================
- * FILTROS ATIVOS — chips com botão de limpar
- * ============================================================ */
 .filtros-ativos {
   display: flex;
   align-items: center;
@@ -203,18 +135,8 @@
   border: none;
   border-radius: 999px;
   cursor: pointer;
-  transition: opacity 150ms ease, transform 150ms ease;
 }
 
-.chip:hover {
-  opacity: 0.85;
-}
-
-.chip:active {
-  transform: scale(0.97);
-}
-
-/* Chip de categoria (azul) */
 .chip-categoria {
   color: #1d4ed8;
   background-color: #dbeafe;
@@ -225,7 +147,6 @@
   line-height: 1;
 }
 
-/* Botão "Limpar todos" */
 .limpar-todos {
   padding: 0;
   color: #10b981;
@@ -235,17 +156,8 @@
   background: none;
   border: none;
   cursor: pointer;
-  transition: opacity 150ms ease;
 }
 
-.limpar-todos:hover {
-  opacity: 0.75;
-  text-decoration: underline;
-}
-
-/* ============================================================
- * ESTADOS — carregando, erro, vazio
- * ============================================================ */
 .estado-simples {
   padding: 40px 16px;
   color: #64748b;
@@ -270,7 +182,6 @@
   font-size: 13px;
 }
 
-/* Variação de erro (fundo rosa + borda vermelha) */
 .estado-erro {
   background-color: #fef2f2;
   border: 1px solid #fecaca;
@@ -291,16 +202,8 @@
   border: 1px solid #13795b;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 150ms ease;
 }
 
-.botao-recarregar:hover {
-  background-color: #0f5d46;
-}
-
-/* ============================================================
- * TABELA — listagem de ocorrências
- * ============================================================ */
 .tabela-wrap {
   overflow-x: auto;
 }
@@ -326,38 +229,31 @@
   color: #0d1b2a;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
-  transition: background-color 100ms ease;
 }
 
 .tabela tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Linha inteira é clicável */
 .linha-clicavel {
   cursor: pointer;
 }
 
-/* Hover suave na linha (verde-claro) */
-.linha-clicavel:hover td {
+.linha-clicavel:hover {
   background-color: #f0fdf9;
 }
 
-/* Link do protocolo (SMAP-XXXX) */
 .protocolo {
   color: #10b981;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 150ms ease;
 }
 
 .protocolo:hover {
-  color: #0ea371;
   text-decoration: underline;
 }
 
-/* Placeholder de foto (quando não tem imagem) */
 .foto-placeholder {
   display: inline-flex;
   align-items: center;
@@ -375,9 +271,6 @@
   height: 18px;
 }
 
-/* ============================================================
- * BADGES DE CATEGORIA
- * ============================================================ */
 .badge-categoria {
   display: inline-block;
   padding: 5px 12px;
@@ -387,16 +280,36 @@
   white-space: nowrap;
 }
 
-.cat-buraco      { color: #a9663d; background-color: #f6e8de; }
-.cat-iluminacao  { color: #d97706; background-color: #fdf0dd; }
-.cat-vazamento   { color: #3b82f6; background-color: #e3edfd; }
-.cat-lixo        { color: #13b1a2; background-color: rgba(19, 177, 162, 0.12); }
-.cat-sinalizacao { color: #7c3aed; background-color: #ede9fe; }
-.cat-outros      { color: #64748b; background-color: #eef2f6; }
+.cat-buraco {
+  color: #a9663d;
+  background-color: #f6e8de;
+}
 
-/* ============================================================
- * COLUNAS ESPECÍFICAS
- * ============================================================ */
+.cat-iluminacao {
+  color: #d97706;
+  background-color: #fdf0dd;
+}
+
+.cat-vazamento {
+  color: #3b82f6;
+  background-color: #e3edfd;
+}
+
+.cat-lixo {
+  color: #13b1a2;
+  background-color: rgba(19, 177, 162, 0.12);
+}
+
+.cat-sinalizacao {
+  color: #7c3aed;
+  background-color: #ede9fe;
+}
+
+.cat-outros {
+  color: #64748b;
+  background-color: #eef2f6;
+}
+
 .local {
   max-width: 260px;
 }
@@ -415,21 +328,16 @@
   border-radius: 999px;
 }
 
-/* Coluna "Aguardando" — destaca em vermelho */
 .aguardando {
   color: #ef4444;
   font-weight: 700;
   white-space: nowrap;
 }
 
-/* Se for 0 dias, fica neutro */
 .aguardando-zero {
   color: #0d1b2a;
 }
 
-/* ============================================================
- * RODAPÉ — contagem + paginação
- * ============================================================ */
 .tabela-rodape {
   display: flex;
   align-items: center;
@@ -455,16 +363,6 @@
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    color 150ms ease;
-}
-
-/* Hover apenas em botões clicáveis (não desabilitados, não ativos) */
-.paginacao button:hover:not(:disabled):not(.ativa) {
-  border-color: #cbd5e1;
-  background-color: #f8fafc;
 }
 
 .paginacao button:disabled {
@@ -472,16 +370,12 @@
   cursor: not-allowed;
 }
 
-/* Página atual — verde */
 .paginacao button.ativa {
   color: #ffffff;
   background-color: #10b981;
   border-color: #10b981;
 }
 
-/* ============================================================
- * RESPONSIVO — telas pequenas
- * ============================================================ */
 @media (max-width: 760px) {
   .admin-page h2 {
     font-size: 26px;

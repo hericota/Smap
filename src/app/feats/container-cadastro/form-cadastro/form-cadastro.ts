@@ -28,11 +28,15 @@ export class FormCadastro {
     cep: '',
     senha: '',
     check: false,
-    username: ''
+    username: '',
   });
   private usuarioService = inject(UserService);
   private router = inject(Router);
 
+
+  etapa = signal(1);
+
+  
   cadastroForm = form(this.cadastroModel, (schemaPath) => {
     required(schemaPath.nome, { message: '*' });
     required(schemaPath.sobreNome, { message: '*' });
@@ -49,9 +53,20 @@ export class FormCadastro {
     pattern(schemaPath.senha, /.*\d.*/, { message: '*Ao menos 1 número!' });
     pattern(schemaPath.senha, /.*[@$!%*?&].*/, { message: '*Ao menos 1 caractere especial!' });
     pattern(schemaPath.cpf, /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/, { message: '*CPF inválido!' });
-    pattern(schemaPath.telefone, /^(\(\d{2}\)\s?\d{4,5}-\d{4}|\d{10,11})$/, { message: '*Telefone inválido!' });
+    pattern(schemaPath.telefone, /^(\(\d{2}\)\s?\d{4,5}-\d{4}|\d{10,11})$/, {
+      message: '*Telefone inválido!',
+    });
     pattern(schemaPath.cep, /^(\d{5}-\d{3}|\d{8})$/, { message: '*CEP inválido!' });
   });
+
+  
+  proximaEtapa() {
+    this.etapa.set(2);
+  }
+
+  voltarEtapa() {
+    this.etapa.set(1);
+  }
 
   cadastrar(event: SubmitEvent) {
     event.preventDefault();
@@ -59,5 +74,5 @@ export class FormCadastro {
     this.usuarioService.cadastrar(this.cadastroModel());
     this.cadastroForm().reset();
     this.router.navigate(['/login']);
-}
+  }
 }

@@ -1,7 +1,7 @@
 .container {
   overflow-x: hidden;
   width: 100%;
-
+  max-width: 400px;
   min-height: 100dvh;
   background-image: url('/assets/fundo-mobile.jpg');
   background-repeat: no-repeat;
@@ -61,7 +61,7 @@ p {
 p a[routerLink='/cadastro'] {
   color: #16c1a3;
   text-decoration: none;
-  font-weight: 600;
+   font-weight: 600;
 }
 .entrarComGoogleApple {
   width: 100%;
@@ -82,108 +82,132 @@ p a[routerLink='/cadastro'] {
   outline: none;
   background-clip: padding-box;
 }
-@media (min-width: 400px) {
-  :host {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 100dvh;
-    background-image: url('/assets/smap-admin-login-ana.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;
-  }
+@media (min-width: 768px) {
 
-  .container {
-    width: calc(100% - 32px);
-    max-width: 460px;
-    min-height: auto;
+    .container {
+        width: 100%;
+        max-width: none;
+        min-height: 100dvh;
 
-    background: #ffffff;
+        padding: 50px 20px 30px;
 
-    border-radius: 16px;
-    padding: 32px;
+        background-image: url('/assets/fundo-mobile.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
 
-    box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
 
-    box-shadow:
-      0 10px 25px -5px rgba(0, 0, 0, 0.05),
-      0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        box-sizing: border-box;
+    }
 
-    border: 1px solid #e2e8f0;
+    .saudacao {
+        width: 100%;
+        max-width: 700px;
 
-    justify-content: flex-start;
-    gap: 20px;
-  }
+        padding: 0;
+        padding-top: 10px;
 
-  .saudacao {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    align-items: center;
-  }
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-  .formulario {
-    width: 100%;
-  }
+        text-align: center;
+    }
 
-  app-form-login {
-    display: block;
-    width: 100%;
-  }
+    .bemvindo {
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+    }
 
-  .entrarComGoogleApple button {
-    height: 44px;
+    .saudacao h1 {
+        font-size: 42px;
+        margin: 0;
+    }
 
-    border: 1px solid #e2e8f0;
-    background-color: #f8fafc;
-  }
+    .saudacao img {
+        height: 42px;
+        width: auto;
+    }
 
-  p {
-    padding: 0;
-    margin-top: 8px;
-  }
+    .texto {
+        max-width: 650px;
+
+        padding-top: 12px;
+
+        font-size: 17px;
+        line-height: 1.5;
+
+        text-align: center;
+    }
+
+    .formulario {
+        width: 100%;
+        max-width: 600px;
+
+        margin-top: 110px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .entrarComGoogleApple {
+        width: 100%;
+        max-width: 600px;
+
+        gap: 35px;
+        padding-top: 15px;
+    }
+
+    .entrarComGoogleApple button {
+        width: 50%;
+        height: 55px;
+
+        font-size: 16px;
+    }
+
+    .container > p {
+        margin-top: 25px;
+        padding: 0;
+
+        font-size: 15px;
+    }
 }
+
 section {
   width: 100%;
   min-height: 100dvh;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   position: relative;
 }
 
 .personagem {
   display: none;
 }
+
 @media (min-width: 800px) {
   section {
     width: 100%;
     min-height: 100dvh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .container {
-    width: 460px;
-    max-width: calc(100% - 32px);
-    min-height: auto;
   }
 
   .personagem {
     display: block;
     width: auto;
     height: auto;
-
     margin-left: -25px;
     position: relative;
     top: 90px;
-
     z-index: 2;
   }
 }
