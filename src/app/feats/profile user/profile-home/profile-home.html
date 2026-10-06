@@ -1,44 +1,54 @@
-<section class="container">
+<div class="desktop-layout">
+    <aside class="desktop-sidebar">
+        <app-profile-config></app-profile-config>
+    </aside>
+    <section class="container">
+        <div class="header">
+            <div class="nomeUser">
+                <h1>{{usuarioLogado()?.nome}}👋</h1>
+                <p>data atual</p>
+            </div>
+            <div class="user-actions">
+                <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
+                <a routerLink="/perfil-config">
+                    <img class="config" src="/assets/settings-icons.png"></a>
+            </div>
+        </div>
 
-    <div class="header">
-        <div class="nomeUser">
-            <h1>{{usuarioLogado()?.nome}}👋</h1>
-            <p>data atual</p>
+        <div class="header-desktop">
+            <div class="nomeUser">
+                <h1>Olá, {{usuarioLogado()?.nome}} 👋</h1>
+                <p>Quarta-feira, 26 de Janeiro</p>
+            </div>
+            <img class="ilustracao-cidade" src="assets/profile-hero-desktop.png" alt="Ilustração de Blumenau">
         </div>
-        <div class="user-actions">
-            <img class="fotouser" src="/assets/user.jpg" alt="foto do usuario">
-            <a routerLink="/perfil-config">
-            <img class="config" src="/assets/settings-icons.png" ></a>
 
-        </div>
-    </div>
+        <a class="registrar esconder-no-desktop" routerLink="/registrar-ocorrencia">
+            <div>
+                <img class="icon-camera" src="/assets/camera-icon.svg">
+            </div>
+            <div class="text-button">
+                <span class="text-h1">Registrar nova ocorrência</span>
+                <span class="text-p">Tire uma foto e reporte agora mesmo</span>
+            </div>
+        </a>
 
-    <a class="registrar" routerLink="/registrar-ocorrencia">
-        <div>
-            <img class="icon-camera" src="/assets/camera-icon.svg">
-        </div>
-        <div class="text-button">
-            <span class="text-h1">Registrar nova ocorrência</span>
-            <span class="text-p">Tire uma foto e reporte agora mesmo</span>
-        </div>
-    </a>
+        <section class="ocorrencias">
+            <div class="text-minhas-ocorrencias">
+                <h2>Minhas ocorrências</h2>
+                <a routerLink="/ocorrenciasRegistrada">Ver todas</a>
+            </div>
+            <div class="list-ocorrencia">
+                <img src="" width="40px" height="40px" loading="lazy">
+            </div>
+        </section>
 
-    <section class="ocorrencias">
-        <div class="text-minhas-ocorrencias">
-            <h2>Minhas ocorrências</h2>
-            <a routerLink="/ocorrenciasRegistrada">Ver todas</a>
-        </div>
-        <div class="list-ocorrencia">
-            <img src="" width="40px" height="40px" loading="lazy">
+        <h3>Mapa do bairro </h3>
+        <div id="mapa">
+            <app-mapa-separado></app-mapa-separado>
         </div>
 
     </section>
+</div>
 
-    <h3>Mapa do bairro </h3>
-    <div id="mapa">
-        <app-mapa-separado></app-mapa-separado>
-    </div>
-
-
-</section>
 <app-bottom-nav></app-bottom-nav>
