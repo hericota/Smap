@@ -3,9 +3,10 @@ import { BottomNav } from '../../../components/bottom-nav/bottom-nav';
 import { RouterLink } from '@angular/router';
 import { MapaSeparado } from '../../../components/mapa-separado/mapa-separado';
 import { UserService } from '../user-service/user-service';
+import { ProfileConfig } from '../profile-config/profile-config';
 
 @Component({
-  imports: [BottomNav, RouterLink, MapaSeparado],
+  imports: [BottomNav, RouterLink, MapaSeparado, ProfileConfig],
   selector: 'app-profile-home',
   styleUrl: './profile-home.css',
   templateUrl: './profile-home.html',
@@ -14,5 +15,4 @@ export class ProfileHome {
    private usuarioService = inject(UserService);
    
  usuarioLogado = this.usuarioService.usuarioLogado;
-
 }
