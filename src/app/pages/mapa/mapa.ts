@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, DestroyRef, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { finalize, map, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -17,6 +17,7 @@ import { BottomNav } from '../../components/bottom-nav/bottom-nav';
   styleUrl: './mapa.css',
 })
 export class Mapa implements AfterViewInit, OnDestroy {
+  private readonly centroBlumenau: L.LatLngTuple = [-26.9187, -49.0661];
 
   readonly consumoService = inject(ConsumoApi);
   readonly router = inject(Router);
@@ -30,6 +31,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
     criadaEm: '',
     titulo: '',
     localizacao: '',
+    imagemUrl: null,
   });
 
   @ViewChild('mapContainer', { static: true })
@@ -44,6 +46,10 @@ export class Mapa implements AfterViewInit, OnDestroy {
   readonly erroCarregamento = signal('');
   readonly carregando = signal(false);
   readonly salvando = signal(false);
+  readonly processandoImagem = signal(false);
+  readonly arquivoImagem = signal<File | null>(null);
+  readonly imagemPreviewUrl = signal<string | null>(null);
+  readonly imagemInfo = signal('');
   readonly ocorrencias = signal<Ocorrencia[]>([]);
   private selecao?: L.CircleMarker;
   private registros = L.layerGroup();
@@ -53,7 +59,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
-    this.map = L.map(this.mapContainer.nativeElement).setView([-14.235, -51.9253], 4);
+    this.map = L.map(this.mapContainer.nativeElement).setView(this.centroBlumenau, 12);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -78,7 +84,57 @@ export class Mapa implements AfterViewInit, OnDestroy {
     this.destroyed = true;
     this.requestId++;
     this.resizeObserver?.disconnect();
+    this.revogarPreview();
     this.map?.remove();
+  }
+
+  async selecionarImagem(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files?.[0];
+
+    if (!arquivo) return;
+
+    this.erro.set('');
+    this.mensagem.set('');
+
+    if (!arquivo.type.startsWith('image/')) {
+      this.erro.set('Selecione um arquivo de imagem válido.');
+      input.value = '';
+      return;
+    }
+
+    if (arquivo.size > 20 * 1024 * 1024) {
+      this.erro.set('A imagem original deve ter no máximo 20 MB.');
+      input.value = '';
+      return;
+    }
+
+    this.processandoImagem.set(true);
+
+    try {
+      const compactada = await this.compactarImagem(arquivo);
+      this.arquivoImagem.set(compactada);
+      this.revogarPreview();
+      this.imagemPreviewUrl.set(URL.createObjectURL(compactada));
+      this.imagemInfo.set(
+        `${arquivo.name} · ${this.formatarTamanho(arquivo.size)} → ${this.formatarTamanho(compactada.size)}`,
+      );
+    } catch {
+      this.arquivoImagem.set(null);
+      this.revogarPreview();
+      this.imagemInfo.set('');
+      this.erro.set('Não foi possível preparar esta imagem. Tente uma foto em JPEG, PNG ou WebP.');
+      input.value = '';
+    } finally {
+      this.processandoImagem.set(false);
+    }
+  }
+
+  removerImagem(...inputs: HTMLInputElement[]): void {
+    this.arquivoImagem.set(null);
+    this.imagemInfo.set('');
+    this.revogarPreview();
+    for (const input of inputs) input.value = '';
   }
 
   localizar(): void {
@@ -147,6 +203,7 @@ export class Mapa implements AfterViewInit, OnDestroy {
       titulo: dados.titulo.trim(),
       localizacao: dados.localizacao.trim(),
       descricao: dados.descricao.trim(),
+      imagemUrl: dados.imagemUrl?.trim() || null,
       latitude: ponto.latitude,
       longitude: ponto.longitude,
       criadaEm: new Date().toISOString(),
@@ -154,7 +211,15 @@ export class Mapa implements AfterViewInit, OnDestroy {
 
     // 3. Executa a requisição HTTP
     this.salvando.set(true);
-    this.consumoService.cadastrarOcorrencia(registro).pipe(
+    const arquivo = this.arquivoImagem();
+    const cadastro$ = arquivo
+      ? this.consumoService.enviarImagem(arquivo).pipe(
+          map(({ url }) => ({ ...registro, imagemUrl: url })),
+          switchMap((registroComImagem) => this.consumoService.cadastrarOcorrencia(registroComImagem)),
+        )
+      : this.consumoService.cadastrarOcorrencia(registro);
+
+    cadastro$.pipe(
       takeUntilDestroyed(this.destroyRef),
       finalize(() => this.salvando.set(false)),
     ).subscribe({
@@ -167,7 +232,9 @@ export class Mapa implements AfterViewInit, OnDestroy {
       error: (error: HttpErrorResponse) => {
         this.erro.set(error.status === 0
           ? 'Não foi possível conectar à API. Verifique se o servidor está disponível e tente novamente.'
-          : 'O servidor não conseguiu salvar a ocorrência. Confira os dados e tente novamente.');
+          : error.status === 413
+            ? 'A imagem ficou maior que o limite aceito pela API.'
+            : 'O servidor não conseguiu salvar a ocorrência. Confira os dados e tente novamente.');
       }
 
     });
@@ -188,7 +255,8 @@ export class Mapa implements AfterViewInit, OnDestroy {
         }
         this.ocorrencias.set(registros.filter((item) => item != null));
         this.renderizar();
-        const pontos = this.ocorrencias().filter((item) => this.temCoordenadas(item));
+        const pontos = this.ocorrencias().filter((item) =>
+          this.temCoordenadas(item) && this.estaEmBlumenau(item.latitude, item.longitude));
         if (pontos.length) {
           this.map?.fitBounds(pontos.map((o) => [o.latitude!, o.longitude!] as L.LatLngTuple),
             { maxZoom: 16, padding: [24, 24] });
@@ -203,6 +271,11 @@ export class Mapa implements AfterViewInit, OnDestroy {
       Number.isFinite(registro.longitude) && Math.abs(registro.longitude!) <= 180;
   }
 
+  private estaEmBlumenau(latitude: number, longitude: number): boolean {
+    return latitude >= -27.05 && latitude <= -26.75 &&
+      longitude >= -49.25 && longitude <= -48.95;
+  }
+
   private renderizar(): void {
     this.registros.clearLayers();
     for (const registro of this.ocorrencias()) {
@@ -212,6 +285,14 @@ export class Mapa implements AfterViewInit, OnDestroy {
         title.textContent = registro.titulo || registro.categoria;
         const description = document.createElement('p');
         description.textContent = registro.descricao;
+        if (registro.imagemUrl) {
+          const image = document.createElement('img');
+          image.src = registro.imagemUrl;
+          image.alt = `Imagem da ocorrência: ${registro.titulo}`;
+          image.className = 'map-popup-image';
+          image.addEventListener('error', () => image.remove());
+          popup.appendChild(image);
+        }
         popup.append(title, description);
 
         L.circleMarker([registro.latitude, registro.longitude], {
@@ -219,6 +300,72 @@ export class Mapa implements AfterViewInit, OnDestroy {
         }).bindPopup(popup).addTo(this.registros);
       }
     }
+  }
+
+  private async compactarImagem(arquivo: File): Promise<File> {
+    const imagemUrl = URL.createObjectURL(arquivo);
+    const imagem = new Image();
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        imagem.onload = () => resolve();
+        imagem.onerror = () => reject(new Error('Formato de imagem não suportado'));
+        imagem.src = imagemUrl;
+      });
+    } finally {
+      URL.revokeObjectURL(imagemUrl);
+    }
+
+    const maiorLado = Math.max(imagem.naturalWidth, imagem.naturalHeight);
+    const escala = Math.min(1, 1440 / maiorLado);
+    const largura = Math.max(1, Math.round(imagem.naturalWidth * escala));
+    const altura = Math.max(1, Math.round(imagem.naturalHeight * escala));
+    const canvas = document.createElement('canvas');
+    canvas.width = largura;
+    canvas.height = altura;
+
+    const contexto = canvas.getContext('2d');
+    if (!contexto) {
+      throw new Error('Canvas indisponível');
+    }
+
+    contexto.drawImage(imagem, 0, 0, largura, altura);
+
+    let qualidade = 0.78;
+    let resultado = await this.canvasParaBlob(canvas, qualidade);
+
+    while (resultado.size > 900 * 1024 && qualidade > 0.48) {
+      qualidade -= 0.1;
+      resultado = await this.canvasParaBlob(canvas, qualidade);
+    }
+
+    const nomeBase = arquivo.name.replace(/\.[^.]+$/, '') || 'ocorrencia';
+    return new File([resultado], `${nomeBase}.jpg`, {
+      type: 'image/jpeg',
+      lastModified: Date.now(),
+    });
+  }
+
+  private canvasParaBlob(canvas: HTMLCanvasElement, qualidade: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error('Falha ao compactar imagem')),
+        'image/jpeg',
+        qualidade,
+      );
+    });
+  }
+
+  private formatarTamanho(bytes: number): string {
+    return bytes < 1024 * 1024
+      ? `${Math.max(1, Math.round(bytes / 1024))} KB`
+      : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  }
+
+  private revogarPreview(): void {
+    const url = this.imagemPreviewUrl();
+    if (url) URL.revokeObjectURL(url);
+    this.imagemPreviewUrl.set(null);
   }
 }
 

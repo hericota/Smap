@@ -1,6 +1,9 @@
 <form (submit)="cadastrar($event)">
+@if (etapa() === 1) {
 
-  <div class="nomeSobrenome">
+
+  <div class="etapa">
+  
     <div class="box-input">
       <div>
         <label [class.label-error]="cadastroForm.nome().touched() && cadastroForm.nome().invalid()" for="nome">Nome</label>
@@ -22,7 +25,19 @@
       </div>
       <input [class.input-error]="cadastroForm.sobreNome().touched() && cadastroForm.sobreNome().invalid()" [formField]="cadastroForm.sobreNome" id="sobrenome" type="text" placeholder="sobrenome">
     </div>
+ 
+
+<div class="box-input">
+    <div>
+      <label [class.label-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" for="CPF">CPF</label>
+      @if (cadastroForm.cpf().touched() && cadastroForm.cpf().invalid() ) {
+      @for (error of cadastroForm.cpf().errors(); track $index) {
+      <span class="errorValidators">{{ error.message }}</span>}
+      }
+    </div>
+    <input [class.input-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" [formField]="cadastroForm.cpf" id="CPF" type="text" placeholder="000.000.000-00">
   </div>
+
 
   <div class="box-input">
     <div>
@@ -35,17 +50,22 @@
     <input [class.input-error]="cadastroForm.email().touched() && cadastroForm.email().invalid()" [formField]="cadastroForm.email" id="email" type="email" placeholder="email@gmail.com">
   </div>
 
-  <div class="box-input">
-    <div>
-      <label [class.label-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" for="CPF">CPF</label>
-      @if (cadastroForm.cpf().touched() && cadastroForm.cpf().invalid() ) {
-      @for (error of cadastroForm.cpf().errors(); track $index) {
-      <span class="errorValidators">{{ error.message }}</span>}
-      }
-    </div>
-    <input [class.input-error]="cadastroForm.cpf().touched() && cadastroForm.cpf().invalid()" [formField]="cadastroForm.cpf" id="CPF" type="text" placeholder="000.000.000-00">
-  </div>
+</div> 
 
+
+   <button class="btn-etapa"
+      type="button"
+      (click)="proximaEtapa()">
+    Próximo
+    </button>
+
+}
+
+
+<!-- segunda etapa -->
+
+@if (etapa()===2) {
+  <div class="etapa">
   <div class="box-input">
     <div>
       <label [class.label-error]="cadastroForm.telefone().touched() && cadastroForm.telefone().invalid()" for="phone">Telefone</label>
@@ -84,6 +104,14 @@
     <input [class.input-error]="cadastroForm.check().touched() && cadastroForm.check().invalid()" [formField]="cadastroForm.check" id="check" type="checkbox">
   </div>
 
+  <button class="btn-etapa"
+  type="button"
+  (click)="voltarEtapa()">
+  Voltar
+</button>
   <button>Criar conta</button>
+   </div>
+}
 
+  
 </form>

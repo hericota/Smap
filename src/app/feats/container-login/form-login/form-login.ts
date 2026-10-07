@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginInterface } from './login-interface';
 import { email, form, required, FormField } from '@angular/forms/signals';
-
+import { UserService } from '../../profile user/user-service/user-service';
 
 @Component({
   imports: [RouterLink, FormField],
@@ -13,21 +13,27 @@ import { email, form, required, FormField } from '@angular/forms/signals';
 export class FormLogin {
   loginModel = signal<LoginInterface>({
     email: '',
-    password: '',
+    senha: '',
   });
 
+  private usuarioService = inject(UserService);
   private router = inject(Router);
 
   loginForm = form(this.loginModel, (schemaPath) => {
     required(schemaPath.email, { message: '*' });
     email(schemaPath.email, { message: '*' });
-    required(schemaPath.password, { message: '*' });
+    required(schemaPath.senha, { message: '*' });
   });
+
   fazerLogin(event: SubmitEvent) {
     event.preventDefault();
     if (this.loginForm().invalid()) return;
-    else {
-      this.router.navigate(['/perfil-usuario']); //pagina principal de perfil do usuario
-    }
+   
+    const resultado = this.usuarioService.login(
+      this.loginModel().email,
+      this.loginModel().senha
+    )
+    if (resultado){this.router.navigate(['/perfil-usuario']);}//pagina principal de perfil do usuario
   }
+  
 }

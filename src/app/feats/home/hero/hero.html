@@ -1,42 +1,29 @@
-<div class="hero">
-    <div class="title">
-        <p class="title-text">A mudança começa <br>
-            com <span class="you">você.</span></p>
-    </div>
-    <div class="text-box">
-        <p>
-            Registre problemas urbanos,
-            acompanhe soluções e transforme
-            sua cidade em uma cidade inteligente
-            e colaborativa.
-        </p>
-    </div>
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-copy">
+            <div class="title">
+                <h1 class="title-text">A mudança começa com <span class="you">você.</span></h1>
+            </div>
 
-    <div class="btn">
-        <div class="btn-regitrar">
-            <a routerLink="/registrar-ocorrencia">Registrar ocorrência</a>
+            <div class="text-box">
+                <p>Registre problemas urbanos, acompanhe soluções e transforme sua cidade em uma cidade inteligente e colaborativa.</p>
+            </div>
+
+            <div class="hero-actions">
+                <a class="btn-registrar" routerLink="/registrar-ocorrencia">Registrar ocorrência</a>
+                <a class="btn-explorer" routerLink="/mapa">Explorar mapa</a>
+            </div>
         </div>
-        <div class="btn-explorer">
-            <a routerLink="/mapa-separado">
-                <span>
-                    Explorar Mapa
-                </span>
-            </a>
-        </div>
+
         <div class="defer-loading">
             @defer (on immediate) {
-            <div class="mapa-hero"><app-mapa-separado></app-mapa-separado></div>
+                <div class="mapa-hero"><app-mapa-separado></app-mapa-separado></div>
             } @loading {
-            <div class="spinner-container">
-                <div class="spinner-media">
-                    <img src="/assets/spinner.png" alt="Spinner">
+                <div class="spinner-container">
+                    <div class="spinner-media"><img src="/assets/spinner.png" alt="Carregando"></div>
+                    <div class="spinner-text"><h3>Carregando mapa...</h3></div>
                 </div>
-                <div class="spinner-text">
-                    <h3>Carregando mapa...</h3>
-                </div>
-            </div>
             }
         </div>
-
     </div>
-</div>
+</section>

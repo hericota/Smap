@@ -1,52 +1,82 @@
 .footer-content {
+    padding: 48px 20px;
+    color: #fff;
+    background: #0d1b2a;
+}
+
+.footer-inner {
     display: flex;
     flex-direction: column;
-    padding: 48px 20px;
-    color: white;
-    background-color: #0D1B2A;
+    gap: 60px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .col-1 {
     display: flex;
     flex-direction: column;
-    padding-bottom: 60px;
+    gap: 12px;
 }
 
 .col-1 p {
-    color: #64748B;
-    font-size: 0.9rem;
+    max-width: 360px;
+    color: #64748b;
+    font-size: 0.8125rem;
 }
 
 .col-2 {
     display: flex;
     flex-direction: column;
-    padding-bottom: 60px;
     gap: 12px;
 }
 
-
 .col-2 a {
-    color: white;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
 .separation-bar hr {
-    border: none;
-    height: 2px;
-    background-color: rgba(255, 255, 255, 0.120);
-}
-
-.copyrights {
-    display: flex;
-    flex-direction: column;
-    padding-top: 60px;
+    height: 1px;
+    border: 0;
+    background: rgb(255 255 255 / 12%);
 }
 
 .copyrights span {
-    color: #64748B;
+    color: #64748b;
+    font-size: 0.75rem;
 }
 
 .smap-logo {
     width: 103px;
     height: 31px;
-    margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+    .footer-content {
+        padding: 64px 40px 36px;
+    }
+
+    .footer-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 48px 96px;
+    }
+
+    .col-2 {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        align-content: start;
+        gap: 16px 48px;
+    }
+
+    .separation-bar,
+    .copyrights {
+        grid-column: 1 / -1;
+    }
+
+    .copyrights {
+        margin-top: -28px;
+    }
 }

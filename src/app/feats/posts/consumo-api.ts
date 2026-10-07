@@ -2,30 +2,34 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Ocorrencia } from '../ocorrencia';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
 
 @Service()
 export class ConsumoApi {
-    private route = inject(ActivatedRoute);
-    private readonly httpClient = inject(HttpClient);
-    private readonly urlApi = `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias`;
-    id = this.route.snapshot.paramMap.get('id')
+  private readonly httpClient = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl.replace(/\/+$/, '');
+  private readonly urlApi = `${this.baseUrl}/ocorrencias`;
 
-    cadastrarOcorrencia(ocorrencia:Ocorrencia){
-        return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia)
-    }
+  cadastrarOcorrencia(ocorrencia: Ocorrencia) {
+    return this.httpClient.post<Ocorrencia>(this.urlApi, ocorrencia);
+  }
 
-    listarOcorrencias() {
-        return this.httpClient.get<Ocorrencia[]>(this.urlApi);
-    }
+  enviarImagem(arquivo: File) {
+    const dados = new FormData();
+    dados.append('arquivo', arquivo, arquivo.name);
 
-    pegarOcorrencia() {
-        return this.httpClient.get<Ocorrencia[]>(this.urlApi+"/"+this.id);
-    }
+    return this.httpClient.post<{ url: string }>(`${this.baseUrl}/uploads/imagens`, dados);
+  }
 
-    readonly listarOcorrenciasResource = httpResource<Ocorrencia[]>(
-        () => this.urlApi,
-        {defaultValue:[]}
-    )
+  listarOcorrencias() {
+    return this.httpClient.get<Ocorrencia[]>(this.urlApi);
+  }
 
+  pegarOcorrencia(id: number | string) {
+    return this.httpClient.get<Ocorrencia>(`${this.urlApi}/${id}`);
+  }
+
+  readonly listarOcorrenciasResource = httpResource<Ocorrencia[]>(
+    () => this.urlApi,
+    { defaultValue: [] },
+  );
 }

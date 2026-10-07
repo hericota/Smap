@@ -1,34 +1,92 @@
-<div>
-  <div>
-    <h1>Ocorrência #{{ id }}</h1>
-  </div>
-
-  @if (ocorrenciaDetail.isLoading()) {
-
-    <div class="card-loading">
-      <span class="loader"></span>
-      <p>Carregando ocorrência...</p>
+<div class="detail-page">
+  <header class="detail-header">
+    <div class="detail-header__inner">
+      <a class="back-link" routerLink="/ocorrenciasRegistrada" aria-label="Voltar para ocorrências">‹</a>
+      <h1>Ocorrência #{{ id }}</h1>
     </div>
+  </header>
 
-  } @else if (ocorrenciaDetail.error()) {
+  <main class="detail-main">
+    @if (ocorrenciaDetail.isLoading()) {
+      <section class="state-card" aria-live="polite">
+        <span class="loader" aria-hidden="true"></span>
+        <div><strong>Carregando ocorrência</strong><p>Aguarde enquanto buscamos os detalhes.</p></div>
+      </section>
+    } @else if (ocorrenciaDetail.error()) {
+      <section class="state-card state-card--error" role="alert">
+        <span class="error-icon" aria-hidden="true">!</span>
+        <div><strong>Não foi possível carregar</strong><p>Confira se a API está disponível e tente novamente.</p></div>
+      </section>
+    } @else if (ocorrenciaDetail.hasValue()) {
+      @let ocorrencia = ocorrenciaDetail.value();
 
-    <div class="card-error">
-      <span>!</span>
-      <p>Não foi possível carregar a ocorrência.</p>
-    </div>
+      <article class="detail-content">
+        @if (ocorrencia.imagemUrl) {
+          <figure class="hero-image">
+            <img [src]="ocorrencia.imagemUrl" [alt]="'Foto da ocorrência: ' + ocorrencia.titulo">
+          </figure>
+        }
 
-  } @else if (ocorrenciaDetail.hasValue()) {
+        <section class="summary-card">
+          <div class="pills">
+            <span class="pill pill--category">{{ ocorrencia.categoria || 'Outros' }}</span>
+            <span [class]="'pill pill--status ' + classeStatus(ocorrencia.status)">
+              {{ formatarStatus(ocorrencia.status) }}
+            </span>
+          </div>
 
-    <div class="card">
-      <h2>{{ ocorrenciaDetail.value().titulo }}</h2>
+          <h2>{{ ocorrencia.titulo }}</h2>
 
-      <p>{{ ocorrenciaDetail.value().descricao }}</p>
+          <div class="location-row">
+            <img src="/assets/map-pin-img.png" alt="">
+            <p>{{ ocorrencia.localizacao || 'Localização não informada' }}</p>
+          </div>
 
-      <p>{{ ocorrenciaDetail.value().categoria }}</p>
+          <p class="description">{{ ocorrencia.descricao || 'Sem descrição informada.' }}</p>
+        </section>
 
-      <p>{{ ocorrenciaDetail.value().localizacao }}</p>
-    </div>
+        <section class="metadata-grid" aria-label="Informações da ocorrência">
+          <div class="metadata-card">
+            <span>Registrada em</span>
+            <strong>{{ formatarData(ocorrencia.criadaEm) }}</strong>
+          </div>
+          <div class="metadata-card">
+            <span>Status</span>
+            <strong [class]="'status-value ' + classeStatus(ocorrencia.status)">
+              {{ formatarStatus(ocorrencia.status) }}
+            </strong>
+          </div>
+        </section>
 
-  }
+        <section class="history-card">
+          <h2>Histórico de atualizações</h2>
+          <div class="timeline-item" [class.timeline-item--active]="etapaAtingida(ocorrencia.status, 0)">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <strong>Enviada</strong>
+              <time>{{ formatarData(ocorrencia.criadaEm) }}</time>
+              <p>Em breve uma equipe analisará a ocorrência.</p>
+            </div>
+          </div>
+          <div class="timeline-item" [class.timeline-item--active]="etapaAtingida(ocorrencia.status, 1)">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <strong>Em andamento</strong>
+              <p>A ocorrência está sendo atendida pela equipe responsável.</p>
+            </div>
+          </div>
+          <div class="timeline-item timeline-item--last" [class.timeline-item--active]="etapaAtingida(ocorrencia.status, 2)">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <strong>Resolvida</strong>
+              <p>Problema resolvido com sucesso.</p>
+            </div>
+          </div>
+        </section>
+      </article>
+    }
+  </main>
 </div>
+
+<app-bottom-nav></app-bottom-nav>
 

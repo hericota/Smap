@@ -238,3 +238,57 @@ section h1 {
     width: 24px;
     height: 24px;
 }
+
+.esconder-no-mobile {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+    .esconder-no-mobile {
+        display: flex !important;
+        margin-top: 24px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .esconder-no-mobile.registrar {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-evenly !important;
+        width: 100% !important;
+        height: 40px !important;
+        background-color: #16c1a3 !important;
+        color: #ffffff !important;
+        border-radius: 12px !important;
+        border: none !important;
+        text-decoration: none !important;
+        box-sizing: border-box !important;
+    }
+
+   
+    .esconder-no-mobile.registrar .icon-camera {
+        width: 24px ;
+        height: 24px ;
+        display: block ;
+    }
+
+    .esconder-no-mobile.registrar .text-button {
+        display: flex ;
+        flex-direction: column ;
+        text-align: start ;
+    }
+
+    .esconder-no-mobile.registrar .text-h1 {
+        font-size: 16px ;
+        font-weight: 700 ;
+        color: #ffffff ;
+    }
+
+    .esconder-no-mobile.registrar .text-p {
+        font-size: 13px ;
+        font-weight: 500 ;
+        color: #ffffff ;
+    
+    }
+}

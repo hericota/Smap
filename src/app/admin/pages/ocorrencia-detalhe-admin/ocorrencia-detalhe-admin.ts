@@ -41,9 +41,9 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
     this.route.paramMap.pipe(map((params) => Number(params.get('id')))),
     { initialValue: Number(this.route.snapshot.paramMap.get('id')) },
   );
-
   private readonly urlApi = computed(
-    () => `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia()}`,
+    () =>
+      `${environment.apiUrl.replace(/\/+$/, '')}/ocorrencias/${this.idOcorrencia()}`,
   );
 
   protected readonly ocorrenciaResource = httpResource<OcorrenciaApi>(
@@ -106,6 +106,10 @@ export class OcorrenciaDetalhes implements AfterViewInit, OnDestroy {
 
     const data = new Date(ocorrencia.criadaEm);
     if (Number.isNaN(data.getTime())) return '—';
+
+    if (Number.isNaN(data.getTime())) {
+      return '—';
+    }
 
     const mes = data.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
     const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
