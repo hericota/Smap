@@ -1,8 +1,26 @@
-/* ===== WRAPPER ===== */
+/* ============================================================
+ * MAPA ADMIN — Tela de mapa com ocorrências e filtros
+ * ------------------------------------------------------------
+ * Estrutura:
+ *   .mapa-wrapper        → container principal (tela cheia)
+ *   .mapa-fullscreen     → elemento do mapa (Leaflet)
+ *   .overlay-*           → painéis flutuantes sobre o mapa
+ *   .busca-filtros       → barra de busca + filtros
+ *   .painel-regiao       → painel lateral direito (região)
+ *   .legenda-card        → legenda de categorias
+ *
+ * Responsivo:
+ *   < 1020px → painel lateral mais estreito
+ *   < 768px  → painel lateral oculto
+ * ============================================================ */
+
+/* ============================================================
+ * WRAPPER — container principal
+ * ============================================================ */
 .mapa-wrapper {
   position: relative;
   width: 100%;
-  height: calc(100vh - 80px); /* ajuste conforme o header */
+  height: calc(100vh - 80px);
   border-radius: 12px;
   overflow: hidden;
   background-color: #e5e7eb;
@@ -14,7 +32,12 @@
   z-index: 0;
 }
 
-/* ===== OVERLAYS ===== */
+/* ============================================================
+ * OVERLAYS — painéis flutuantes
+ * ------------------------------------------------------------
+ * pointer-events: none no pai + auto nos filhos permite
+ * interagir com o mapa por baixo dos painéis.
+ * ============================================================ */
 .overlay {
   position: absolute;
   z-index: 400;
@@ -44,7 +67,9 @@
   left: 16px;
 }
 
-/* ===== BUSCA + FILTROS ===== */
+/* ============================================================
+ * BUSCA + FILTROS — barra superior
+ * ============================================================ */
 .busca-filtros {
   display: flex;
   align-items: center;
@@ -80,6 +105,7 @@
   font-size: 13px;
   color: #1f2a24;
   outline: none;
+  transition: border-color 150ms ease;
 }
 
 .busca input:focus {
@@ -96,6 +122,7 @@
   color: #4b5651;
   cursor: pointer;
   outline: none;
+  transition: border-color 150ms ease;
 }
 
 .filtro-select:focus {
@@ -113,13 +140,16 @@
   background-color: #ffffff;
   color: #4b5651;
   cursor: pointer;
+  transition: background-color 150ms ease;
 }
 
 .btn-fullscreen:hover {
   background-color: #f3f4f6;
 }
 
-/* ===== ESTADO (loading/erro) ===== */
+/* ============================================================
+ * ESTADO — loading e erro
+ * ============================================================ */
 .estado-msg {
   margin-top: 10px;
   padding: 10px 14px;
@@ -145,9 +175,16 @@
   font-weight: 600;
   color: #334155;
   cursor: pointer;
+  transition: background-color 150ms ease;
 }
 
-/* ===== PAINEL REGIÃO ===== */
+.btn-tentar:hover {
+  background-color: #f3f4f6;
+}
+
+/* ============================================================
+ * PAINEL REGIÃO — lateral direito
+ * ============================================================ */
 .painel-regiao {
   padding: 18px;
   background-color: #ffffff;
@@ -183,7 +220,9 @@
   text-transform: uppercase;
 }
 
-/* Barras de progresso */
+/* ============================================================
+ * BARRAS DE PROGRESSO — status das ocorrências
+ * ============================================================ */
 .barra-item + .barra-item {
   margin-top: 12px;
 }
@@ -216,14 +255,16 @@
 .barra-fill {
   height: 100%;
   border-radius: 3px;
-  transition: width 0.3s ease;
+  transition: width 300ms ease;
 }
 
 .fill-alta { background-color: #e11d48; }
 .fill-exec { background-color: #3b82f6; }
 .fill-conc { background-color: #10b981; }
 
-/* Cards de recentes */
+/* ============================================================
+ * CARDS DE RECENTES
+ * ============================================================ */
 .recente-card {
   display: block;
   width: 100%;
@@ -236,7 +277,7 @@
   text-align: left;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 150ms ease;
 }
 
 .recente-card:hover {
@@ -278,7 +319,9 @@
   font-style: italic;
 }
 
-/* ===== LEGENDA ===== */
+/* ============================================================
+ * LEGENDA — cartão inferior esquerdo
+ * ============================================================ */
 .legenda-card {
   padding: 14px 16px;
   background-color: #ffffff;
@@ -316,7 +359,9 @@
   flex-shrink: 0;
 }
 
-/* ===== RESPONSIVO ===== */
+/* ============================================================
+ * RESPONSIVO
+ * ============================================================ */
 @media (max-width: 1020px) {
   .overlay-top-right {
     width: 260px;
@@ -337,6 +382,6 @@
   }
 
   .overlay-top-right {
-    display: none; 
+    display: none;
   }
 }

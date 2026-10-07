@@ -93,96 +93,26 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
   });
 
   protected readonly ocorrenciasPorStatus: StatusOcorrencia[] = [
-    {
-      nome: 'Enviada',
-      quantidade: 184,
-      percentual: 38,
-      classe: 'status-enviada',
-    },
-    {
-      nome: 'Em análise',
-      quantidade: 245,
-      percentual: 51,
-      classe: 'status-analise',
-    },
-    {
-      nome: 'Encaminhada',
-      quantidade: 192,
-      percentual: 40,
-      classe: 'status-encaminhada',
-    },
-    {
-      nome: 'Concluída',
-      quantidade: 482,
-      percentual: 100,
-      classe: 'status-concluida',
-    },
-    {
-      nome: 'Pausada',
-      quantidade: 32,
-      percentual: 7,
-      classe: 'status-pausada',
-    },
-    {
-      nome: 'Rejeitada',
-      quantidade: 23,
-      percentual: 5,
-      classe: 'status-rejeitada',
-    },
+    { nome: 'Enviada', quantidade: 184, percentual: 38, classe: 'status-enviada' },
+    { nome: 'Em análise', quantidade: 245, percentual: 51, classe: 'status-analise' },
+    { nome: 'Encaminhada', quantidade: 192, percentual: 40, classe: 'status-encaminhada' },
+    { nome: 'Concluída', quantidade: 482, percentual: 100, classe: 'status-concluida' },
+    { nome: 'Pausada', quantidade: 32, percentual: 7, classe: 'status-pausada' },
+    { nome: 'Rejeitada', quantidade: 23, percentual: 5, classe: 'status-rejeitada' },
   ];
 
   protected readonly regioesCriticas: RegiaoCritica[] = [
-    {
-      nome: 'Centro Histórico',
-      total: 423,
-      altaPrioridade: 14,
-      tempoMedioDias: 2.4,
-    },
-    {
-      nome: 'Vila Nova',
-      total: 289,
-      altaPrioridade: 5,
-      tempoMedioDias: 4.1,
-    },
-    {
-      nome: 'Itoupava Norte',
-      total: 212,
-      altaPrioridade: 2,
-      tempoMedioDias: 3.2,
-    },
-    {
-      nome: 'Escola Agrícola',
-      total: 178,
-      altaPrioridade: 1,
-      tempoMedioDias: 5.0,
-    },
-    {
-      nome: 'Garcia',
-      total: 145,
-      altaPrioridade: 1,
-      tempoMedioDias: 4.5,
-    },
+    { nome: 'Centro Histórico', total: 423, altaPrioridade: 14, tempoMedioDias: 2.4 },
+    { nome: 'Vila Nova', total: 289, altaPrioridade: 5, tempoMedioDias: 4.1 },
+    { nome: 'Itoupava Norte', total: 212, altaPrioridade: 2, tempoMedioDias: 3.2 },
+    { nome: 'Escola Agrícola', total: 178, altaPrioridade: 1, tempoMedioDias: 5.0 },
+    { nome: 'Garcia', total: 145, altaPrioridade: 1, tempoMedioDias: 4.5 },
   ];
 
   protected readonly atencaoImediata: AtencaoImediata[] = [
-    {
-      tipo: 'Buraco',
-      classe: 'atencao-buraco',
-      endereco: 'Rua XV de Novembro, Centro',
-      diasAguardando: 20,
-    },
-    {
-      tipo: "Vazamento d'água",
-      classe: 'atencao-vazamento',
-      endereco: 'Av. Brasil, Ponta Aguda',
-      diasAguardando: 27,
-    },
-    {
-      tipo: 'Poste Apagado',
-      classe: 'atencao-poste',
-      endereco: 'Rua Joinville, Vila Nova',
-      diasAguardando: 30,
-    },
+    { tipo: 'Buraco', classe: 'atencao-buraco', endereco: 'Rua XV de Novembro, Centro', diasAguardando: 20 },
+    { tipo: "Vazamento d'água", classe: 'atencao-vazamento', endereco: 'Av. Brasil, Ponta Aguda', diasAguardando: 27 },
+    { tipo: 'Poste Apagado', classe: 'atencao-poste', endereco: 'Rua Joinville, Vila Nova', diasAguardando: 30 },
   ];
 
   @ViewChild('mapContainer', { static: true })
@@ -199,34 +129,10 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
   };
 
   private readonly zonasProvisorias = [
-    {
-      nome: 'Centro',
-      coordenadas: [-26.9184, -49.0656] as L.LatLngTuple,
-      raio: 700,
-      quantidade: 38,
-      intensidade: 'alta',
-    },
-    {
-      nome: 'Itoupava Norte',
-      coordenadas: [-26.8894, -49.0794] as L.LatLngTuple,
-      raio: 800,
-      quantidade: 21,
-      intensidade: 'media',
-    },
-    {
-      nome: 'Velha',
-      coordenadas: [-26.9403, -49.0786] as L.LatLngTuple,
-      raio: 700,
-      quantidade: 17,
-      intensidade: 'media',
-    },
-    {
-      nome: 'Garcia',
-      coordenadas: [-26.9283, -49.0453] as L.LatLngTuple,
-      raio: 600,
-      quantidade: 9,
-      intensidade: 'baixa',
-    },
+    { nome: 'Centro', coordenadas: [-26.9184, -49.0656] as L.LatLngTuple, raio: 700, quantidade: 38, intensidade: 'alta' },
+    { nome: 'Itoupava Norte', coordenadas: [-26.8894, -49.0794] as L.LatLngTuple, raio: 800, quantidade: 21, intensidade: 'media' },
+    { nome: 'Velha', coordenadas: [-26.9403, -49.0786] as L.LatLngTuple, raio: 700, quantidade: 17, intensidade: 'media' },
+    { nome: 'Garcia', coordenadas: [-26.9283, -49.0453] as L.LatLngTuple, raio: 600, quantidade: 9, intensidade: 'baixa' },
   ];
 
   constructor() {
@@ -250,6 +156,8 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
 
     this.montarZonas(this.ocorrenciasResource.value());
 
+    setTimeout(() => this.map?.invalidateSize(), 150);
+
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
       this.resizeObserver.observe(this.mapContainer.nativeElement);
@@ -262,9 +170,7 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
   }
 
   private montarZonas(ocorrencias: OcorrenciaApi[]): void {
-    if (!this.map || !this.zonasLayer) {
-      return;
-    }
+    if (!this.map || !this.zonasLayer) return;
 
     this.zonasLayer.clearLayers();
 
@@ -331,9 +237,7 @@ export class DashboardAdmin implements AfterViewInit, OnDestroy {
   }
 
   private montarZonasProvisorias(): void {
-    if (!this.map || !this.zonasLayer) {
-      return;
-    }
+    if (!this.map || !this.zonasLayer) return;
 
     for (const zona of this.zonasProvisorias) {
       const cor = this.coresIntensidade[zona.intensidade];

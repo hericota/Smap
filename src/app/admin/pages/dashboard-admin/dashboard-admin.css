@@ -1,6 +1,16 @@
+/* ============================================================
+ * DASHBOARD ADMIN — Visão geral do painel administrativo
+ * ============================================================ */
+
 .dashboard-page {
   max-width: 1200px;
   margin: 0 auto;
+  animation: dashboardFadeIn 0.25s ease-out;
+}
+
+@keyframes dashboardFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .page-header {
@@ -36,6 +46,12 @@
   color: #334155;
   font-size: 13px;
   font-weight: 500;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.periodo-chip:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .periodo-chip svg {
@@ -45,6 +61,9 @@
   color: #64748b;
 }
 
+/* ============================================================
+ * INDICADORES
+ * ============================================================ */
 .indicadores {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -58,6 +77,13 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+}
+
+.indicador-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 .indicador-rotulo {
@@ -90,53 +116,50 @@
   font-weight: 700;
 }
 
-.badge-positivo {
-  color: #10b981;
-  background-color: #d1fae5;
-}
-
-.badge-critico {
-  color: #ef4444;
-  background-color: #fee2e2;
-}
-
-.badge-eficiencia {
-  color: #13b1a2;
-  background-color: rgba(19, 177, 162, 0.12);
-}
+.badge-positivo { color: #10b981; background-color: #d1fae5; }
+.badge-critico { color: #ef4444; background-color: #fee2e2; }
+.badge-eficiencia { color: #13b1a2; background-color: rgba(19, 177, 162, 0.12); }
 
 @media (max-width: 1020px) {
-  .indicadores {
-    grid-template-columns: 1fr;
-  }
+  .indicadores { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+ * GRID PRINCIPAL — status + zona
+ * ------------------------------------------------------------
+ * ⚠️ align-items: start (NÃO stretch) para que cada card
+ *    tenha a altura do seu próprio conteúdo.
+ *    Com stretch, o card menor estica pra igualar o maior,
+ *    e o mapa pode vazar do card.
+ * ============================================================ */
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
-  align-items: stretch;
+  align-items: start;   /* ← MUDOU de stretch para start */
   margin-top: 24px;
 }
 
 @media (max-width: 900px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
+  .dashboard-grid { grid-template-columns: 1fr; }
 }
 
-.status-card,
-.zona-card {
-  box-sizing: border-box;
-  height: 294px;
-}
-
+/* ============================================================
+ * CARD DE STATUS
+ * ============================================================ */
 .status-card {
   box-sizing: border-box;
   padding: 22px 24px;
+  min-height: 294px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.status-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .status-card h3 {
@@ -146,18 +169,17 @@
   font-weight: 700;
 }
 
-.status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.status-list { display: flex; flex-direction: column; gap: 12px; }
 
 .status-row {
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr) 30px;
   align-items: center;
   gap: 12px;
+  transition: opacity 150ms ease;
 }
+
+.status-row:hover { opacity: 0.85; }
 
 .status-name {
   color: #64748b;
@@ -176,6 +198,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
+  transition: width 400ms ease;
 }
 
 .status-total {
@@ -184,48 +207,41 @@
   text-align: right;
 }
 
-.status-enviada {
-  background-color: #3b82f6;
-}
-
-.status-analise {
-  background-color: #e87d00;
-}
-
-.status-encaminhada {
-  background-color: #334155;
-}
-
-.status-concluida {
-  background-color: #10b981;
-}
-
-.status-pausada {
-  background-color: #94a3b8;
-}
-
-.status-rejeitada {
-  background-color: #ef4444;
-}
+.status-enviada     { background-color: #3b82f6; }
+.status-analise     { background-color: #e87d00; }
+.status-encaminhada { background-color: #334155; }
+.status-concluida   { background-color: #10b981; }
+.status-pausada     { background-color: #94a3b8; }
+.status-rejeitada   { background-color: #ef4444; }
 
 @media (max-width: 560px) {
-  .status-row {
-    grid-template-columns: 70px minmax(0, 1fr) 28px;
-    gap: 8px;
-  }
-
-  .status-name,
-  .status-total {
-    font-size: 11px;
-  }
+  .status-row { grid-template-columns: 70px minmax(0, 1fr) 28px; gap: 8px; }
+  .status-name, .status-total { font-size: 11px; }
 }
 
+/* ============================================================
+ * CARD DE ZONA (mapa)
+ * ------------------------------------------------------------
+ * display: flex + flex-direction: column
+ * O mapa usa flex: 1, então ele ocupa EXATAMENTE o espaço
+ * restante do card. Nunca vaza.
+ * ============================================================ */
 .zona-card {
   box-sizing: border-box;
   padding: 20px;
+  min-height: 294px;
   background-color: #ffffff;
   border: 1px solid #e1e5e4;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+  display: flex;              /* ← NOVO: controla altura interna */
+  flex-direction: column;     /* ← NOVO */
+  overflow: hidden;           /* ← NOVO: corta qualquer vazamento */
+}
+
+.zona-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .zona-cabecalho {
@@ -235,6 +251,7 @@
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 16px;
+  flex-shrink: 0;   /* ← NOVO: não encolhe */
 }
 
 .zona-cabecalho h3 {
@@ -260,44 +277,28 @@
   font-size: 12px;
 }
 
-.zona-legenda li {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.zona-legenda li { display: flex; align-items: center; gap: 6px; }
 
-.zona-marcador {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
+.zona-marcador { width: 10px; height: 10px; border-radius: 50%; }
 
-.zona-alta {
-  background-color: #f5484c;
-}
+.zona-alta  { background-color: #f5484c; }
+.zona-media { background-color: #d97706; }
+.zona-baixa { background-color: #13b1a2; }
 
-.zona-media {
-  background-color: #d97706;
-}
-
-.zona-baixa {
-  background-color: #13b1a2;
-}
-
+/* Mapa — ocupa o espaço que sobrar, nunca mais que isso */
 .zona-mapa {
   width: 100%;
-  height: 190px;
-  margin-top: 18px;
+  flex: 1;              /* ← NOVO: ocupa o espaço restante */
+  min-height: 190px;    /* ← altura MÍNIMA (substitui height) */
+  margin-top: 8px;
   overflow: hidden;
   border-radius: 18px;
+  position: relative;   /* ← âncora para o Leaflet */
 }
 
-@media (max-width: 760px) {
-  .zona-mapa {
-    height: 260px;
-  }
-}
-
+/* ============================================================
+ * SEGUNDA LINHA — regiões + atenção
+ * ============================================================ */
 .dashboard-linha-2 {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -307,17 +308,24 @@
 }
 
 @media (max-width: 900px) {
-  .dashboard-linha-2 {
-    grid-template-columns: 1fr;
-  }
+  .dashboard-linha-2 { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+ * CARD DE REGIÕES CRÍTICAS
+ * ============================================================ */
 .regioes-card {
   box-sizing: border-box;
   padding: 22px 24px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.regioes-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .regioes-card h3 {
@@ -346,17 +354,44 @@
   padding: 13px 12px;
   color: #0d1b2a;
   border-bottom: 1px solid #f1f5f9;
+  transition: background-color 100ms ease;
 }
 
-.regioes-tabela tbody tr:last-child td {
-  border-bottom: none;
+.regioes-tabela tbody tr:hover td { background-color: #f9fafb; }
+.regioes-tabela tbody tr:last-child td { border-bottom: none; }
+.regiao-alerta { color: #ef4444; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .regioes-tabela { font-size: 12px; }
+
+  .regioes-tabela th,
+  .regioes-tabela td {
+    padding: 8px 6px;
+    white-space: nowrap;
+  }
+
+  .regioes-tabela th { font-size: 10px; }
+
+  .regioes-tabela th:first-child,
+  .regioes-tabela td:first-child {
+    white-space: normal;
+    max-width: 120px;
+  }
 }
 
-.regiao-alerta {
-  color: #ef4444;
-  font-weight: 700;
+@media (max-width: 480px) {
+  .regioes-tabela { font-size: 11px; }
+
+  .regioes-tabela th,
+  .regioes-tabela td { padding: 6px 4px; }
+
+  .regioes-tabela th:first-child,
+  .regioes-tabela td:first-child { max-width: 90px; }
 }
 
+/* ============================================================
+ * COLUNA DE ATENÇÃO IMEDIATA
+ * ============================================================ */
 .atencao-coluna h3 {
   margin: 0 0 14px;
   color: #0d1b2a;
@@ -370,17 +405,23 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
+  transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
 }
 
-.atencao-card + .atencao-card {
-  margin-top: 12px;
+.atencao-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
+
+.atencao-card + .atencao-card { margin-top: 12px; }
 
 .atencao-linha {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .atencao-badge {
@@ -391,17 +432,9 @@
   font-weight: 700;
 }
 
-.atencao-buraco {
-  background-color: #a9663d;
-}
-
-.atencao-vazamento {
-  background-color: #3b82f6;
-}
-
-.atencao-poste {
-  background-color: #d97706;
-}
+.atencao-buraco    { background-color: #a9663d; }
+.atencao-vazamento { background-color: #3b82f6; }
+.atencao-poste     { background-color: #d97706; }
 
 .atencao-dias {
   color: #ef4444;
