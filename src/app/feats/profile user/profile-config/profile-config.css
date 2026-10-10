@@ -1,14 +1,15 @@
+
 section {
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 20px;
-    color: #0D1B2A;
-    background-color: #f7f7f4;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+  color: #0d1b2a;
+  background-color: #f7f7f4;
 }
 
 section h1 {
@@ -16,11 +17,27 @@ section h1 {
     font-weight: bold;
 }
 
+
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.box-config {
+  width: 100%;
+   
+  min-width: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 0;
+  box-sizing: border-box;
 }
 
 .perfil {
@@ -80,26 +97,30 @@ section h1 {
     display: block;
 }
 
+
 .list {
-    width: 100%;
-    height: auto;
-    background-color: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    gap: 4px;
-    border-radius: 16px;
-    align-items: center;
-    padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  padding: 16px 8px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
 }
+
 
 .divider {
     width: 1px;
@@ -109,7 +130,7 @@ section h1 {
 }
 
 .card-text {
-    font-size: 12px;
+    font-size: clamp(10px, 1.5vw, 12px);
     color: #64748B;
     font-weight: 500;
 }
@@ -139,12 +160,11 @@ section h1 {
 }
 
 .box-config {
-    width: 350px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  min-width: 0;
+  padding: 20px 0;
+  box-sizing: border-box;
 }
 
 .box-ul {
@@ -156,32 +176,35 @@ section h1 {
 }
 
 .card-li {
-    background-color: #FFFFFF;
-    padding: 16px;
-    border-radius: 12px;
-    height: 53px;
-    border: 1px solid #E2E8F0;
-    display: flex;
-    gap: 12px;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-
+  width: 100%;
+  min-width: 0;
+  min-height: 53px;
+  height: auto;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .box-ul a {
-    display: flex;
-    gap: 12px;
-    text-decoration: none;
-    color: #0D1B2A;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  text-decoration: none;
+  color: #0d1b2a;
 }
 
 .flex-icon {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
-
 .arrow {
     width: 14px;
 }
@@ -243,7 +266,52 @@ section h1 {
     display: none !important;
 }
 
-@media (min-width: 1024px) {
+@media (min-width:400px) and (max-width: 700px) {
+  section {
+    max-width: 1023px;
+    margin: 0 auto;
+    padding: 32px;
+    min-height: 100dvh;
+    border-radius: 16px;
+  }
+
+  section > h1 {
+    font-size: 26px;
+  }
+
+  .container {
+    gap: 28px;
+  }
+
+  .perfil img {
+    object-fit: cover;
+  }
+
+  .icon-box {
+    width: 112px;
+    height: 112px;
+  }
+
+  .list {
+    padding: 20px;
+  }
+
+  .box-config {
+    max-width: 100%;
+    padding: 20px 0;
+  }
+
+  .card-li {
+    padding: 18px;
+  }
+
+  .sairDaConta {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 700px) {
     .esconder-no-mobile {
         display: flex !important;
         margin-top: 24px;
