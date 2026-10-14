@@ -16,6 +16,7 @@
 </article>}
 </div><aside><article class="card"><h2>Moderação</h2><p>Publicação: <strong>{{o.moderacao || 'APROVADA'}}</strong></p><p>Status: <strong>{{o.status}}</strong></p>
 @if(o.motivoModeracao){<p>Motivo: {{o.motivoModeracao}}</p>}
+@if(!service.can('APPROVE') && !service.can('REJECT') && !service.can('CHANGE_STATUS')){<p class="notice" role="alert">Sua conta não possui permissão de moderação. Solicite ao administrador superior as permissões <strong>APPROVE</strong>, <strong>REJECT</strong> ou <strong>CHANGE_STATUS</strong> para a área desta ocorrência.</p>}
 @if(service.can('APPROVE')){<button (click)="moderate('APPROVE')" [disabled]="busy() || o.moderacao==='APROVADA'">Aprovar publicação</button>}
 @if(service.can('REJECT')){<form (ngSubmit)="moderate('REJECT')"><label>Motivo da recusa<textarea name="reason" [(ngModel)]="reason" required maxlength="500"></textarea></label><div class="actions"><button class="danger" [disabled]="busy() || !reason.trim()">Recusar / ocultar</button></div></form>}
 @if(service.can('CHANGE_STATUS')){<form (ngSubmit)="moderate('CHANGE_STATUS')"><label>Status<select name="status" [(ngModel)]="status"><option value="PENDENTE">Pendente</option><option value="EM_ANDAMENTO">Em andamento</option><option value="RESOLVIDA">Resolvida</option></select></label><div class="actions"><button [disabled]="busy() || (o.moderacao!==null && o.moderacao!=='APROVADA')">Atualizar status</button></div></form>}

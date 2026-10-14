@@ -27,6 +27,7 @@ export class AdminService {
  readonly apiBase=environment.apiUrl.replace(/\/+$/,'');
  supreme() { return (this.auth.usuarioLogado() as unknown as AuthProfile|null)?.role==='SUPREME'; }
  can(permission:string) { const user=this.auth.usuarioLogado() as unknown as AuthProfile|null; return this.supreme() || !!user?.permissions?.includes(permission); }
+ profile() { return this.auth.usuarioLogado() as unknown as AuthProfile|null; }
  territories() { return this.http.get<Territory[]>(this.authBase+'/territories').pipe(timeout(12000)); }
  admins() { return this.http.get<AuthProfile[]>(this.authBase+'/admins').pipe(timeout(12000)); }
  createTerritory(body:unknown) { return this.http.post<Territory>(this.authBase+'/territories',body).pipe(timeout(12000)); }
@@ -42,10 +43,11 @@ export class AdminService {
  labelModeracao(value:string|null|undefined) { return value==='PENDENTE'?'Aguardando aprovação':value==='REJEITADA'?'Recusada':'Publicada'; }
  labelStatus(value:string|null|undefined) { return value==='EM_ANDAMENTO'?'Em andamento':value==='RESOLVIDA'?'Resolvida':'Pendente'; }
  message(error:any) {
-   return error?.status===403 ? 'Sem permissão para esta ação ou território.'
+   const detail = typeof error?.error?.message === 'string' ? error.error.message : '';
+   return error?.status===403 ? (detail || 'Sem permissão para esta ação ou território. Verifique se sua conta recebeu a permissão e se a ocorrência pertence à sua área.')
     : error?.status===401 ? 'Sua sessão expirou. Entre novamente.'
-    : error?.status===409 ? 'Operação incompatível com o estado atual ou cadastro duplicado.'
-    : error?.status===400 ? (error.error?.message || 'Confira os campos e os limites territoriais.')
+    : error?.status===409 ? (detail || 'Operação incompatível com o estado atual ou cadastro duplicado.')
+    : error?.status===400 ? (detail || 'Confira os campos e os limites territoriais.')
     : 'Não foi possível concluir. Confira se as APIs estão disponíveis e tente novamente.';
  }
 }

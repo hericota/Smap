@@ -22,6 +22,7 @@ export const routes: Routes = [
   { path: 'header', component: Header },
   { path: 'hero', component: Hero },
   { path: 'login', component: ContainerLogin },
+  { path: 'loginAdmin', component: ContainerLogin },
   { path: 'perfil-usuario', component: ProfileHome, canActivate: [authGuard] },
   { path: 'perfil-config', component: ProfileConfig, canActivate: [authGuard] },
   { path: 'cadastro', component: ContainerCadastro },
